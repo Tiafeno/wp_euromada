@@ -1,0 +1,1 @@
+"# Euromada wordpress template" 
