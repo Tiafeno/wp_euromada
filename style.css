@@ -1,0 +1,410 @@
+/*
+  Theme Name: Euromada
+  Theme URI: https://euromada.fr/
+  Author: the Falicrea team
+  Author URI: https://falicrea.com/
+  Description: 
+  License: MIT License v2 or later
+  License URI: 
+  Tags: automobile, two-columns, left-sidebar, accessibility-ready, custom-background, custom-colors, custom-header, custom-logo, custom-menu, editor-style, featured-images, microformats, post-formats, rtl-language-support, sticky-post, threaded-comments, translation-ready
+  Text Domain: euromada
+
+*/
+
+html {
+  font-family: 'Exo', sans-serif;
+}
+
+.main-navigation {
+  margin-right: 0px;
+  margin-left: 18%;
+}
+
+a.uk-logo img {
+  width: 150px;
+}
+
+.er-navbar-top li > a:hover {
+  color: #666 !important;
+}
+.er-navbar-top li > a {
+  font-size: 8pt !important;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: #ffffff !important;
+}
+.er-navbar-top {
+  background-color: #343434;
+}
+
+ul.er-subnav {
+  background: #AAAAAA;
+  margin-bottom: 0px;
+}
+
+ul.er-subnav li>a {
+  font-family: 'Exo', sans-serif;
+  color: #ffffff !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  padding-bottom: 10px !important;
+  padding-top: 10px !important;
+}
+
+ul.er-subnav li>a:hover,
+.er-subnav .uk-active a {
+  background: #001689 !important;
+}
+
+.er-subnav>li.er-publisher-car {
+  background: #41A75F;
+}
+
+ul.er-subnav li {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.er-subnav li a {
+  font-size: 12px !important;
+  font-weight: bolder;
+}
+
+.er-number {
+  width: inherit;
+  float: right;
+}
+
+.er-number p {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.er-padding-left-small {
+  padding-left: 0px;
+  padding-top: 5px;
+}
+
+.er-icon-flag {
+  width: 15px;
+  height: 15px;
+}
+
+.er-user-subnav a:hover .er-user-text,
+.er-user-subnav a:hover .er-user-icon {
+  color: #000000;
+}
+
+.er-user-subnav {
+  margin-bottom: 0px;
+}
+
+.er-user-subnav a:hover {
+  background: #F6EA11 !important;
+}
+
+.er-user-subnav a {
+  background: #343434 !important;
+  padding-bottom: 11px !important;
+  padding-top: 7px !important;
+}
+
+.er-user-icon {
+  color: white;
+}
+
+.er-user-text {
+  padding-left: 5px;
+  position: relative;
+  top: 3px;
+  font-weight: bold;
+  color: white;
+}
+
+.er-search {
+  background-color: #AAAAAA;
+}
+
+.er-search .dropdown .default.text {
+  color: #000000 !important;
+}
+.er-button-search {
+  padding: 0 34px !important;
+}
+
+.er-information {
+  background-color: #CBCBCB;
+}
+
+.er-information h2,
+.er-h2 {
+  font-size: 11pt !important;
+  font-weight: bold;
+}
+
+#er-annonce li>.cards>.card .cost {
+  color: #000000;
+}
+
+#app-benefit .ui.cards>.card,
+#app-benefit .ui.cards>.card .content {
+  border-radius: 0px !important;
+}
+
+#app-benefit .ui.cards>.card .content {
+  background-color: #F6BF11;
+}
+
+.card .content span,
+.card .content p,
+.card .content a {
+  color: #000000;
+}
+
+.er-underline::after {
+  content: ' ';
+  width: 10em;
+  height: 2px;
+  background-color: #001689;
+  display: block;
+  margin-top: 10px;
+}
+
+#er-annonce.uk-switcher .content>a.header {
+  min-height: 36px;
+  word-break: break-word;
+}
+
+footer .er-footer {
+  background-color: #4D4D4D;
+}
+
+footer .er-footer-title {
+  color: #ffffff;
+  font-size: 11pt;
+  font-weight: bold;
+  font-family: 'Exo', sans-serif;
+  margin-bottom: 0;
+}
+
+footer .er-footer-meta {
+  color: #F6921E;
+}
+
+.er-footer-icon {
+  color: white;
+  margin-bottom: 25px;
+}
+
+footer .er-contact span,
+footer .er-contact .content {
+  color: white;
+}
+
+footer .er-contact .content>a {
+  color: white;
+  font-weight: bold;
+}
+
+
+/* Override Class */
+
+.uk-button-euromada:hover {
+  background-color: #1730b0;
+}
+
+.uk-button-euromada {
+  background-color: #001689;
+  color: #ffffff;
+}
+
+.uk-padding-medium {
+  padding: 40px !important;
+}
+
+.ui.selection.dropdown {
+  border-radius: 0 !important;
+}
+
+.ui.fluid.dropdown>.dropdown.icon {
+  background-color: #D8D8D8;
+  margin-right: -12px;
+}
+
+#er-annonce .ui.cards>.card,
+.ui.card {
+  width: 213px !important;
+  border-radius: 0px !important;
+}
+
+i.icon.linkify::before {
+  content: '' !important;
+}
+.ui.rating .active.icon {
+  color: rgba(255, 206, 62, 0.85);
+}
+.ui.rating .icon.selected, .ui.rating .icon.selected.active {
+  color: rgb(255, 156, 3);
+}
+
+/** product **/
+
+
+.er-h1 {
+  font-size: 12pt !important;
+  font-family: "Exo", sans-serif;
+  font-weight: bold;
+}
+
+.er-price {
+  font-size: 15pt;
+  font-weight: bold;
+  display: block;
+  width: 100%;
+}
+
+/** override css style */
+
+.ui.primary.buttons .button,
+.ui.primary.button {
+  background-color: #001689 !important;
+}
+
+.er-button-voir:hover {
+  background-color: #f6bf11 !important;
+  color: #000000 !important;
+}
+
+.er-button-voir {
+  background-color: #001689 !important;
+  font-size: 14px !important;
+  border-radius: 0 !important;
+  color: #ffffff !important;
+}
+
+.er-button-voir i {
+  visibility: hidden;
+}
+
+.er-button-voir:hover i {
+  visibility: visible
+}
+
+.er-sidebar section .extra.content .ui.button {
+  padding: 11px !important;
+}
+
+.summary {
+  background: #E5E5E5;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 25px;
+  padding-bottom: 30px;
+}
+
+.ui.celled.table tr th,
+.ui.celled.table tr td {
+  border-left: none !important;
+}
+
+.ui.table {
+  border: none !important;
+}
+
+tr.er-product-specification {
+  background-color: #001689;
+  color: aliceblue;
+}
+
+
+.er-Exo {
+  font-family: "Exo", sans-serif;
+}
+
+.er-icon-button {
+  border-radius: 0px !important;
+}
+
+.content.er-share-title p {
+  color: #ffffff;
+}
+
+.content.er-share-title {
+  padding: 10px 20px;
+  background-color: #000000;
+}
+
+.er-card .meta {
+  padding-top: 10px;
+}
+
+.er-share-content {
+  border-bottom: 1px solid #DAD0C6;
+  padding-bottom: 9px;
+  border-left: 1px solid #DAD0C6;
+  border-right: 1px solid #DAD0C6;
+}
+
+/*** Offer **/
+a.er-list-title {
+  font-size: 15.98px;
+  color: rgba(0, 0, 0, 0.85) !important;
+  font-weight: bold;
+}
+.ui.primary.buttons .button, .ui.primary.button {
+  background-color: #001689 !important;
+}
+.ui.primary.buttons .button:hover, .ui.primary.button:hover {
+  background-color: #f6bf11 !important;
+  color: #000000;
+}
+.er-sidebar section .image > img { 
+  padding: 16px;
+}
+.er-sidebar section .er-sidebar-title {
+  background-color: #F6BF11 !important;
+  font-weight: bold;
+}
+.er-sidebar section > .content .meta > p {
+  font-weight: 300;
+}
+.er-sidebar section .extra.content .ui.button {
+  padding: 11px !important;
+}
+.er-button-voir {
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+}
+.er-sidebar section .extra.content .ui.button, .er-button-voir {
+  font-size: 14px !important;
+  border-radius: 0 !important;
+}
+.er-label {
+  font-size: 0.614286rem !important;
+}
+.er-pagination .uk-icon {
+  color: #001689 !important;
+  font-weight: bold;
+}
+.er-photo  {
+  display: block;
+  position: absolute;
+  width: 28px;
+  text-align: center;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  background-image: url(img/camera.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 0px -1.2px;
+  color: #ffffff;
+  font-size: 11px;
+  left: 5px;
+  top: 5px;
+}
+
+/** Override */
+h1.entry-title {
+  font-family: "Exo";
+  font-weight: bold;
+}

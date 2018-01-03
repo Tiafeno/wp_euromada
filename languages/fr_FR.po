@@ -1,0 +1,39 @@
+# Translation of Themes - Euromada in French (France)
+# This file is distributed under the same license as the Themes - Euromada package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2018-01-03 20:04+0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Poedit 2.0.1\n"
+"Language: fr\n"
+"Project-Id-Version: Themes - Euromada\n"
+"POT-Creation-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+
+#. Author of the plugin/theme
+msgid "Mark"
+msgstr "Marque"
+
+#. Author of the plugin/theme
+msgid "Model"
+msgstr "Modèle"
+
+#. Author of the plugin/theme
+msgid "Model Year"
+msgstr "Année modèle"
+
+#. Author of the plugin/theme
+msgid "Mileage"
+msgstr "Kilométrage"
+
+#. Author of the plugin/theme
+msgid "Fuel"
+msgstr "Carburant"
+
+#. Author of the plugin/theme
+msgid "GearBox"
+msgstr "Boîte de vitesses"
