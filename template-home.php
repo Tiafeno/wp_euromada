@@ -4,7 +4,13 @@
  * 
  */
 get_header();
+
+$Euromada = new Euromada();
+$Adverts = $Euromada->getAdverts();
 ?>
+<script type="text/javascript">
+  var __adverts__ = <?= json_encode( $Adverts, JSON_PRETTY_PRINT ); ?>;
+</script>
 
     <div id="primary-content">
       <div class="uk-section uk-section-large uk-padding-medium">
@@ -16,81 +22,34 @@ get_header();
 
             <ul id="er-annonce" class="uk-switcher uk-margin">
 
-              <li class="uk-position-relative">
+              <li v-for="(advert, index) in adverts" v-bind:class="index == 0 ? 'uk-position-relative': ''">
                 <div class="ui special cards">
-                  <div class="card" v-for="todo in itemI">
+                  <div class="card" v-for="adv in advert">
                     <div class="blurring dimmable image">
                       <div class="ui dimmer">
                         <div class="content">
                           <div class="center">
-                            <div class="ui inverted button" @click="routeLinkView(todo.id)">Voir</div>
+                            <div class="ui inverted button" @click="onClick( adv.url )">Voir</div>
                           </div>
                         </div>
                       </div>
-                      <img v-bind:src="todo.link">
+                      <img v-bind:src="adv.imgLink">
                     </div>
                     <div class="content">
-                      <a class="header er-h2">{{ todo.title }}</a>
+                      <a class="header er-h2">{{ adv.title }}</a>
                       <div class="meta">
-                        <span class="cost">{{ todo.cost | ariary }} </span>
+                        <span class="cost">{{ adv.cost | ariary }} </span>
                       </div>
                     </div>
                   </div>
                 </div>
               </li>
 
-              <li>
-                <div class="ui special cards">
-                  <div class="card" v-for="todo in itemII">
-                    <div class="blurring dimmable image">
-                      <div class="ui dimmer">
-                        <div class="content">
-                          <div class="center">
-                            <div class="ui inverted button" @click="routeLinkView(todo.id)">Voir</div>
-                          </div>
-                        </div>
-                      </div>
-                      <img v-bind:src="todo.link">
-                    </div>
-                    <div class="content">
-                      <a class="header er-h2">{{ todo.title }}</a>
-                      <div class="meta">
-                        <span class="cost">{{ todo.cost | ariary }}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li>
-                <div class="ui special cards">
-                  <div class="card" v-for="todo in itemIII">
-                    <div class="blurring dimmable image">
-                      <div class="ui dimmer">
-                        <div class="content">
-                          <div class="center">
-                            <div class="ui inverted button" @click="routeLinkView(todo.id)">Voir</div>
-                          </div>
-                        </div>
-                      </div>
-                      <img v-bind:src="todo.link">
-                    </div>
-                    <div class="content">
-                      <a class="header er-h2">{{ todo.title }}</a>
-                      <div class="meta">
-                        <span class="cost">{{ todo.cost | ariary }} </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
             </ul>
 
             <div class="uk-flex uk-flex-center">
               <div uk-switcher="animation: uk-animation-slide-right-medium; connect: #er-annonce;" class="uk-dotnav" >
-                  <li class="uk-active"><a href="#">Item 1</a></li>
-                  <li><a href="#">Item 2</a></li>
-                  <li><a href="#">Item 3</a></li>
+                  <li v-for="(advert, index) in adverts" v-bind:class="index == 0 ? 'uk-active' : ''"><a href="#">Item {{index}}</a></li>
               </div>
             </div>
           </div>
@@ -128,10 +87,10 @@ get_header();
               <p class="uk-text-center uk-margin-auto uk-width-xlarge">Vous pouvez également consulter d’autres sites web à partir des liens ci-dessous.
                 Communiquez-nous la référence que vous souhaitez commander et nous vous ferons un devis.</p>
               <div class="uk-width-xlarge uk-margin-auto" uk-grid>
-                <div class="uk-width-1-4@s"><img class="uk-logo" src="img/logo/leboncoin.jpg" /></div>
-                <div class="uk-width-1-4@s"><img class="uk-logo" src="img/logo/paruvendu.jpg" /></div>
-                <div class="uk-width-1-4@s"><img class="uk-logo" src="img/logo/mobile.de.jpg" /></div>
-                <div class="uk-width-1-4@s"><img class="uk-logo" src="img/logo/europe-camions.jpg" /></div>
+                <div class="uk-width-1-4@s"><img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/leboncoin.jpg" /></div>
+                <div class="uk-width-1-4@s"><img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/paruvendu.jpg" /></div>
+                <div class="uk-width-1-4@s"><img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/mobile.de.jpg" /></div>
+                <div class="uk-width-1-4@s"><img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/europe-camions.jpg" /></div>
 
               </div>
             </div>

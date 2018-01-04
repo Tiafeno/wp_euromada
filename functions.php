@@ -4,11 +4,9 @@ require get_template_directory() . '/inc/class-services.php';
 require get_template_directory() . '/inc/class-walker.php';
 /** Widget */
 require get_template_directory() . '/inc/widgets/search.widget.php';
-
 function euromada_init() {
   Euromada::taxonomy();
 }
-
 add_action( 'init', 'euromada_init');
 
 if (! function_exists("euromada_setup")):
@@ -16,7 +14,6 @@ if (! function_exists("euromada_setup")):
 
     load_theme_textdomain( 'twentyfifteen' );
     load_theme_textdomain( 'euromada', get_template_directory() . '/languages' );
-
     add_theme_support( 'automatic-feed-links' );
     add_theme_support( 'title-tag' );
 
@@ -24,16 +21,14 @@ if (! function_exists("euromada_setup")):
     * Enable support for Post Thumbnails on posts and pages.
     */
     add_theme_support( 'post-thumbnails' );
-
     register_nav_menus( array(
       'top_menu' => 'Top Menu',
-      'account' => 'Account Menu',
-      'primary' => __( 'Primary Menu',      'twentyfifteen' ),
-      'social'  => __( 'Social Links Menu', 'twentyfifteen' ),
+      'account'  => 'Account Menu',
+      'primary'  => __( 'Primary Menu',      'twentyfifteen' ),
+      'social'   => __( 'Social Links Menu', 'twentyfifteen' ),
     ) );
   }
 endif;
-
 add_action( 'after_setup_theme', 'euromada_setup' );
 
 /**
@@ -60,7 +55,6 @@ add_action( 'widgets_init', 'euromada_widgets_init' );
  * Enqueue scripts and styles.
  */
 function euromada_scripts() {
-
   wp_enqueue_style( 'euromada-style', get_stylesheet_uri() );
   wp_enqueue_script( 'lodash', get_template_directory_uri() . '/js/lodash.min.js', array() );
   wp_enqueue_script( 'uikit', get_template_directory_uri() . '/js/uikit.min.js', array('jquery') );
