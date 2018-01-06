@@ -57,12 +57,7 @@
                 'container_class' => 'uk-navbar-right'
               ] );
             ?>
-              <!-- <div class="uk-navbar-right">
-                <ul class="uk-subnav uk-margin-remove">
-                  <li><a href="#">Se connecter</a></li>
-                  <li><a href="#">Condition de ventes</a></li>
-                </ul>
-              </div> -->
+            
             </nav>
           </div>
         <?php endif; ?>
@@ -91,15 +86,6 @@
               'container_class' => 'uk-navbar-right'
             ] );
           ?>
-          <!-- <div class="uk-navbar-right">
-            <ul class="uk-subnav uk-subnav-pill er-subnav" uk-margin>
-              <li class="uk-active"><a href="#">Accueil</a></li>
-              <li><a href="offres.html">Offres</a></li>
-              <li><a href="#">Promotion</a></li>
-              <li><a href="#">Nous contacter</a></li>
-              <li class="er-publisher-car"><a href="#">Publier une voiture</a></li>
-            </ul>
-          </div> -->
 
           <div class="uk-navbar-right">
             <?php if ( has_nav_menu( 'account' )) : ?>
@@ -111,14 +97,6 @@
                   'walker' => new Account_Walker()
                 ] );
               ?>
-              <!-- <ul class="uk-subnav uk-subnav-pill er-user-subnav" uk-margin>
-                <li>
-                  <a href="#">
-                    <span class="er-user-icon" uk-icon="icon: user"></span> 
-                    <span class="er-user-text">Mon compte</span>
-                  </a>
-                </li>
-              </ul> -->
             <?php endif; ?>
           </div>
         </nav>

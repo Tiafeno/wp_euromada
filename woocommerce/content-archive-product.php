@@ -53,6 +53,7 @@ global $wp_query;
               </div>
             </div>
           </div>
+          
         </div>
       </div>
 
