@@ -4,10 +4,26 @@ require get_template_directory() . '/inc/class-services.php';
 require get_template_directory() . '/inc/class-walker.php';
 /** Widget */
 require get_template_directory() . '/inc/widgets/search.widget.php';
+
 function euromada_init() {
   Euromada::taxonomy();
+  Euromada::setRecommandation();
 }
 add_action( 'init', 'euromada_init');
+
+function action_save_postdata( $post_id ) {
+  /** for `cost` post meta */
+  $valueCost = Services::getValue('cost_recommandation');
+  if (false != $valueCost)
+    update_post_meta( $post_id, 'cost_recommandation', $valueCost );
+
+  /** for `link` post meta  */
+  $valueLink = Services::getValue('link_recommandation');
+  if (false != $valueLink)
+    update_post_meta( $post_id, 'link_recommandation', $valueLink );
+}
+
+add_action( 'save_post', 'action_save_postdata' );
 
 if (! function_exists("euromada_setup")):
   function euromada_setup() {
@@ -99,10 +115,20 @@ add_action( "wp_head", function(){
 }, 10, 2 );
 
 
-// add_filter( 'loop_shop_per_page', 'override_loop_shop_per_page', 20 );
-// function override_loop_shop_per_page( $cols ) {
-//   // $cols contains the current number of products per page based on the value stored on Options -> Reading
-//   // Return the number of products you wanna show per page.
-//   $cols = 2;
-//   return $cols;
-// }
+add_action( 'admin_menu', function () {
+  add_meta_box( 'products', 'Produits', "render_cost", "recommandation", 'normal', 'low' );
+} );
+
+function render_cost( $post ) {
+  $cost = get_post_meta( $post->ID, 'cost_recommandation', true );
+  $link = get_post_meta( $post->ID, 'link_recommandation', true );
+  ?>
+  <section>
+    <p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="cost">Prix unitaire</label></p>
+    <input size="80" type="number" placeholder="Ex: 2000000" id="cost" name="cost_recommandation"  value="<?= $cost ?>" autocomplete="off">
+
+    <p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="link">Lien de l'annonce</label></p>
+    <input type="text" placeholder="Ex: http://https://www.leboncoin.fr/outillage_materiaux_2nd_oeuvre/1364621424.htm?ca=7_s" id="link" name="link_recommandation"  value="<?= $link ?>" autocomplete="off">
+  </section>
+  <?php
+}

@@ -41,6 +41,32 @@ class Euromada {
     endif;
   }
 
+  /** 
+   * Create custom post type `recommandation`  - call in function.php file
+   * @param {void}
+   * @return {void}
+   */
+  public static function setRecommandation() {
+    register_post_type( "recommandation", array(
+      'label'         => _x( "Recommandation", 'General name for "recommandation" post type' ),
+      'labels'        => array(
+        'name'               => _x( "Recommandations", "Plural name for Recommandation post type" ),
+        'singular_name'      => _x( "Recommandation", "Singular name for Recommandation post type" ),
+        'add_new'            => __( 'Ajouter' ),
+        'add_new_item'       => __( "Ajouter une recommandation" ),
+        'edit_item'          => __( 'Modifier' ),
+        'view_item'          => __( 'Voir' ),
+        'search_items'       => __( "Rechercher une recommandation" )
+      ),
+      'public'        => true,
+      'hierarchical'  => false,
+      'menu_position' => 100,
+      'menu_icon'     => "dashicons-book",
+      'supports'      => [ 'title', 'editor', 'thumbnail', 'excerpt' ]
+    ) );
+
+  }
+
   /**
    * Push the dependancy content in global array variable.
    * @param {void}
@@ -96,11 +122,32 @@ class Euromada {
       $this->createObjectJS( $advert );
       $this->push();
     endwhile;
-    wp_reset_query();
 
     /** return all products details pushed  */
     return $this->adverts;
     
+  }
+
+  public function getLastAd() {
+    $args = array(
+      'post_type'      => 'product',
+      'posts_per_page' => 12
+    );
+    query_posts($args); 
+    if (have_posts()) {
+      while (have_posts()) : the_post();
+        $this->contents = new stdClass();
+        $advert = wc_get_product(get_the_ID());
+        $this->full_size_gallery = Services::getThumbnails();
+        $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [600, 300] );
+        array_push( $this->full_size_gallery, $this->mainImage );
+
+        $this->createObjectJS( $advert );
+        $this->push();
+      endwhile;
+    }
+    wp_reset_query();
+    return $this->adverts;
   }
 
   /**

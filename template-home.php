@@ -6,7 +6,7 @@
 get_header();
 
 $Euromada = new Euromada();
-$Adverts = $Euromada->getAdverts();
+$Adverts = $Euromada->getLastAd();
 ?>
 <script type="text/javascript">
   var __adverts__ = <?= json_encode( $Adverts, JSON_PRETTY_PRINT ); ?>;
