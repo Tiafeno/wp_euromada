@@ -1,26 +1,8 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) 
 	exit; 
-}
 
-function getMainThumbnail( $id, $size = "full" ) {
-  $image = wp_get_attachment_image_src( $id, $size );
-  $title =get_post_field( 'post_title', $id );
-  $excerpt = get_post_field( 'post_excerpt', $id );
-  return [$image, $title, $excerpt];
-}
-
-$product = wc_get_product($post->ID);
-
-$full_size_gallery = Services::getThumbnails();
-$thumbnail_gallery = Services::getThumbnails( [300, 300] );
-
-$full_size_main = getMainThumbnail((int)$product->get_image_id(), 'full');
-$thumbnail_main = getMainThumbnail((int)$product->get_image_id(), [300, 300]);
-$mainImgSrc = $full_size_main[0][0];
-array_push( $full_size_gallery, $full_size_main );
-array_push( $thumbnail_gallery, $thumbnail_main );
-
+$euromada = new Euromada();
 ?>
 
 <?php
@@ -32,20 +14,7 @@ array_push( $thumbnail_gallery, $thumbnail_main );
   do_action( 'woocommerce_before_single_product' );
 ?>
 <script type="text/javascript">
-  var __advert__ = {
-    id: <?= $product->get_id(); ?>,
-    title: "<?= $product->get_title(); ?>",
-    cost: <?= $product->get_price(); ?>,
-    countPic: <?= count($full_size_gallery) ?>,
-    description: "<?= $product->get_description(); ?>",
-    dateadd: moment().startOf('<?= $product->get_date_created(); ?>').fromNow(),
-    link: "<?= $mainImgSrc ?>",
-    gallery: { 
-      full: <?= json_encode($full_size_gallery, JSON_PRETTY_PRINT); ?>, 
-      thumbnail: <?= json_encode($thumbnail_gallery, JSON_PRETTY_PRINT); ?> 
-    },
-    attributes : <?= json_encode(Services::getObjectTerms(), JSON_PRETTY_PRINT); ?>
-  }
+  var __advert__ = <?= json_encode( $euromada->getAdvert() ); ?>
 </script>
 
 <div id="product-<?php the_ID(); ?>" <?php post_class(); ?>>

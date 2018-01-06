@@ -13,13 +13,14 @@ class Services {
     return $term;
   }
 
-  public static function getThumbnails( $size = "full" ) {
-    global $post, $product;
+  public static function getThumbnails( $size = "full", $ids = [], $post_id = null ) {
+    global $product;
     $thumbnails = [];
 
-    $attachment_ids = $product->get_gallery_image_ids();
+    $attachment_ids = empty($ids) ? $product->get_gallery_image_ids() : $ids;
+    $id = is_null( $post_id ) ? $product->get_id() : $post_id;
 
-    if ( $attachment_ids && has_post_thumbnail() ) {
+    if ( $attachment_ids && has_post_thumbnail( $id ) ) {
       foreach ( $attachment_ids as $attachment_id ) {
         $full_size_image = wp_get_attachment_image_src( $attachment_id, $size );
         $title = get_post_field( 'post_title', $attachment_id );

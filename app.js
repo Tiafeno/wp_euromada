@@ -132,18 +132,18 @@
     new Vue({
       el: "#app-lists",
       data: {
-        sorting: ""
+        sorting: "",
+        postCount: 0,
+        adverts: []
       },
       mounted: function () {
         jQuery('.ui.dropdown').dropdown();
+        this.adverts = _.concat(__adverts__);
+        this.postCount = this.adverts.length;
       },
       methods: {
         sortBy: function () {
-          this.adverts = _.sortBy(this.adverts, this.sorting);
-        },
-        routeLinkProduct: function (id) {
-          var link = "products.html?_id=";
-          window.location.href = link + id;
+          this.adverts = _.sortBy(__adverts__, [this.sorting]);
         }
       }
     });

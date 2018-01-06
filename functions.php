@@ -92,3 +92,7 @@ function uk_active_nav_class( $class, $item ) {
   return $class;
 }
 add_filter( 'nav_menu_css_class', 'uk_active_nav_class', 10, 2 );
+
+add_action( "wp_head", function(){
+  include get_template_directory() . '/inc/x-template.php';
+}, 10, 2 );

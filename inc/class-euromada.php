@@ -8,7 +8,9 @@ class Euromada {
   public $mainImage;
   public $contents;
 
-  function __construct() {}
+  function __construct() {
+    $this->contents = new stdClass();
+  }
 
   public static function taxonomy() {
     $post_type = "product";
@@ -33,7 +35,6 @@ class Euromada {
   }
 
   protected function createObjectJS( &$advert ) {
-    $this->contents = new stdClass();
     $this->contents->id = $advert->get_id();
     $this->contents->title = $advert->get_title();
     $this->contents->cost = $advert->get_price();
@@ -55,28 +56,39 @@ class Euromada {
   }
 
   public function getAdverts() {
-    $index = ( get_query_var( 'index' ) ) ? get_query_var( 'index' ) : 1;
-    $args = array(
-      'post_type'      => 'product',
-      'posts_per_page' => 12,
-      'paged'          => $index
-    );
-    query_posts($args); 
-    if (have_posts()) {
-      while (have_posts()) : the_post();
-        
-        $advert = wc_get_product(get_the_ID());
+    while (have_posts()) : the_post();
+      $this->contents = new stdClass();
+      $advert = wc_get_product(get_the_ID());
+      $this->full_size_gallery = Services::getThumbnails();
+      $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [600, 300] );
+      array_push( $this->full_size_gallery, $this->mainImage );
 
-        $this->full_size_gallery = Services::getThumbnails();
-        $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [600, 300] );
-        array_push( $this->full_size_gallery, $this->mainImage );
-
-        $this->createObjectJS( $advert );
-        $this->push();
-      endwhile;
-    }
-
+      $this->createObjectJS( $advert );
+      $this->push();
+    endwhile;
+    wp_reset_query();
     return $this->adverts;
     
+  }
+
+  public function getAdvert() {
+    $advert = wc_get_product(get_the_ID());
+    $this->full_size_gallery = Services::getThumbnails();
+    $this->thumbnail_gallery = Services::getThumbnails( [300, 300] );
+
+    $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), "full" );
+    array_push( $this->full_size_gallery, $this->mainImage );
+
+    $thumbnail_main = $this->getMainThumbnail( (int)$advert->get_image_id(), [300, 300]);
+    array_push( $this->thumbnail_gallery, $thumbnail_main );
+
+    $this->createObjectJS( $advert );
+
+    $gallery = new stdClass();
+    $gallery->full = $this->full_size_gallery;
+    $gallery->thumbnail = $this->thumbnail_gallery;
+    $this->push();
+    $this->contents->gallery = $gallery;
+    return $this->contents;
   }
 }
