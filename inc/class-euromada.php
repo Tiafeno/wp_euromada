@@ -1,4 +1,11 @@
 <?php
+/**
+ * Author: Tiafeno Finel
+ * Organisation: Entreprise FALI (Falicrea)
+ * Author mail: tiafenofnel@gmail.com
+ */
+
+
 class Euromada {
   public static $taxonomies = [ "Mark", "Model", "Model Year", "Fuel", "GearBox" ];
 
@@ -12,6 +19,10 @@ class Euromada {
     $this->contents = new stdClass();
   }
 
+  /**
+   * Create dependancy taxonomies for this template
+   * @return {void}
+   */
   public static function taxonomy() {
     $post_type = "product";
     if (post_type_exists( $post_type )) :
@@ -30,10 +41,20 @@ class Euromada {
     endif;
   }
 
+  /**
+   * Push the dependancy content in global array variable.
+   * @param {void}
+   * @return {void}
+   */
   protected function push() {
     array_push( $this->adverts, $this->contents );
   }
 
+  /**
+   * Add the dependancy in contents object
+   * @param {object} - Woocommerce product class
+   * @return {void}
+   */
   protected function createObjectJS( &$advert ) {
     $this->contents->id = $advert->get_id();
     $this->contents->title = $advert->get_title();
@@ -44,10 +65,13 @@ class Euromada {
     $this->contents->imgLink = $this->mainImage[0][0];
     $this->contents->url = get_the_permalink( $advert->get_id() );
     $this->contents->attributes = Services::getObjectTerms();
-    /** set in adverts varibale */
-    
   }
 
+  /**
+   * Get main product thumbnail 
+   * @param {int $id, string|array $size} - $id is product or post ID
+   * @return {array}
+   */
   protected function getMainThumbnail( $id, $size = "full" ) {
     $image   = wp_get_attachment_image_src( $id, $size );
     $title   = get_post_field( 'post_title', $id );
@@ -55,6 +79,12 @@ class Euromada {
     return [ $image, $title, $excerpt ];
   }
 
+  /**
+   * Get all lists of products (use by content-archive-product)
+   * Change pagination Option -> Reading in wordpress.
+   * @param {void}
+   * @return {array} - Array of object product details
+   */
   public function getAdverts() {
     while (have_posts()) : the_post();
       $this->contents = new stdClass();
@@ -67,10 +97,17 @@ class Euromada {
       $this->push();
     endwhile;
     wp_reset_query();
+
+    /** return all products details pushed  */
     return $this->adverts;
     
   }
 
+  /**
+   * Get single product details
+   * @param {void}
+   * @return {object}
+   */
   public function getAdvert() {
     $advert = wc_get_product(get_the_ID());
     $this->full_size_gallery = Services::getThumbnails();

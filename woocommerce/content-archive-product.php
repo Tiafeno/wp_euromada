@@ -38,11 +38,11 @@ global $wp_query;
             </div>
             <div class="content">
               <div class="extra">
-                <div class="ui left floated"><a class="header er-list-title">{{ advert.title }}</a></div>
+                <div class="ui left floated"><a v-bind:href="advert.url" class="header er-list-title">{{ advert.title }}</a></div>
                 <div class="ui right floated er-h2" style="color: #000"><p>{{ advert.cost | ariary }}</p></div>
               </div>
               <div class="meta">
-                <span class="cinema">{{ advert.dateadd.date }}</span>
+                <span class="cinema">{{ advert.dateadd.date | moment }}</span>
               </div>
               <div class="description">
                 <p></p>
@@ -56,24 +56,22 @@ global $wp_query;
         </div>
       </div>
 
-      <div class="er-pagination">
+      <div class="er-pagination uk-margin-small-top">
         <?php
           $pages = paginate_links( array(
-            'base' => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
-            'format' => '?paged=%#%',
+            'base'         => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
+            'format'       => '?paged=%#%',
             'prev_text'    => '<span uk-pagination-previous></span>',
             'next_text'    => '<span uk-pagination-next></span>',
             'current' => max( 1, get_query_var( 'paged' ) ),
-            'total' => $wp_query->max_num_pages,
-            'type'  => 'array'
+            'total'   => $wp_query->max_num_pages,
+            'type'    => 'array'
           ));
 
           if ( is_array( $pages ) ) {
             $paged = ( get_query_var('paged') == 0 ) ? 1 : get_query_var('paged');
             echo '<ul class="uk-pagination uk-flex-center" uk-margin>';
-            foreach ( $pages as $page ) {
-              echo "<li> $page </li>";
-            }
+            foreach ( $pages as $page ) echo "<li> $page </li>";
             echo '</ul>';
           }
         ?>

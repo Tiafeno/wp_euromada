@@ -6,7 +6,6 @@
     return true;
   }
 
-  moment.locale("fr");
 
   /** Filter and Component vue */
 
@@ -24,6 +23,12 @@
     if (isNaN(v)) return value;
     return new Intl.NumberFormat('de-DE', {
     }).format(v);
+  });
+
+  Vue.filter("moment", function(value) {
+    moment.locale("fr");
+    var currentDate = new Date( value );
+    return moment(currentDate).endOf('day').fromNow(); 
   });
 
   Vue.filter('formatName', function (value) {
