@@ -116,10 +116,10 @@ add_action( "wp_head", function(){
 
 
 add_action( 'admin_menu', function () {
-  add_meta_box( 'products', 'Produits', "render_cost", "recommandation", 'normal', 'low' );
+  add_meta_box( 'products', 'Produits', "render_product", "recommandation", 'normal', 'low' );
 } );
 
-function render_cost( $post ) {
+function render_product( $post ) {
   $cost = get_post_meta( $post->ID, 'cost_recommandation', true );
   $link = get_post_meta( $post->ID, 'link_recommandation', true );
   ?>
