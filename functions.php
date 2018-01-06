@@ -93,6 +93,16 @@ function uk_active_nav_class( $class, $item ) {
 }
 add_filter( 'nav_menu_css_class', 'uk_active_nav_class', 10, 2 );
 
+
 add_action( "wp_head", function(){
   include get_template_directory() . '/inc/x-template.php';
 }, 10, 2 );
+
+
+// add_filter( 'loop_shop_per_page', 'override_loop_shop_per_page', 20 );
+// function override_loop_shop_per_page( $cols ) {
+//   // $cols contains the current number of products per page based on the value stored on Options -> Reading
+//   // Return the number of products you wanna show per page.
+//   $cols = 2;
+//   return $cols;
+// }
