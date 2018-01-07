@@ -139,7 +139,7 @@ class Euromada {
         $this->contents = new stdClass();
         $advert = wc_get_product(get_the_ID());
         $this->full_size_gallery = Services::getThumbnails();
-        $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [600, 300] );
+        $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [200, 50] );
         array_push( $this->full_size_gallery, $this->mainImage );
 
         $this->createObjectJS( $advert );
@@ -158,12 +158,12 @@ class Euromada {
   public function getAdvert() {
     $advert = wc_get_product(get_the_ID());
     $this->full_size_gallery = Services::getThumbnails();
-    $this->thumbnail_gallery = Services::getThumbnails( [300, 300] );
+    $this->thumbnail_gallery = Services::getThumbnails( [100, 100] );
 
     $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), "full" );
     array_push( $this->full_size_gallery, $this->mainImage );
 
-    $thumbnail_main = $this->getMainThumbnail( (int)$advert->get_image_id(), [300, 300]);
+    $thumbnail_main = $this->getMainThumbnail( (int)$advert->get_image_id(), [100, 100]);
     array_push( $this->thumbnail_gallery, $thumbnail_main );
 
     $this->createObjectJS( $advert );

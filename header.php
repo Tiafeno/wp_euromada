@@ -37,9 +37,27 @@
     (function($){
       $(document).ready(function() {
         $('.ui.dropdown').dropdown();
+
+        /** Fix uk-active parent menu item */
+        var elementActive = $(".uk-dropdown").find("li.uk-active");
+        elementActive
+          .parents(".menu-item-has-children")
+          .children("a")
+          .addClass("uk-active");
       });
     })(jQuery)
   </script>
+
+  <style type="text/css">
+    .er-dropdown {
+      padding: 0 !important;
+      background-color: #aaaaaa;
+    }
+    a.uk-active {
+      background: #001689 !important;
+    }
+  </style>
+
   </head>
 
 <body <?php body_class(); ?>>
@@ -83,7 +101,8 @@
             wp_nav_menu( [
               'menu_class' => "uk-subnav uk-subnav-pill er-subnav uk-margin",
               'theme_location' => 'primary',
-              'container_class' => 'uk-navbar-right'
+              'container_class' => 'uk-navbar-right',
+              'walker' => new Primary_Walker
             ] );
           ?>
 
