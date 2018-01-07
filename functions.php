@@ -1,15 +1,83 @@
 <?php
+/**
+ * Author: Tiafeno Finel
+ * Organisation: Entreprise FALI (Falicrea)
+ * Author mail: tiafenofnel@gmail.com
+ */
+
 require get_template_directory() . '/inc/class-euromada.php';
 require get_template_directory() . '/inc/class-services.php';
 require get_template_directory() . '/inc/class-walker.php';
+/** Shortcode */
+require get_template_directory() . '/inc/shortcode/class-login.php';
 /** Widget */
 require get_template_directory() . '/inc/widgets/search.widget.php';
 
 function euromada_init() {
+  add_action( 'admin_init', function() {
+    $redirect = isset( $_SERVER[ 'HTTP_REFERER' ] ) ? $_SERVER[ 'HTTP_REFERER' ] : home_url( '/' );
+    if ( is_admin() && !defined( 'DOING_AJAX' ) && current_user_can( 'advertiser' ) ) {
+      exit( wp_redirect( $redirect, 301 ) );
+    }
+  }, 100 );
+
+  /** On load wordpress */
+  add_action( "wp_loaded", function() {
+    if (isset($_POST[ 'euromada_settings_nonce' ]) &&
+    wp_verify_nonce($_POST[ 'euromada_settings_nonce' ], 'euromada_settings') &&
+    is_admin() ) {
+
+      $login_page_id = Services::getValue('login_page', '');
+      update_option( 'login_page_id', $login_page_id );
+
+      $register_page_id = Services::getValue('register_page', '');
+      update_option( 'register_page_id', $register_page_id );
+    }
+  });
+
+  add_action( 'after_setup_theme', function() {
+    if ( !current_user_can( 'administrator' ) && !is_admin() ) {
+      show_admin_bar( false );
+    }
+  });
+
+  /** On login fail */
+  add_action( 'wp_login_failed', function() {
+    $referer = $_SERVER[ 'HTTP_REFERER' ];
+    // if there's a valid referrer, and it's not the default log-in screen
+    if ( !empty($referer) && !strstr($referer, 'wp-login') && !strstr($referer, 'wp-admin') ) {
+        exit(wp_redirect( $referer . '?login=failed', 301 ));  // let's append some information (login=failed) to the URL for the theme to use
+    }
+  });
+  
+  /**
+   * Redirect in home page if user is login
+   */
+  add_action( 'get_header', function() {
+    global $post;
+    /** Verify header */
+    if (is_user_logged_in()) {
+      $login_page_id = get_option( 'login_page_id', false );
+      if (is_int( (int)$login_page_id ) ) :
+        if ($post->ID != (int)$login_page_id) return true;
+        $url = home_url( "/" );
+        exit( wp_redirect( $url, 301 ) );
+      endif;
+    }
+  }, 10, 1);
+
+  add_action( 'admin_menu', function() {
+    add_meta_box( 'products', 'Produits', "render_product", "recommandation", 'normal', 'low' );
+    add_menu_page('euromada', 'Euromada', 'manage_options', 'euromada', array(new Euromada, 'euromada_admin_template'), 'dashicons-admin-settings');
+  });
+
   Euromada::taxonomy();
   Euromada::setRecommandation();
 }
-add_action( 'init', 'euromada_init');
+add_action( 'init', 'euromada_init' );
+
+/** Add shortcode  */
+add_shortcode('euromada_login', [ new Euromada_Login(), 'Render' ]);
 
 function action_save_postdata( $post_id ) {
   /** for `cost` post meta */
@@ -25,9 +93,8 @@ function action_save_postdata( $post_id ) {
 
 add_action( 'save_post', 'action_save_postdata' );
 
-if (! function_exists("euromada_setup")):
+if ( ! function_exists("euromada_setup")):
   function euromada_setup() {
-
     load_theme_textdomain( 'twentyfifteen' );
     load_theme_textdomain( 'euromada', get_template_directory() . '/languages' );
     add_theme_support( 'automatic-feed-links' );
@@ -111,13 +178,9 @@ add_filter( 'nav_menu_css_class', 'uk_active_nav_class', 10, 2 );
 
 
 add_action( "wp_head", function(){
-  include get_template_directory() . '/inc/x-template.php';
+  include_once get_template_directory() . '/inc/x-template.php';
 }, 10, 2 );
 
-
-add_action( 'admin_menu', function () {
-  add_meta_box( 'products', 'Produits', "render_product", "recommandation", 'normal', 'low' );
-} );
 
 function render_product( $post ) {
   $cost = get_post_meta( $post->ID, 'cost_recommandation', true );

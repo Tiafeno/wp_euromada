@@ -15,13 +15,54 @@ class Euromada {
   public $mainImage;
   public $contents;
 
+  public $forms = [];
+
   function __construct() {
     $this->contents = new stdClass();
   }
 
   /**
+   * This function add input or select form in euromada page admin
+   * @param void
+   * @return object $this - This class instance
+   */
+  public function getForms() {
+    $this->forms = [
+      [
+        "blogname" => "Page pour login",
+        "id" => "login_page",
+        "page_id" => get_option( "login_page_id", false ),
+        "description" => ""
+      ],
+      [
+        "blogname" => "Page pour s'enregistrer",
+        "id" => "register_page",
+        "page_id" => get_option( "register_page_id", false ),
+        "description" => ""
+      ]
+    ];
+    return $this;
+  }
+
+  /**
+   * This function render euromada admin template menu
+   * @param void
+   * @return void
+   */
+  public function euromada_admin_template() {
+    $params = [
+      'post_type' => 'page',
+      'posts_per_page' => -1
+    ];
+    $posts = get_posts( $params );
+    $forms = $this->getForms()->forms;
+
+    include_once get_template_directory() . '/inc/tpls/admin.tmpl.php';
+  }
+
+  /**
    * Create dependancy taxonomies for this template
-   * @return {void}
+   * @return void
    */
   public static function taxonomy() {
     $post_type = "product";
@@ -43,8 +84,8 @@ class Euromada {
 
   /** 
    * Create custom post type `recommandation`  - call in function.php file
-   * @param {void}
-   * @return {void}
+   * @param void
+   * @return void
    */
   public static function setRecommandation() {
     register_post_type( "recommandation", array(
@@ -69,8 +110,8 @@ class Euromada {
 
   /**
    * Push the dependancy content in global array variable.
-   * @param {void}
-   * @return {void}
+   * @param void
+   * @return void
    */
   protected function push() {
     array_push( $this->adverts, $this->contents );
@@ -78,8 +119,8 @@ class Euromada {
 
   /**
    * Add the dependancy in contents object
-   * @param {object} - Woocommerce product class
-   * @return {void}
+   * @param object $advert - Woocommerce product class
+   * @return void
    */
   protected function createObjectJS( &$advert ) {
     $this->contents->id = $advert->get_id();
@@ -95,8 +136,9 @@ class Euromada {
 
   /**
    * Get main product thumbnail 
-   * @param {int $id, string|array $size} - $id is product or post ID
-   * @return {array}
+   * @param int $id - This is product or post ID
+   * @param string|array $size
+   * @return array
    */
   protected function getMainThumbnail( $id, $size = "full" ) {
     $image   = wp_get_attachment_image_src( $id, $size );
@@ -108,8 +150,8 @@ class Euromada {
   /**
    * Get all lists of products (use by content-archive-product)
    * Change pagination Option -> Reading in wordpress.
-   * @param {void}
-   * @return {array} - Array of object product details
+   * @param void
+   * @return array - Array of object product details
    */
   public function getAdverts() {
     while (have_posts()) : the_post();
@@ -152,8 +194,8 @@ class Euromada {
 
   /**
    * Get single product details
-   * @param {void}
-   * @return {object}
+   * @param void
+   * @return object
    */
   public function getAdvert() {
     $advert = wc_get_product(get_the_ID());
