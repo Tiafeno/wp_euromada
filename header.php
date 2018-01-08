@@ -27,6 +27,7 @@
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/transition.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/dimmer.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/rating.css");
+    /* @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/form.css"); */
   /** UIkit */
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/uikit.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/style.css");
@@ -55,6 +56,22 @@
     }
     a.uk-active {
       background: #001689 !important;
+    }
+    .ui.form textarea, 
+    .ui.form input:not([type]), 
+    .ui.form input[type="date"], 
+    .ui.form input[type="datetime-local"], 
+    .ui.form input[type="email"], 
+    .ui.form input[type="number"], 
+    .ui.form input[type="password"], 
+    .ui.form input[type="search"], 
+    .ui.form input[type="tel"], 
+    .ui.form input[type="time"], 
+    .ui.form input[type="text"], 
+    .ui.form input[type="file"], 
+    .ui.form input[type="url"] {
+      width: inherit !important;
+      vertical-align: top;
     }
   </style>
 
@@ -107,16 +124,13 @@
           ?>
 
           <div class="uk-navbar-right">
-            <?php if ( has_nav_menu( 'account' )) : ?>
-              <?php
-                wp_nav_menu( [
-                  'menu_class' => "uk-subnav uk-subnav-pill er-user-subnav uk-margin",
-                  'theme_location' => 'account',
-                  'container_class' => ' ',
-                  'walker' => new Account_Walker()
-                ] );
-              ?>
-            <?php endif; ?>
+            <div class=" ">
+              <ul id="menu-compte" class="uk-subnav uk-subnav-pill er-user-subnav uk-margin">
+                <li>
+                  <a href='#'><span class='er-user-icon' uk-icon='icon: user'></span><span class='er-user-text'>Mon compte</span></a> 
+                </li>
+              </ul>
+            </div>
           </div>
         </nav>
 

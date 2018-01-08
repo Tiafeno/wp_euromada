@@ -21,6 +21,91 @@ class Euromada {
     $this->contents = new stdClass();
   }
 
+  public static function createRole() {
+    $result = add_role(
+      'advertiser',
+      'Advertiser',
+      array(
+          'read'         => true,  // true allows this capability
+          'upload_files' => true,
+          'edit_posts'   => true,
+          'edit_users'   => true,
+          'manage_options' => true,
+          'remove_users' => true,
+          'edit_others_posts'   => true,
+          'delete_others_pages'   => true,
+          'delete_published_posts' => true,
+          'edit_others_posts' => true, // Allows user to edit others posts not just their own
+          'create_posts' => true, // Allows user to create new posts
+          'manage_categories' => true, // Allows user to manage post categories
+          'publish_posts' => true, // Allows the user to publish, otherwise posts stays in draft mode
+          'edit_themes' => false, // false denies this capability. User can’t edit your theme
+          'install_plugins' => false, // User cant add new plugins
+          'update_plugin' => false, // User can’t update any plugins
+          'update_core' => false // user cant perform core updatesy
+      )
+    );
+    return (null != $result) ? true : false;
+  }
+
+  public function register_user() {
+    if (is_user_logged_in())
+      return false;
+    $email = Services::getValue('email');
+    $pwd = Services::getValue('pwd');
+    if (false == $email || false == $pwd)
+      return false;
+
+    $user_id = email_exists( $email );
+    if (isset( $_REQUEST[ 'lastname' ], $_REQUEST[ 'firstname' ] )) {
+      $lastname = Services::getValue( 'lastname', '' );
+      $firstname = Services::getValue( 'firstname', '' );
+      $username = Services::getValue( 'username' );
+      if ( $username == false ) return false;
+      if ( $user_id == false ) {
+          /* @return id user */
+          $args = [
+            "user_pass"    => $pwd,
+            "user_login"   => $username,
+            "user_email"   => $email,
+            "display_name" => $lastname,
+            "first_name"   => $firstname,
+            "last_name"    => $lastname,
+            "role"         => "advertiser",
+            "show_admin_bar_front" => false
+          ];
+          $user_id = wp_insert_user( $args );
+          if ( ! is_wp_error($user_id)){
+            /* Register success */
+            $User = new WP_User( $user_id );
+            $User->add_cap('upload_files');
+            return [
+              'success' => true
+            ];
+
+          } else {
+            $errno = &$user_id;
+            return  [
+              'success' => false,
+              'tracking' => 'Create user.',
+              'data' => $errno->get_error_messages()
+            ];
+          }
+
+      } else {
+        return array(
+          'success' => false,
+          'tracking' => 'Adress `email` or `user` already exists. ',
+          'data' => 'User already exists.'
+        );
+      }
+    } else return [
+      'success' => false,
+      'tracking' => 'Please review Request variable, probably that `lastname` or `firstname` is not define.',
+      'data' => 'There are variables not defined in the query.'
+    ];
+  }
+
   /**
    * This function add input or select form in euromada page admin
    * @param void

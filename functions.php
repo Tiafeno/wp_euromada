@@ -5,16 +5,26 @@
  * Author mail: tiafenofnel@gmail.com
  */
 
+$ERROR = null;
+
 require get_template_directory() . '/inc/class-euromada.php';
 require get_template_directory() . '/inc/class-services.php';
 require get_template_directory() . '/inc/class-walker.php';
+require get_template_directory() . '/inc/class-error.php';
 /** Shortcode */
 require get_template_directory() . '/inc/shortcode/class-login.php';
+require get_template_directory() . '/inc/shortcode/class-register.php';
 /** Widget */
 require get_template_directory() . '/inc/widgets/search.widget.php';
 
 function euromada_init() {
   add_action( 'admin_init', function() {
+
+    $advertiser = get_role( "advertiser" );
+    if ($advertiser === null) {
+      $role = Euromada::createRole();
+    }
+
     $redirect = isset( $_SERVER[ 'HTTP_REFERER' ] ) ? $_SERVER[ 'HTTP_REFERER' ] : home_url( '/' );
     if ( is_admin() && !defined( 'DOING_AJAX' ) && current_user_can( 'advertiser' ) ) {
       exit( wp_redirect( $redirect, 301 ) );
@@ -23,6 +33,10 @@ function euromada_init() {
 
   /** On load wordpress */
   add_action( "wp_loaded", function() {
+    // $user_ = new WP_User(3);
+    // echo get_password_reset_key( $user_ );
+    
+    /** Check if login form is submit */
     if (isset($_POST[ 'euromada_settings_nonce' ]) &&
     wp_verify_nonce($_POST[ 'euromada_settings_nonce' ], 'euromada_settings') &&
     is_admin() ) {
@@ -33,6 +47,16 @@ function euromada_init() {
       $register_page_id = Services::getValue('register_page', '');
       update_option( 'register_page_id', $register_page_id );
     }
+
+    /** Check if register form is submit */
+    if (isset($_POST[ 'register_nonce' ]) &&
+    wp_verify_nonce($_POST[ 'register_nonce' ], 'register') ) {
+      $euromada = new Euromada();
+      $results = $euromada->register_user();
+      if ($results['success'] == false)
+        $ERROR = new EuromadaError( $results );
+    }
+
   });
 
   add_action( 'after_setup_theme', function() {
@@ -78,6 +102,7 @@ add_action( 'init', 'euromada_init' );
 
 /** Add shortcode  */
 add_shortcode('euromada_login', [ new Euromada_Login(), 'Render' ]);
+add_shortcode('euromada_register', [ new Euromada_register(), 'Render' ]);
 
 function action_save_postdata( $post_id ) {
   /** for `cost` post meta */
@@ -150,6 +175,7 @@ function euromada_scripts() {
   wp_enqueue_script( 'dimmer', get_template_directory_uri() . '/js/dimmer.min.js', array() );
   wp_enqueue_script( 'rating', get_template_directory_uri() . '/js/rating.min.js', array() );
   wp_enqueue_script( 'transition', get_template_directory_uri() . '/js/transition.min.js', array() );
+  wp_enqueue_script( 'form-semantic', get_template_directory_uri() . '/js/form.min.js', array() );
 
   wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/app.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '20150330', true );
   wp_localize_script( 'euromada-script', 'jParams', array(
