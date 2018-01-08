@@ -5,11 +5,24 @@
  * Author mail: tiafenofnel@gmail.com
  */
 
+ /************
+  * get_option( 'woocommerce_shop_page_id' ); 
+    get_option( 'woocommerce_cart_page_id' ); 
+    get_option( 'woocommerce_checkout_page_id' );
+    get_option( 'woocommerce_pay_page_id' ); 
+    get_option( 'woocommerce_thanks_page_id' ); 
+    get_option( 'woocommerce_myaccount_page_id' ); 
+    get_option( 'woocommerce_edit_address_page_id' ); 
+    get_option( 'woocommerce_view_order_page_id' ); 
+    get_option( 'woocommerce_terms_page_id' ); 
+  */
+
 $ERROR = null;
 
 require get_template_directory() . '/inc/class-euromada.php';
 require get_template_directory() . '/inc/class-services.php';
 require get_template_directory() . '/inc/class-walker.php';
+require get_template_directory() . '/inc/class-order.php';
 require get_template_directory() . '/inc/class-error.php';
 /** Shortcode */
 require get_template_directory() . '/inc/shortcode/class-login.php';
@@ -35,6 +48,7 @@ function euromada_init() {
   add_action( "wp_loaded", function() {
     // $user_ = new WP_User(3);
     // echo get_password_reset_key( $user_ );
+    
     
     /** Check if login form is submit */
     if (isset($_POST[ 'euromada_settings_nonce' ]) &&
@@ -79,6 +93,15 @@ function euromada_init() {
    */
   add_action( 'get_header', function() {
     global $post;
+
+    $order = Services::getValue("order"); 
+    if ($order != false) {
+      $Order = new Euromada_Order();
+      $Order->addCart( (int)$order );
+      $cart_page_url = get_the_permalink( get_option( 'woocommerce_cart_page_id' ) );
+      wp_redirect( $cart_page_url, 301 );
+    }
+
     /** Verify header */
     if (is_user_logged_in()) {
       $login_page_id = get_option( 'login_page_id', false );

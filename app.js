@@ -56,9 +56,9 @@
     props: ['product'],
     template: '#template-summary',
     methods: {
-      routeLinkOrder: function (product_id) {
-        /** redirect in order page  */
-
+      routeLinkOrder: function( product_id ) {
+        var currentUrl = window.location.href;
+        window.location.href = currentUrl + "?order=" + parseInt( product_id );
       }
     },
   });
@@ -170,6 +170,9 @@
         jQuery('.segment')
           .dimmer({ closable: false })
           .dimmer('show');
+      },
+      methods : {
+        
       },
       mounted: function () {
         if ( _.isUndefined(__advert__) ) console.warn("adverts variable is undefined");
