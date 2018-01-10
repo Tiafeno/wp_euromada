@@ -92,8 +92,7 @@ function euromada_init() {
    * Redirect in home page if user is login
    */
   add_action( 'get_header', function() {
-    global $post;
-
+    global $post, $posts;
     $order = Services::getValue("order"); 
     if ($order != false) {
       $Order = new Euromada_Order();
@@ -104,6 +103,7 @@ function euromada_init() {
 
     /** Verify header */
     if (is_user_logged_in()) {
+      if ($post == null) return;
       $login_page_id = get_option( 'login_page_id', false );
       if (is_int( (int)$login_page_id ) ) :
         if ($post->ID != (int)$login_page_id) return true;

@@ -4,9 +4,9 @@
   <!-- search section -->
   <div class="uk-section-transparent uk-section-large uk-margin-remove uk-padding-remove">
     <div class="uk-container uk-container-small">
-      <form class="uk-grid-small" uk-grid>
+      <form class="uk-grid-small" method="GET" action="" uk-grid>
         <div class="uk-width-1-6@m">
-            <select name="category" class="ui fluid normal dropdown">
+            <select name="cat" class="ui fluid normal dropdown">
               <option value="">Catégorie</option>
               <option v-for="cat in selectInput.categories" v-bind:value="cat.term_id">
                 {{cat.name}}
@@ -44,6 +44,7 @@
               </select>
         </div>
         <div class="uk-width-1-6@m">
+            <div class="uk-hidden"><input type="text" name="s" value="" /></div>
             <button class="uk-button uk-button-euromada er-button-search">CHERCHER</button>
         </div>
       </form>
