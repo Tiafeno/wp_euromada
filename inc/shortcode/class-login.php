@@ -3,7 +3,7 @@
 final class Euromada_Login {
   public function __construct() {}
 
-  protected static function getRegisterLink() {
+  protected static function registerLink() {
     $register_page_id = get_option('register_page_id', false);
     return get_permalink( (int)$register_page_id );
   }
@@ -108,7 +108,7 @@ final class Euromada_Login {
           <div class="uk-margin">
             <div class="uk-inline">
               <span >Vous n'avez pas de compte?</span>
-              <a href="<?= self::getRegisterLink() ?>"  class="uk-button uk-button-link" >Crée un compte</a>
+              <a href="<?= self::registerLink() ?>"  class="uk-button uk-button-link" >Crée un compte</a>
             </div>
           </div>
           
