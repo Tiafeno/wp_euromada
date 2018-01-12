@@ -2,7 +2,7 @@
 
 final class Euromada_register{
   public function __construct() {}
-  public static function render($attrs, $content = null) {
+  public static function render($attrs, $content = "") {
     global $MESSAGE;
     $verification = is_null($MESSAGE) ? true : (is_object($MESSAGE) ? true : false );
     $url = home_url( '/' );
@@ -163,6 +163,7 @@ final class Euromada_register{
       </form>
     <?php else: ?>
       <p class="uk-margin-remove er-h2">Vous n'avez pas les autorisations pour afficher les contenues de cette page.</p>
+      <p><?= $content ?></p>
     <?php endif; ?>
     </div>
     <?php

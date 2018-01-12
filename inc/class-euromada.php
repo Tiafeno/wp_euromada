@@ -73,7 +73,14 @@ class Euromada {
           "show_admin_bar_front" => false
         ];
         $user_id = wp_insert_user( $args );
+        
         if ( ! is_wp_error($user_id)){
+
+          /** reset and validate account */
+          $user = new WP_User($user_id);
+          get_password_reset_key( $user );
+          // send_confirmation_mail()
+
           /* Register success */
           $User = new WP_User( $user_id );
           $User->add_cap('upload_files');
@@ -122,6 +129,12 @@ class Euromada {
         "blogname" => "Page pour s'enregistrer",
         "id" => "register_page",
         "page_id" => get_option( "register_page_id", false ),
+        "description" => ""
+      ],
+      [
+        "blogname" => "Pge profil",
+        "id" => "profil_page",
+        "page_id" => get_option( "profil_page_id", false ),
         "description" => ""
       ]
     ];
@@ -254,6 +267,11 @@ class Euromada {
     
   }
 
+  /**
+   * Get 12 last product list
+   * @param void
+   * @return array - (WP_Post) Array of object product details 
+   */
   public function getLastAd() {
     $args = array(
       'post_type'      => 'product',
@@ -301,4 +319,40 @@ class Euromada {
     $this->contents->gallery = $gallery;
     return $this->contents;
   }
+
+  /**
+   * ****************************************** USER ********************************************
+   */
+
+  /**
+   * Get product(s)
+   * @param void
+   * @return array - (WP_Post) Array of object product details 
+   */
+  public function myAdverts() {
+    $products = [];
+    /** Denied access if user is connected */
+    if ( ! is_user_logged_in())
+      return false;
+    $user = wp_get_current_user();
+    $args = [
+      'post_type' => 'product',
+      'author' => $user->ID,
+      'posts_per_page' => -1
+    ];
+    $query = new WP_Query( $args );
+    if ($query->have_posts()) {
+      while ($query->have_posts()) : $query->the_post();
+        $this->contents = new stdClass();
+        $advert = wc_get_product($query->post->ID);
+        $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [200, 50] );
+
+        $this->createObjectJS( $advert );
+        $this->push();
+      endwhile;
+    }
+    wp_reset_postdata();
+    return $this->adverts;
+  }
+
 }
