@@ -37,6 +37,8 @@ final class Euromada_profil {
       })
     })(jQuery)
     </script>
+
+  <!-- Dialog -->
       <div class="ui basic commande modal">
         <div class="ui icon header">
           <i class="archive icon"></i>
@@ -71,7 +73,7 @@ final class Euromada_profil {
           </div>
         </div>
       </div>
-
+<!--  end Dialog - -->
 
     <h2 class="ui header">
       <i class="settings icon"></i>
@@ -164,10 +166,12 @@ final class Euromada_profil {
             <?php endforeach; ?>
                 </tbody>
               </table>
-                      
-               
           </li>
-          <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed do eiusmod.</li>
+
+          <li>
+            <?php $logoutUrl = wp_logout_url( home_url('/') );  ?>
+            <a href="<?= $logoutUrl ?>" class="button ui left floated primary button">Se deconnecter</a>
+          </li>
       </ul>
 
     <?php

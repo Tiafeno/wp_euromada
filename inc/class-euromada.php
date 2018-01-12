@@ -69,8 +69,7 @@ class Euromada {
           "display_name" => $lastname,
           "first_name"   => $firstname,
           "last_name"    => $lastname,
-          "role"         => "advertiser",
-          "show_admin_bar_front" => false
+          "role"         => "advertiser"
         ];
         $user_id = wp_insert_user( $args );
         
@@ -89,6 +88,7 @@ class Euromada {
           $type = Services::getValue('type');
           update_user_meta($user_id, '_adress_', trim($adress));
           update_user_meta($user_id, '_type_', trim($type));
+          update_user_meta($user_id, 'show_admin_bar_front', false);
           return [
             'success' => true,
             'msg' => "Inscription success!"
