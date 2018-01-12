@@ -3,6 +3,18 @@
 final class Euromada_register{
   public function __construct() {}
   public static function render($attrs, $content = null) {
+    global $MESSAGE;
+    $verification = is_null($MESSAGE) ? true : (is_object($MESSAGE) ? true : false );
+    $url = home_url( '/' );
+    /** Denied access if user is connected and redirect login url */
+    if (is_user_logged_in()) {
+      $login_page_id = get_option( 'login_page_id', false );
+      if (is_int( (int)$login_page_id ) ) :
+        $url = get_the_permalink( (int)$login_page_id, false );
+      endif;
+      $verification = false;
+    }
+
     ?>
     <script type="text/javascript">
       (function($){
@@ -29,8 +41,8 @@ final class Euromada_register{
                   }
                 ]
               },
-              address: {
-                identifier: 'address',
+              adress: {
+                identifier: 'adress',
                 rules: [
                   {
                     type   : 'empty',
@@ -70,7 +82,7 @@ final class Euromada_register{
                 ]
               },
               password: {
-                identifier  : 'same_password',
+                identifier  : 'same_pwd',
                 rules: [
                   {
                     type   : 'match[pwd]',
@@ -85,60 +97,73 @@ final class Euromada_register{
       
     </script>
     <div class="main ui container">
+
+  <?php if ($verification) : ?>
       <form id="registerform" action="" method="POST" class="ui form">
       <?= wp_nonce_field('register', 'register_nonce') ?>
-        <h4 class="ui dividing header">Shipping Information</h4>
-        <div class=" fields">
+        <h4 class="ui dividing header">Informations sur la livraison</h4>
+        <div class="three fields">
+          <div class="field"> 
+            <label>Vous êtes ?</label>
+            <select class="ui fluid search dropdown" name="type">
+              <option value=""></option>
+              <option value="seller">Vendeur</option>
+              <option value="buyer">Acheteur</option>
+            </select>
+          </div>
           <div class="field"> <!-- error -->
-            <label>First Name</label>
-            <input placeholder="First Name" name="firstname" type="text">
+            <label>Nom de famille</label>
+            <input placeholder="" name="firstname" type="text">
           </div>
           <div class="field">
-            <label>Last Name</label>
-            <input placeholder="Last Name" name="lastname" type="text">
+            <label>Prénom</label>
+            <input placeholder="" name="lastname" type="text">
           </div>
         </div>
 
         <div class="field">
-          <label>Address E-mail</label>
+          <label>Adrèsse E-mail</label>
           <div class="fields">
             <div class="twelve wide field">
-              <input type="text" name="email" placeholder="Address email">
+              <input type="text" name="email" placeholder="Adresse email">
             </div>
           </div>
         </div>
 
         <div class=" fields">
           <div class="field">
-            <label>Billing Address</label>
-            <input placeholder="Address" name="address" type="text">
+            <label>Adrèsse de facturation</label>
+            <input placeholder="Adresse" name="adress" type="text">
           </div>
           <div class="field">
-            <label>Phone</label>
-            <input placeholder="Phone" name="phone" type="text">
+            <label>Numéro de téléphone</label>
+            <input placeholder="Votre numéro" name="phone" type="text">
           </div>
         </div>
 
-        <h4 class="ui dividing header">login Information</h4>
+        <h4 class="ui dividing header">Informations de connexion</h4>
         <div class="fields">
           <div class="field">
-            <label>Username</label>
-            <input type="text" name="username" placeholder="Username">
+            <label>Nom d'utilisateur</label>
+            <input type="text" name="username" placeholder="">
           </div>
         </div>
         <div class="fields">
           <div class="field">
-            <label>Password</label>
+            <label>Mot de passe</label>
             <input type="password" name="pwd" >
           </div>
           <div class="field">
-            <label>Confirm Password</label>
-            <input type="password" name="same_password">
+            <label>Confirmez le mot de passe</label>
+            <input type="password" name="same_pwd">
           </div>
         </div>
 
-        <button class="ui button" type="submit">S'inscrire</button>
+        <button class="ui blue button" type="submit">S'inscrire</button>
       </form>
+    <?php else: ?>
+      <p class="uk-margin-remove er-h2">Vous n'avez pas les autorisations pour afficher les contenues de cette page.</p>
+    <?php endif; ?>
     </div>
     <?php
   }

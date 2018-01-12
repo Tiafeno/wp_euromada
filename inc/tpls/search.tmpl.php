@@ -4,7 +4,7 @@
   <!-- search section -->
   <div class="uk-section-transparent uk-section-large uk-margin-remove uk-padding-remove">
     <div class="uk-container uk-container-small">
-      <form class="uk-grid-small" method="GET" action="" uk-grid>
+      <form class="uk-grid-small" method="GET" action="<?= site_url('/'); ?>" uk-grid>
         <div class="uk-width-1-6@m">
             <select name="cat" class="ui fluid normal dropdown">
               <option value="">Catégorie</option>

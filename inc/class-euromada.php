@@ -49,61 +49,60 @@ class Euromada {
   }
 
   public function register_user() {
+    /** Denied access if user is connected */
     if (is_user_logged_in())
       return false;
+
     $email = Services::getValue('email');
     $pwd = Services::getValue('pwd');
-    if (false == $email || false == $pwd)
-      return false;
-
     $user_id = email_exists( $email );
-    if (isset( $_REQUEST[ 'lastname' ], $_REQUEST[ 'firstname' ] )) {
-      $lastname = Services::getValue( 'lastname', '' );
-      $firstname = Services::getValue( 'firstname', '' );
-      $username = Services::getValue( 'username' );
-      if ( $username == false ) return false;
-      if ( $user_id == false ) {
-          /* @return id user */
-          $args = [
-            "user_pass"    => $pwd,
-            "user_login"   => $username,
-            "user_email"   => $email,
-            "display_name" => $lastname,
-            "first_name"   => $firstname,
-            "last_name"    => $lastname,
-            "role"         => "advertiser",
-            "show_admin_bar_front" => false
+    $lastname = Services::getValue( 'lastname', '' );
+    $firstname = Services::getValue( 'firstname', '' );
+    $username = Services::getValue( 'username' );
+    if ( $username == false ) return false;
+    if ( $user_id == false ) {
+        /* @return id user */
+        $args = [
+          "user_pass"    => $pwd,
+          "user_login"   => $username,
+          "user_email"   => $email,
+          "display_name" => $lastname,
+          "first_name"   => $firstname,
+          "last_name"    => $lastname,
+          "role"         => "advertiser",
+          "show_admin_bar_front" => false
+        ];
+        $user_id = wp_insert_user( $args );
+        if ( ! is_wp_error($user_id)){
+          /* Register success */
+          $User = new WP_User( $user_id );
+          $User->add_cap('upload_files');
+          
+          $adress = Services::getValue('adress');
+          $type = Services::getValue('type');
+          update_user_meta($user_id, '_adress_', trim($adress));
+          update_user_meta($user_id, '_type_', trim($type));
+          return [
+            'success' => true,
+            'msg' => "Inscription success!"
           ];
-          $user_id = wp_insert_user( $args );
-          if ( ! is_wp_error($user_id)){
-            /* Register success */
-            $User = new WP_User( $user_id );
-            $User->add_cap('upload_files');
-            return [
-              'success' => true
-            ];
 
-          } else {
-            $errno = &$user_id;
-            return  [
-              'success' => false,
-              'tracking' => 'Create user.',
-              'data' => $errno->get_error_messages()
-            ];
-          }
+        } else {
+          $errno = &$user_id;
+          return  [
+            'success' => false,
+            'tracking' => 'Create user.',
+            'msg' => $errno->get_error_messages()
+          ];
+        }
 
-      } else {
-        return array(
-          'success' => false,
-          'tracking' => 'Adress `email` or `user` already exists. ',
-          'data' => 'User already exists.'
-        );
-      }
-    } else return [
-      'success' => false,
-      'tracking' => 'Please review Request variable, probably that `lastname` or `firstname` is not define.',
-      'data' => 'There are variables not defined in the query.'
-    ];
+    } else {
+      return array(
+        'success' => false,
+        'tracking' => 'Adress `email` or `user` already exists. ',
+        'msg' => 'User already exists.'
+      );
+    }
   }
 
   /**

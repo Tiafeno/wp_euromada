@@ -1,4 +1,5 @@
 <?php
+global $MESSAGE;
 /**
  * The template for displaying the header
  *
@@ -70,8 +71,11 @@
     .ui.form input[type="text"], 
     .ui.form input[type="file"], 
     .ui.form input[type="url"] {
-      width: inherit !important;
       vertical-align: top;
+      box-sizing: border-box !important;
+    }
+    form .ui.dropdown {
+      box-sizing: border-box;
     }
   </style>
 
@@ -144,6 +148,18 @@
           dynamic_sidebar( 'middle-area' ); 
         endif; 
       ?>
+    <?php if ( ! is_null($MESSAGE)) : ?>
+        <div class="uk-section uk-section-large uk-padding-small ">
+          <div class="uk-container uk-container-small">
+            <div class="ui <?= $MESSAGE->type ?> message">
+              <div class="header">
+              <?= $MESSAGE->get_title() ?>
+              </div>
+              <p><?= $MESSAGE->get_message() ?></p>
+            </div>
+          </div>
+        </div>
+    <?php endif; ?>
     <?php if (is_front_page()) : ?>
       <section class="er-information uk-padding-medium uk-padding-remove-left uk-padding-remove-right">
         <!-- euromada description -->

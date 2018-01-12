@@ -17,13 +17,13 @@
     get_option( 'woocommerce_terms_page_id' ); 
   */
 
-$ERROR = null;
+$MESSAGE = null;
 
 require get_template_directory() . '/inc/class-euromada.php';
 require get_template_directory() . '/inc/class-services.php';
 require get_template_directory() . '/inc/class-walker.php';
 require get_template_directory() . '/inc/class-order.php';
-require get_template_directory() . '/inc/class-error.php';
+require get_template_directory() . '/inc/class-message.php';
 /** Shortcode */
 require get_template_directory() . '/inc/shortcode/class-login.php';
 require get_template_directory() . '/inc/shortcode/class-register.php';
@@ -46,6 +46,7 @@ function euromada_init() {
 
   /** On load wordpress */
   add_action( "wp_loaded", function() {
+    global $MESSAGE;
     // $user_ = new WP_User(3);
     // echo get_password_reset_key( $user_ );
     
@@ -67,8 +68,9 @@ function euromada_init() {
     wp_verify_nonce($_POST[ 'register_nonce' ], 'register') ) {
       $euromada = new Euromada();
       $results = $euromada->register_user();
-      if ($results['success'] == false)
-        $ERROR = new EuromadaError( $results );
+      $singin = (object)$results;
+      $type =  ((bool)$singin->success == false) ? 'negative' : 'positive';
+      $MESSAGE = new Euromada_Message($singin->msg, 'Inscription', $type);
     }
 
   });
