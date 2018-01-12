@@ -7,7 +7,9 @@
 
 
 final class Euromada_Order {
-  public function __construct() {}
+  public function __construct() {
+    return $this;
+  }
   
   public function addCart( $post_id ) {
     global $woocommerce;

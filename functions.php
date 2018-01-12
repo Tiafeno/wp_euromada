@@ -27,6 +27,7 @@ require get_template_directory() . '/inc/class-message.php';
 /** Shortcode */
 require get_template_directory() . '/inc/shortcode/class-login.php';
 require get_template_directory() . '/inc/shortcode/class-register.php';
+require get_template_directory() . '/inc/shortcode/class-profil.php';
 /** Widget */
 require get_template_directory() . '/inc/widgets/search.widget.php';
 
@@ -50,7 +51,6 @@ function euromada_init() {
     // $user_ = new WP_User(3);
     // echo get_password_reset_key( $user_ );
     
-    
     /** Check if login form is submit */
     if (isset($_POST[ 'euromada_settings_nonce' ]) &&
     wp_verify_nonce($_POST[ 'euromada_settings_nonce' ], 'euromada_settings') &&
@@ -61,6 +61,9 @@ function euromada_init() {
 
       $register_page_id = Services::getValue('register_page', '');
       update_option( 'register_page_id', $register_page_id );
+
+      $profil_page_id = Services::getValue('profil_page', '');
+      update_option( 'profil_page_id', $profil_page_id );
     }
 
     /** Check if register form is submit */
@@ -86,7 +89,7 @@ function euromada_init() {
     $referer = $_SERVER[ 'HTTP_REFERER' ];
     // if there's a valid referrer, and it's not the default log-in screen
     if ( !empty($referer) && !strstr($referer, 'wp-login') && !strstr($referer, 'wp-admin') ) {
-        exit(wp_redirect( $referer . '?login=failed', 301 ));  // let's append some information (login=failed) to the URL for the theme to use
+      exit(wp_redirect( $referer . '?login=failed', 301 ));  // let's append some information (login=failed) to the URL for the theme to use
     }
   });
   
@@ -103,6 +106,8 @@ function euromada_init() {
       wp_redirect( $cart_page_url, 301 );
     }
 
+    $post_delete_id = Services::getValue('__post_delete_id', false);
+    if (false != $post_delete_id) Euromada_profil::deletePost( (int)$post_delete_id );
     /** Verify header */
     if (is_user_logged_in()) {
       if ($post == null) return;
@@ -128,6 +133,7 @@ add_action( 'init', 'euromada_init' );
 /** Add shortcode  */
 add_shortcode('euromada_login', [ new Euromada_Login(), 'Render' ]);
 add_shortcode('euromada_register', [ new Euromada_register(), 'Render' ]);
+add_shortcode('euromada_profil', [ new Euromada_profil(), 'Render' ]);
 
 function action_save_postdata( $post_id ) {
   /** for `cost` post meta */
@@ -201,6 +207,8 @@ function euromada_scripts() {
   wp_enqueue_script( 'rating', get_template_directory_uri() . '/js/rating.min.js', array() );
   wp_enqueue_script( 'transition', get_template_directory_uri() . '/js/transition.min.js', array() );
   wp_enqueue_script( 'form-semantic', get_template_directory_uri() . '/js/form.min.js', array() );
+  wp_enqueue_script( 'sidebar-semantic', get_template_directory_uri() . '/js/sidebar.min.js', array() );
+  wp_enqueue_script( 'modal-semantic', get_template_directory_uri() . '/js/modal.min.js', array() );
 
   wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/app.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '20150330', true );
   wp_localize_script( 'euromada-script', 'jParams', array(

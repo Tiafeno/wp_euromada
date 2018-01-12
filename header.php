@@ -22,18 +22,23 @@ global $MESSAGE;
 	<?php wp_head(); ?>
 
   <style type="text/css">
+   
   /** UI semantic */
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/semantic.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/dropdown.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/transition.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/dimmer.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/rating.css");
+    @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/sidebar.css");
+    @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/icon.css");
+    @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/model.css");
     /* @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/form.css"); */
   /** UIkit */
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/uikit.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/style.css");
   /** Google fonts */
     @import url('https://fonts.googleapis.com/css?family=Exo:300,400,700');
+
   </style>
   <script type="text/javascript">
     (function($){
@@ -77,6 +82,23 @@ global $MESSAGE;
     form .ui.dropdown {
       box-sizing: border-box;
     }
+    nav .er-navbar-right {
+      margin-left: 15px !important;
+    }
+    @font-face {
+      font-family: 'Icons';
+      src: url("<?=  esc_url( get_template_directory_uri() ); ?>/css/themes/default/assets/fonts/icons.eot");
+      src: url("<?=  esc_url( get_template_directory_uri() ); ?>/css/themes/default/assets/fonts/icons.eot?#iefix") format('embedded-opentype'), 
+      url("<?=  esc_url( get_template_directory_uri() ); ?>/css/themes/default/assets/fonts/icons.woff2") format('woff2'), 
+      url("<?=  esc_url( get_template_directory_uri() ); ?>/css/themes/default/assets/fonts/icons.woff") format('woff'), 
+      url("<?=  esc_url( get_template_directory_uri() ); ?>/css/themes/default/assets/fonts/icons.ttf") format('truetype'), 
+      url("<?=  esc_url( get_template_directory_uri() ); ?>/css/themes/default/assets/fonts/icons.svg#icons") format('svg');
+      font-style: normal;
+      font-weight: normal;
+      font-variant: normal;
+      text-decoration: inherit;
+      text-transform: none;
+    }
   </style>
 
   </head>
@@ -118,22 +140,29 @@ global $MESSAGE;
       <?php if ( has_nav_menu( 'primary' ) ) : ?>
 
         <nav class="uk-navbar-container uk-navbar-transparent main-navigation" style="margin-bottom: 15px" uk-navbar>
-          <?php
-            wp_nav_menu( [
-              'menu_class' => "uk-subnav uk-subnav-pill er-subnav uk-margin",
-              'theme_location' => 'primary',
-              'container_class' => 'uk-navbar-right',
-              'walker' => new Primary_Walker
-            ] );
-          ?>
+          <div class="uk-margin-auto-left uk-flex">
+            <?php
+              wp_nav_menu( [
+                'menu_class' => "uk-subnav uk-subnav-pill er-subnav uk-margin er-navbar-right",
+                'theme_location' => 'primary',
+                'container_class' => 'uk-navbar-right',
+                'walker' => new Primary_Walker
+              ] );
 
-          <div class="uk-navbar-right">
-            <div class=" ">
-              <ul id="menu-compte" class="uk-subnav uk-subnav-pill er-user-subnav uk-margin">
-                <li>
-                  <a href='#'><span class='er-user-icon' uk-icon='icon: user'></span><span class='er-user-text'>Mon compte</span></a> 
-                </li>
-              </ul>
+              $usr = is_user_logged_in() ? wp_get_current_user() : 'Mon Compte';
+              $profil_page_id = get_option( "profil_page_id", false );
+              $profil_url = $usr instanceof WP_User ? get_the_permalink( (int)$profil_page_id ) : get_the_permalink( get_option( 'login_page_id' ) );
+              $profil_name = $usr instanceof WP_User ? $usr->display_name  : $usr;
+            ?>
+
+            <div class="uk-navbar-right er-navbar-right">
+              <div class=" ">
+                <ul id="menu-compte" class="uk-subnav uk-subnav-pill er-user-subnav uk-margin">
+                  <li>
+                    <a href='<?= $profil_url ?>'><span class='er-user-icon' uk-icon='icon: user'></span><span class='er-user-text'><?= $profil_name ?></span></a> 
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </nav>

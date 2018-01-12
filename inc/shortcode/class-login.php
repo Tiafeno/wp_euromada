@@ -10,10 +10,11 @@ final class Euromada_Login {
    * @return void 
    */
   public static function render($attrs, $content = null) {
+    $profil_page_id = get_option('profil_page_id', false);
     $args = [];
 		$defaults = array(
 			'echo' => true,
-			'redirect' => \get_permalink(),
+			'redirect' => get_the_permalink((int)$profil_page_id),
 			'form_id' => 'loginform',
 			'label_username' => __( 'Email Address' ),
 			'label_password' => __( 'Password' ),
@@ -27,7 +28,7 @@ final class Euromada_Login {
 			'value_username' => '',
 			// Set 'value_remember' to true to default the "Remember me" checkbox to checked.
 			'value_remember' => true
-		);
+    );
 		$args = wp_parse_args( $args, apply_filters( 'login_form_defaults', $defaults ) );
 		$login_form_top    = apply_filters( 'login_form_top', '', $args );
 		$login_form_middle = apply_filters( 'login_form_middle', '', $args );
