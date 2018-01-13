@@ -48,17 +48,79 @@ class Euromada {
     return (null != $result) ? true : false;
   }
 
+  /**
+   * Action save meta and update
+   * @param int - $user_id : User identification
+   * @return void
+   */
+  public function action_euromada_save_meta_user( $user_id ) {
+    if ( ! is_int( $user_id )) return false;
+    $User = get_user_by('id', $user_id);
+    if ( ! $User instanceof WP_User ) return false;
+    $adress = Services::getValue('adress');
+    $type = Services::getValue('type');
+    $phone = Services::getValue('phone');
+    update_user_meta($user_id, '_adress_', trim($adress));
+    update_user_meta($user_id, '_type_', trim($type));
+    update_user_meta($user_id, '_phone_', $phone);
+  }
+
+  /**
+   * Action update user information
+   * @param int - $user_id : User identification
+   * @return bool
+   */
+  public function action_euromada_update_information_user( $user_id ) {
+    if ( ! is_user_logged_in())
+      return false;
+
+    if ( ! is_int( $user_id )) return false;
+    $firstname = Services::getValue('firstname');
+    $lastname = Services::getValue('lastname');
+    $User = new WP_User( $user_id );
+    $update = false;
+
+    if ($User->first_name != $firstname || $User->last_name != $lastname)
+      $update = true;
+    
+    if ( ! $update ) return true;
+    $args = [
+      'ID' => $user_id,
+      'first_name' => $firstname,
+      "last_name" => $lastname
+    ];
+    $result = wp_update_user( $args );
+    return  (is_wp_error( $result )) ? false : true;
+  }
+
+  /**
+   * Action update user password
+   * @param int - $user_id : User identification
+   * @return bool
+   */
+  public function action_euromada_update_password( $user_id ) {
+
+  }
+
+  public function update_user() {
+    $User = wp_get_current_user();
+    /** update user meta */
+    do_action("euromada_save_meta_user", $User->ID);
+    /** update user */
+    do_action("euromada_update_information_user", $User->ID);
+  }
+
   public function register_user() {
     /** Denied access if user is connected */
     if (is_user_logged_in())
       return false;
 
-    $email = Services::getValue('email');
-    $pwd = Services::getValue('pwd');
-    $user_id = email_exists( $email );
-    $lastname = Services::getValue( 'lastname', '' );
+    $email     = Services::getValue( 'email' );
+    $pwd       = Services::getValue( 'pwd' );
+    $user_id   = email_exists( $email );
+    $lastname  = Services::getValue( 'lastname', '' );
     $firstname = Services::getValue( 'firstname', '' );
-    $username = Services::getValue( 'username' );
+    $username  = Services::getValue( 'username' );
     if ( $username == false ) return false;
     if ( $user_id == false ) {
         /* @return id user */
@@ -83,12 +145,10 @@ class Euromada {
           /* Register success */
           $User = new WP_User( $user_id );
           $User->add_cap('upload_files');
-          
-          $adress = Services::getValue('adress');
-          $type = Services::getValue('type');
-          update_user_meta($user_id, '_adress_', trim($adress));
-          update_user_meta($user_id, '_type_', trim($type));
+        
+          do_action("euromada_save_meta_user", $user_id);
           update_user_meta($user_id, 'show_admin_bar_front', false);
+
           return [
             'success' => true,
             'msg' => "Inscription success!"

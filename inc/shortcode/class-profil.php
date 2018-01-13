@@ -35,11 +35,13 @@ final class Euromada_profil {
     <script type="text/javascript">
     var __user_token__ = "<?= wp_get_session_token() ?>";
     var __adverts__ = <?= json_encode( $euromada->myAdverts(), JSON_PRETTY_PRINT ); ?>;
+
     (function($) {
       $(document).ready(function() {
         /** ready, code here */
       })
     })(jQuery)
+    
     </script>
 
   <!-- Dialog -->

@@ -31,7 +31,13 @@ require get_template_directory() . '/inc/shortcode/class-profil.php';
 /** Widget */
 require get_template_directory() . '/inc/widgets/search.widget.php';
 
+$instanceEuromada = new Euromada();
+
 function euromada_init() {
+  global $instanceEuromada;
+  add_action("euromada_save_meta_user", [ $instanceEuromada, 'action_euromada_save_meta_user' ], 10, 1);
+  add_action("euromada_update_information_user", [ $instanceEuromada, 'action_euromada_update_information_user' ], 10, 1);
+
   add_action( 'admin_init', function() {
 
     $advertiser = get_role( "advertiser" );
@@ -47,9 +53,14 @@ function euromada_init() {
 
   /** On load wordpress */
   add_action( "wp_loaded", function() {
-    global $MESSAGE;
+    global $MESSAGE, $instanceEuromada;
     // $user_ = new WP_User(3);
     // echo get_password_reset_key( $user_ );
+    if (isset($_POST[ 'edit_profil_nonce' ]) &&
+    wp_verify_nonce($_POST[ 'edit_profil_nonce' ], 'edit_profil') &&
+    is_user_logged_in()) {
+      $instanceEuromada->update_user();
+    }
     
     /** Check if login form is submit */
     if (isset($_POST[ 'euromada_settings_nonce' ]) &&
@@ -69,8 +80,7 @@ function euromada_init() {
     /** Check if register form is submit */
     if (isset($_POST[ 'register_nonce' ]) &&
     wp_verify_nonce($_POST[ 'register_nonce' ], 'register') ) {
-      $euromada = new Euromada();
-      $results = $euromada->register_user();
+      $results = $instanceEuromada->register_user();
       $singin = (object)$results;
       $type =  ((bool)$singin->success == false) ? 'negative' : 'positive';
       $MESSAGE = new Euromada_Message($singin->msg, 'Inscription', $type);
