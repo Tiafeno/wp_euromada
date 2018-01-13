@@ -101,7 +101,7 @@ final class Euromada_register{
   <?php if ($verification) : ?>
       <form id="registerform" action="" method="POST" class="ui form">
       <?= wp_nonce_field('register', 'register_nonce') ?>
-        <h4 class="ui dividing header">Informations sur la livraison</h4>
+        <h4 class="ui dividing header">Informations personnelles</h4>
         <div class="three fields">
           <div class="field"> 
             <label>Vous êtes ?</label>
