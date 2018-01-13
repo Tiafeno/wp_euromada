@@ -1,5 +1,7 @@
 <?php
 
+require get_template_directory() . '/inc/shortcode/includes/euromada-actions.php';
+
 final class Euromada_profil {
   public function __construct() {}
 
@@ -14,9 +16,9 @@ final class Euromada_profil {
   }
 
   public static function render($attrs, $content = "") {
-
-    wp_enqueue_script( 'euromada-profil-script', get_template_directory_uri() . '/profil.js', array( 'vuejs', 'vuejs-route', 'jquery', 'euromada-script' ), '', true );
+    $euromadaActions = new euromada_actions();
     $euromada = new Euromada();
+    wp_enqueue_script( 'euromada-profil-script', get_template_directory_uri() . '/profil.js', array( 'vuejs', 'vuejs-route', 'jquery', 'euromada-script' ), '', true );
     
     $my_orders = get_posts( apply_filters( 'woocommerce_my_account_my_orders_query', array(
       'numberposts' => 12,
@@ -26,6 +28,8 @@ final class Euromada_profil {
       'post_status' => array_keys( wc_get_order_statuses() ),
     ) ) );
 
+    add_action('euromada_mes_annonces', [ $euromadaActions, 'action_mes_annonces']);
+    add_action('euromada_my_profil', [ $euromadaActions, 'action_my_profil']);
 
     ?>  
     <script type="text/javascript">
@@ -90,32 +94,7 @@ final class Euromada_profil {
       
       <ul class="uk-switcher uk-margin" id="app-profil">
           <li>
-            <div class="ui divided items">
-
-              <div class="item" v-for="(advert, index) in adverts">
-                <div class="image">
-                  <p class="er-photo">{{ advert.countPic }}</p>
-                  <img v-bind:src="advert.imgLink" v-bind:alt="advert.title">
-                </div>
-                <div class="content">
-                  <div class="extra">
-                    <div class="ui left floated"><a v-bind:href="advert.url" class="header er-list-title">{{ advert.title }}</a></div>
-                    <div class="ui right floated er-h2" style="color: #000"><p>{{ advert.cost | ariary }}</p></div>
-                  </div>
-                  <div class="meta">
-                    <span class="cinema">{{ advert.dateadd.date | moment }}</span>
-                  </div>
-                  <div class="description">
-                    <p></p>
-                  </div>
-                  <div class="extra">
-                    <div class="ui right floated primary button er-button-voir" @click="window.location.href = advert.url">Voir</div>
-                    <div class="ui right floated negative button" @click="deletePost(advert.id)">Supprimer</div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
+            <?php do_action('euromada_mes_annonces'); ?>
           </li>
 
           <li>
@@ -169,8 +148,7 @@ final class Euromada_profil {
           </li>
 
           <li>
-            <?php $logoutUrl = wp_logout_url( home_url('/') );  ?>
-            <a href="<?= $logoutUrl ?>" class="button ui left floated primary button">Se deconnecter</a>
+            <?php do_action('euromada_my_profil'); ?>
           </li>
       </ul>
 

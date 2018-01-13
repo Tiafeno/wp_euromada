@@ -98,6 +98,12 @@ function euromada_init() {
    */
   add_action( 'get_header', function() {
     global $post, $posts;
+
+    /**
+     * Si la variable $_GET 'order' existe
+     * On ajoute le produit qui contient l'identifiant dans le panier et redirection 
+     * vers la page panier pour faire la commande.
+     */
     $order = Services::getValue("order"); 
     if ($order != false) {
       $Order = new Euromada_Order();
@@ -106,15 +112,29 @@ function euromada_init() {
       wp_redirect( $cart_page_url, 301 );
     }
 
+    /**
+     * Si la variable $_GET __post_delete_id existe
+     * on deplace le post dans la corbeille
+     */
     $post_delete_id = Services::getValue('__post_delete_id', false);
     if (false != $post_delete_id) Euromada_profil::deletePost( (int)$post_delete_id );
+
     /** Verify header */
     if (is_user_logged_in()) {
       if ($post == null) return;
       $login_page_id = get_option( 'login_page_id', false );
+      $profil_page_id = get_option( 'profil_page_id', false );
       if (is_int( (int)$login_page_id ) ) :
+        /**
+         * On verifie si la page actuel n'est pas une page pour se connecter.
+         * Si non, on reste dans cette page.
+         */
         if ($post->ID != (int)$login_page_id) return true;
-        $url = home_url( "/" );
+
+        /** rediriger vers la page profil si l'identification existe sinon,
+         * redirection vers la page d'accueil
+         */
+        $url = (false == $profil_page_id) ? home_url( "/" ) : get_permalink( (int)$profil_page_id );
         exit( wp_redirect( $url, 301 ) );
       endif;
     }
