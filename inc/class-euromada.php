@@ -63,6 +63,7 @@ class Euromada {
     update_user_meta($user_id, '_adress_', trim($adress));
     update_user_meta($user_id, '_type_', trim($type));
     update_user_meta($user_id, '_phone_', $phone);
+    update_user_meta($user_id, 'show_admin_bar_front', false);
   }
 
   /**

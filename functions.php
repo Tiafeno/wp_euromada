@@ -33,6 +33,58 @@ require get_template_directory() . '/inc/widgets/search.widget.php';
 
 $instanceEuromada = new Euromada();
 
+add_action( 'after_setup_theme', function() {
+  if ( !current_user_can( 'administrator' ) && !is_admin() ) {
+    show_admin_bar( false );
+  }
+});
+
+ /** On load wordpress */
+ add_action( "wp_loaded", function() {
+  global $MESSAGE, $instanceEuromada;
+  // $user_ = new WP_User(3);
+  // echo get_password_reset_key( $user_ );
+  if (isset($_POST[ 'edit_profil_nonce' ]) &&
+  wp_verify_nonce($_POST[ 'edit_profil_nonce' ], 'edit_profil') &&
+  is_user_logged_in()) {
+    $instanceEuromada->update_user();
+  }
+  
+  /** Check if login form is submit */
+  if (isset($_POST[ 'euromada_settings_nonce' ]) &&
+  wp_verify_nonce($_POST[ 'euromada_settings_nonce' ], 'euromada_settings') &&
+  is_admin() ) {
+
+    $login_page_id = Services::getValue('login_page', '');
+    update_option( 'login_page_id', $login_page_id );
+
+    $register_page_id = Services::getValue('register_page', '');
+    update_option( 'register_page_id', $register_page_id );
+
+    $profil_page_id = Services::getValue('profil_page', '');
+    update_option( 'profil_page_id', $profil_page_id );
+  }
+
+  /** Check if register form is submit */
+  if (isset($_POST[ 'register_nonce' ]) &&
+  wp_verify_nonce($_POST[ 'register_nonce' ], 'register') ) {
+    $results = $instanceEuromada->register_user();
+    $singin = (object)$results;
+    $type =  ((bool)$singin->success == false) ? 'negative' : 'positive';
+    $MESSAGE = new Euromada_Message($singin->msg, 'Inscription', $type);
+  }
+
+});
+
+/** On login fail */
+add_action( 'wp_login_failed', function() {
+  $referer = $_SERVER[ 'HTTP_REFERER' ];
+  // if there's a valid referrer, and it's not the default log-in screen
+  if ( !empty($referer) && !strstr($referer, 'wp-login') && !strstr($referer, 'wp-admin') ) {
+    exit(wp_redirect( $referer . '?login=failed', 301 ));  // let's append some information (login=failed) to the URL for the theme to use
+  }
+});
+
 function euromada_init() {
   global $instanceEuromada;
   add_action("euromada_save_meta_user", [ $instanceEuromada, 'action_euromada_save_meta_user' ], 10, 1);
@@ -50,58 +102,6 @@ function euromada_init() {
       exit( wp_redirect( $redirect, 301 ) );
     }
   }, 100 );
-
-  /** On load wordpress */
-  add_action( "wp_loaded", function() {
-    global $MESSAGE, $instanceEuromada;
-    // $user_ = new WP_User(3);
-    // echo get_password_reset_key( $user_ );
-    if (isset($_POST[ 'edit_profil_nonce' ]) &&
-    wp_verify_nonce($_POST[ 'edit_profil_nonce' ], 'edit_profil') &&
-    is_user_logged_in()) {
-      $instanceEuromada->update_user();
-    }
-    
-    /** Check if login form is submit */
-    if (isset($_POST[ 'euromada_settings_nonce' ]) &&
-    wp_verify_nonce($_POST[ 'euromada_settings_nonce' ], 'euromada_settings') &&
-    is_admin() ) {
-
-      $login_page_id = Services::getValue('login_page', '');
-      update_option( 'login_page_id', $login_page_id );
-
-      $register_page_id = Services::getValue('register_page', '');
-      update_option( 'register_page_id', $register_page_id );
-
-      $profil_page_id = Services::getValue('profil_page', '');
-      update_option( 'profil_page_id', $profil_page_id );
-    }
-
-    /** Check if register form is submit */
-    if (isset($_POST[ 'register_nonce' ]) &&
-    wp_verify_nonce($_POST[ 'register_nonce' ], 'register') ) {
-      $results = $instanceEuromada->register_user();
-      $singin = (object)$results;
-      $type =  ((bool)$singin->success == false) ? 'negative' : 'positive';
-      $MESSAGE = new Euromada_Message($singin->msg, 'Inscription', $type);
-    }
-
-  });
-
-  add_action( 'after_setup_theme', function() {
-    if ( !current_user_can( 'administrator' ) && !is_admin() ) {
-      show_admin_bar( false );
-    }
-  });
-
-  /** On login fail */
-  add_action( 'wp_login_failed', function() {
-    $referer = $_SERVER[ 'HTTP_REFERER' ];
-    // if there's a valid referrer, and it's not the default log-in screen
-    if ( !empty($referer) && !strstr($referer, 'wp-login') && !strstr($referer, 'wp-admin') ) {
-      exit(wp_redirect( $referer . '?login=failed', 301 ));  // let's append some information (login=failed) to the URL for the theme to use
-    }
-  });
   
   /**
    * Redirect in home page if user is login

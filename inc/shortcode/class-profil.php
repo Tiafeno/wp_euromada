@@ -70,7 +70,7 @@ final class Euromada_profil {
           <i class="remove circle icon"></i>
         </div>
         <div class="content">
-          <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
+          <p>Voulez vous vraiment supprimer cette publication?</p>
         </div>
         <div class="actions">
           <div class="ui green ok inverted button">
