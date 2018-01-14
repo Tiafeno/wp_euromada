@@ -189,16 +189,4 @@ global $MESSAGE;
           </div>
         </div>
     <?php endif; ?>
-    <?php if (is_front_page()) : ?>
-      <section class="er-information uk-padding-medium uk-padding-remove-left uk-padding-remove-right">
-        <!-- euromada description -->
-        <div class="uk-section-transparent uk-section-large uk-margin-remove uk-padding-remove">
-          <div class="uk-container uk-container-small">
-            <h2 class="uk-text-uppercase">NOTRE MÉTIER EST D'ACHETER ET D’EXPÉDIER DES VOITURES D'OCCASION DE L'EUROPE VERS 
-              MADAGASCAR.</h2>
-            <p>Grâce à notre antenne installée en FRANCE : EUROMADA offre une meilleure solution pour les particuliers ou entreprises à Madagascar qui 
-              cherchent des moyens sûrs et abordables pour acheter et importer les voitures de leur choix depuis l’Europe vers Madagascar.</p>
-          </div>
-        </div>
-      </section>
-    <?php endif; ?>
+    

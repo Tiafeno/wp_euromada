@@ -217,6 +217,15 @@ function euromada_widgets_init() {
     'before_title'  => '<h2 class="er-widget-title">',
     'after_title'   => '</h2>',
   ) );
+  register_sidebar( array(
+    'name'          => 'Home slider',
+    'id'            => 'home-slider',
+    'description'   => 'Add widgets here to appear in home position.',
+    'before_widget' => '<div id="%1$s" class="%2$s">',
+    'after_widget'  => '</div>',
+    'before_title'  => '<h2 class="er-widget-title">',
+    'after_title'   => '</h2>',
+  ) );
 }
 add_action( 'widgets_init', 'euromada_widgets_init' );
 
