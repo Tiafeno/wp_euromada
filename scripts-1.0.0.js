@@ -1,4 +1,28 @@
-(function () {
+(function ($) {
+  $( document ).ready(function() {
+    /**
+     * Format all element with class `.money` a currency
+     */
+    var interv = window.setInterval(function(){
+      var moneyElements = $( ".money" );
+      if (_.isEmpty(moneyElements)) return;
+
+      $.each( moneyElements, function( key, value ) {
+        $( value ).text( function( index ) {
+          var currencyValue = parseFloat( $( this ).text().trim() );
+          return new Intl.NumberFormat('de-DE', {
+            style: "currency",
+            currency: 'MGA'
+          }).format( currencyValue );
+        });
+      });
+      window.clearInterval( interv );
+
+    }, 1500);
+    
+    
+  }); 
+
   /** On load document */
   function appExist( $id ) {
     var exist = document.getElementById( $id );
@@ -185,5 +209,5 @@
       }
     });
 
-})(window)
+})(jQuery)
 

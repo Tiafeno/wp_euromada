@@ -314,6 +314,11 @@ class Euromada {
   public function getAdverts() {
     while (have_posts()) : the_post();
       $this->contents = new stdClass();
+      
+      /** Get only published post */
+      $post_status = get_post_status();
+      if ($post_status == "private") continue;
+
       $advert = wc_get_product(get_the_ID());
       $this->full_size_gallery = Services::getThumbnails();
       $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [600, 300] );
@@ -323,19 +328,20 @@ class Euromada {
       $this->push();
     endwhile;
 
-    /** return all products details pushed  */
+    /** return all push products details  */
     return $this->adverts;
     
   }
 
   /**
-   * Get 12 last product list
+   * Get 12 last product lists
    * @param void
    * @return array - (WP_Post) Array of object product details 
    */
   public function getLastAd() {
     $args = array(
       'post_type'      => 'product',
+      'post_status'    => 'publish',
       'posts_per_page' => 12
     );
     query_posts($args); 

@@ -1,7 +1,7 @@
 
 <?php get_header(); 
 global $post;
-$cost = get_post_meta( $post->ID, 'cost', true );
+$cost = get_post_meta( $post->ID, 'cost_recommandation', true );
 ?>
 <style type="text/css">
   .er-price {
@@ -122,12 +122,12 @@ $cost = get_post_meta( $post->ID, 'cost', true );
                     <div class="er-summary">
                       <div  itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                         <h1 itemprop="name" class="er-h1">NOS PRESTATIONS</h1>
-                        <p class="price uk-margin-remove-top er-price"><?= $cost ?></p>
+                        <p class="price uk-margin-remove-top er-price money"><?= $cost ?></p>
 
-                        <div class="ui button er-button-voir uk-margin-auto" style="display: table">
+                        <a href="?order_recommandation=<?= the_ID() ?>" class="ui button er-button-voir uk-margin-auto" style="display: table">
                           Commander
                           <span uk-icon="icon: chevron-right"></span>
-                        </div>
+                        </a>
 
                         <meta itemprop="price" content="<?= $cost ?>">
                         <meta itemprop="priceCurrency" content="MGA">

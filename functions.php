@@ -103,53 +103,6 @@ function euromada_init() {
     }
   }, 100 );
   
-  /**
-   * Redirect in home page if user is login
-   */
-  add_action( 'get_header', function() {
-    global $post, $posts;
-
-    /**
-     * Si la variable $_GET 'order' existe
-     * On ajoute le produit qui contient l'identifiant dans le panier et redirection 
-     * vers la page panier pour faire la commande.
-     */
-    $order = Services::getValue("order"); 
-    if ($order != false) {
-      $Order = new Euromada_Order();
-      $Order->addCart( (int)$order );
-      $cart_page_url = get_the_permalink( get_option( 'woocommerce_cart_page_id' ) );
-      wp_redirect( $cart_page_url, 301 );
-    }
-
-    /**
-     * Si la variable $_GET __post_delete_id existe
-     * on deplace le post dans la corbeille
-     */
-    $post_delete_id = Services::getValue('__post_delete_id', false);
-    if (false != $post_delete_id) Euromada_profil::deletePost( (int)$post_delete_id );
-
-    /** Verify header */
-    if (is_user_logged_in()) {
-      if ($post == null) return;
-      $login_page_id = get_option( 'login_page_id', false );
-      $profil_page_id = get_option( 'profil_page_id', false );
-      if (is_int( (int)$login_page_id ) ) :
-        /**
-         * On verifie si la page actuel n'est pas une page pour se connecter.
-         * Si non, on reste dans cette page.
-         */
-        if ($post->ID != (int)$login_page_id) return true;
-
-        /** rediriger vers la page profil si l'identification existe sinon,
-         * redirection vers la page d'accueil
-         */
-        $url = (false == $profil_page_id) ? home_url( "/" ) : get_permalink( (int)$profil_page_id );
-        exit( wp_redirect( $url, 301 ) );
-      endif;
-    }
-  }, 10, 1);
-
   add_action( 'admin_menu', function() {
     add_meta_box( 'products', 'Produits', "render_product", "recommandation", 'normal', 'low' );
     add_menu_page('euromada', 'Euromada', 'manage_options', 'euromada', array(new Euromada, 'euromada_admin_template'), 'dashicons-admin-settings');
@@ -159,6 +112,67 @@ function euromada_init() {
   Euromada::setRecommandation();
 }
 add_action( 'init', 'euromada_init' );
+
+/**
+ * Redirect in home page if user is login
+ */
+add_action( 'get_header', function() {
+  global $post, $posts;
+
+  /**
+   * Si la variable $_GET 'order' existe
+   * On ajoute le produit qui contient l'identifiant dans le panier et redirection 
+   * vers la page panier pour faire la commande.
+   */
+  $order = Services::getValue("order", false); 
+  $order_recommandation = Services::getValue("order_recommandation", false);
+  if ($order) {
+    $Order = new Euromada_Order();
+    $Order->addCart( (int)$order );
+    $cart_page_url = get_the_permalink( get_option( 'woocommerce_cart_page_id' ) );
+    wp_redirect( $cart_page_url, 301 );
+  }
+  
+  if ($order_recommandation) {
+    $Order = new Euromada_Order();
+    $product_id = Euromada_Order::createProduct( (int)$order_recommandation );
+    if (is_wp_error( $product_id )) {
+      echo $product_id->get_error_message();
+    } else {
+      /** Order product */
+      $Order->addCart( $product_id );
+      $cart_page_url = get_the_permalink( get_option( 'woocommerce_cart_page_id' ) );
+      wp_redirect( $cart_page_url, 301 );
+    }
+    
+  }
+  /**
+   * Si la variable $_GET __post_delete_id existe
+   * on deplace le post dans la corbeille
+   */
+  $post_delete_id = Services::getValue('__post_delete_id', false);
+  if (false != $post_delete_id) Euromada_profil::deletePost( (int)$post_delete_id );
+
+  /** Verify header */
+  if (is_user_logged_in()) {
+    if ($post == null) return;
+    $login_page_id = get_option( 'login_page_id', false );
+    $profil_page_id = get_option( 'profil_page_id', false );
+    if (is_int( (int)$login_page_id ) ) :
+      /**
+       * On verifie si la page actuel n'est pas une page pour se connecter.
+       * Si non, on reste dans cette page.
+       */
+      if ($post->ID != (int)$login_page_id) return true;
+
+      /** rediriger vers la page profil si l'identification existe sinon,
+       * redirection vers la page d'accueil
+       */
+      $url = (false == $profil_page_id) ? home_url( "/" ) : get_permalink( (int)$profil_page_id );
+      exit( wp_redirect( $url, 301 ) );
+    endif;
+  }
+}, 10, 1);
 
 /** Add shortcode  */
 add_shortcode('euromada_login', [ new Euromada_Login(), 'Render' ]);
@@ -249,7 +263,7 @@ function euromada_scripts() {
   wp_enqueue_script( 'sidebar-semantic', get_template_directory_uri() . '/js/sidebar.min.js', array() );
   wp_enqueue_script( 'modal-semantic', get_template_directory_uri() . '/js/modal.min.js', array() );
 
-  wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/app.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '20150330', true );
+  wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/scripts-1.0.0.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '20150330', true );
   wp_localize_script( 'euromada-script', 'jParams', array(
     'ajaxUrl' => admin_url('admin-ajax.php'),
     'templateUrl' => get_template_directory_uri(),
@@ -286,10 +300,10 @@ function render_product( $post ) {
   ?>
   <section>
     <p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="cost">Prix unitaire</label></p>
-    <input size="80" type="number" placeholder="Ex: 2000000" id="cost" name="cost_recommandation"  value="<?= $cost ?>" autocomplete="off">
+    <input size="80" type="number" placeholder="Ex: 2000000" id="cost" name="cost_recommandation"  value="<?= $cost ?>" autocomplete="off" required>
 
     <p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="link">Lien de l'annonce</label></p>
-    <input type="text" placeholder="Ex: http://https://www.leboncoin.fr/outillage_materiaux_2nd_oeuvre/1364621424.htm?ca=7_s" id="link" name="link_recommandation"  value="<?= $link ?>" autocomplete="off">
+    <input type="text" placeholder="Ex: http://https://www.leboncoin.fr/outillage_materiaux_2nd_oeuvre/1364621424.htm?ca=7_s" id="link" name="link_recommandation"  value="<?= $link ?>" autocomplete="off" required>
   </section>
   <?php
 }
