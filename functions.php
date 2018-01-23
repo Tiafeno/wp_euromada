@@ -28,6 +28,7 @@ require get_template_directory() . '/inc/class-message.php';
 require get_template_directory() . '/inc/shortcode/class-login.php';
 require get_template_directory() . '/inc/shortcode/class-register.php';
 require get_template_directory() . '/inc/shortcode/class-profil.php';
+require get_template_directory() . '/inc/shortcode/class-publisher.php';
 /** Widget */
 require get_template_directory() . '/inc/widgets/search.widget.php';
 
@@ -178,6 +179,7 @@ add_action( 'get_header', function() {
 add_shortcode('euromada_login', [ new Euromada_Login(), 'Render' ]);
 add_shortcode('euromada_register', [ new Euromada_register(), 'Render' ]);
 add_shortcode('euromada_profil', [ new Euromada_profil(), 'Render' ]);
+add_shortcode('euromada_publisher', [ new Euromada_publisher(), 'Render' ]);
 
 function action_save_postdata( $post_id ) {
   /** for `cost` post meta */
