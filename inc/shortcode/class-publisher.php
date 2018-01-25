@@ -20,26 +20,30 @@ class Euromada_Publisher {
         <?= wp_nonce_field('publish', 'publish_nonce') ?>
         <h4 class="ui dividing header">Votre annonce</h4>
 
-        <div class="field">
-          <label>Catégorie</label>
-          <div class="ui selection dropdown">
-            <input name="category" type="hidden">
-            <div class="default text">Catégorie</div>
-            <i class="dropdown icon"></i>
-            <div class="menu">
-            <?php foreach ($categories as $categorie) { ?>
-              <div class="item" data-value="<?= $categorie->name ?>">
-                <!-- <i class="visa icon"></i> -->
-                <?= $categorie->name ?>
+        <div class="two fields">
+          <div class="field">
+            <label>Catégorie</label>
+            <div class="ui selection dropdown">
+              <input name="category" type="hidden">
+              <div class="default text">Catégorie</div>
+              <i class="dropdown icon"></i>
+              <div class="menu">
+              <?php foreach ($categories as $categorie) { ?>
+                <div class="item" data-value="<?= $categorie->name ?>">
+                  <!-- <i class="visa icon"></i> -->
+                  <?= $categorie->name ?>
+                </div>
+              <?php } ?>
               </div>
-            <?php } ?>
             </div>
           </div>
         </div>
-
-        <div class="field">
-          <label>Titre de l'annonce</label>
-          <input name="title" placeholder="Titre de votre annonce" type="text">
+        
+        <div class="two fields">
+          <div class="field">
+            <label>Titre de l'annonce</label>
+            <input name="title" placeholder="Titre de votre annonce" type="text">
+          </div>
         </div>
 
         <div id="app-dynamic-select-mark" class="two fields">
