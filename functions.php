@@ -34,6 +34,11 @@ require get_template_directory() . '/inc/widgets/search.widget.php';
 
 $instanceEuromada = new Euromada();
 
+add_action("euromada_save_meta_user", [ $instanceEuromada, 'action_euromada_save_meta_user' ], 10, 1);
+add_action("euromada_update_information_user", [ $instanceEuromada, 'action_euromada_update_information_user' ], 10, 1);
+add_action("euromada_upload_thumbnails", [ $instanceEuromada, 'action_upload_thumbnails' ], 10, 1);
+add_action("euromada_insert_term_product", [ $instanceEuromada, 'action_insert_term_product' ], 10, 2);
+
 add_action( 'after_setup_theme', function() {
   if ( !current_user_can( 'administrator' ) && !is_admin() ) {
     show_admin_bar( false );
@@ -41,14 +46,23 @@ add_action( 'after_setup_theme', function() {
 });
 
  /** On load wordpress */
- add_action( "wp_loaded", function() {
+add_action( "wp_loaded", function() {
   global $MESSAGE, $instanceEuromada;
-  // $user_ = new WP_User(3);
-  // echo get_password_reset_key( $user_ );
+  
   if (isset($_POST[ 'edit_profil_nonce' ]) &&
   wp_verify_nonce($_POST[ 'edit_profil_nonce' ], 'edit_profil') &&
   is_user_logged_in()) {
     $instanceEuromada->update_user();
+  }
+
+  if (isset($_POST[ 'publish_nonce' ]) &&
+  wp_verify_nonce($_POST[ 'publish_nonce' ], 'publish') &&
+  is_user_logged_in()) {
+    $insertResult = $instanceEuromada->insert_advert();
+    if ($insertResult[ 'success' ]) {
+      echo $insertResult[ 'msg' ];
+      exit( wp_redirect( $insertResult[ 'url' ], 301 ) );
+    }
   }
   
   /** Check if login form is submit */
@@ -86,29 +100,24 @@ add_action( 'wp_login_failed', function() {
   }
 });
 
+add_action( 'admin_menu', function() {
+  add_meta_box( 'products', 'Produits', "render_product", "recommandation", 'normal', 'low' );
+  add_menu_page('euromada', 'Euromada', 'manage_options', 'euromada', array(new Euromada, 'euromada_admin_template'), 'dashicons-admin-settings');
+});
+
+add_action( 'admin_init', function() {
+  $advertiser = get_role( "advertiser" );
+  if ($advertiser === null) {
+    $role = Euromada::createRole();
+  }
+
+  $redirect = isset( $_SERVER[ 'HTTP_REFERER' ] ) ? $_SERVER[ 'HTTP_REFERER' ] : home_url( '/' );
+  if ( is_admin() && !defined( 'DOING_AJAX' ) && current_user_can( 'advertiser' ) ) {
+    exit( wp_redirect( $redirect, 301 ) );
+  }
+}, 100 );
+
 function euromada_init() {
-  global $instanceEuromada;
-  add_action("euromada_save_meta_user", [ $instanceEuromada, 'action_euromada_save_meta_user' ], 10, 1);
-  add_action("euromada_update_information_user", [ $instanceEuromada, 'action_euromada_update_information_user' ], 10, 1);
-
-  add_action( 'admin_init', function() {
-
-    $advertiser = get_role( "advertiser" );
-    if ($advertiser === null) {
-      $role = Euromada::createRole();
-    }
-
-    $redirect = isset( $_SERVER[ 'HTTP_REFERER' ] ) ? $_SERVER[ 'HTTP_REFERER' ] : home_url( '/' );
-    if ( is_admin() && !defined( 'DOING_AJAX' ) && current_user_can( 'advertiser' ) ) {
-      exit( wp_redirect( $redirect, 301 ) );
-    }
-  }, 100 );
-  
-  add_action( 'admin_menu', function() {
-    add_meta_box( 'products', 'Produits', "render_product", "recommandation", 'normal', 'low' );
-    add_menu_page('euromada', 'Euromada', 'manage_options', 'euromada', array(new Euromada, 'euromada_admin_template'), 'dashicons-admin-settings');
-  });
-
   Euromada::taxonomy();
   Euromada::setRecommandation();
 }
@@ -119,7 +128,6 @@ add_action( 'init', 'euromada_init' );
  */
 add_action( 'get_header', function() {
   global $post, $posts;
-
   /**
    * Si la variable $_GET 'order' existe
    * On ajoute le produit qui contient l'identifiant dans le panier et redirection 

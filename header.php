@@ -139,7 +139,7 @@ global $MESSAGE;
       <!-- main navigation -->
       <?php if ( has_nav_menu( 'primary' ) ) : ?>
 
-        <nav class="uk-navbar-container uk-navbar-transparent main-navigation" style="margin-bottom: 15px" uk-navbar>
+        <nav class="uk-navbar-container uk-navbar-transparent main-navigation" style="margin-bottom: 15px; margin-right: 9px" uk-navbar>
           <div class="uk-margin-auto-left uk-flex">
             <?php
               wp_nav_menu( [

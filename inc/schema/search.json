@@ -1,0 +1,27 @@
+{
+  "category": [
+    {
+      "id": 1,
+      "name": "Used car"
+    },
+    {
+      "id": 2,
+      "name": "Motorbike"
+    },
+    {
+      "id": 3,
+      "name": "Truck"
+    }
+  ],
+  "mark": [
+    {
+      "id": 1,
+      "name": "Audi",
+      "model": [
+        100, 80, 90, "A1", "A2", "A3", "A4",
+        "A4 ALLROAD", "A5", "A6", "A7", "A8",
+        "Q2", "Q3", "Q5", "Q7", "QUATTRO"
+      ]
+    }
+  ]
+}

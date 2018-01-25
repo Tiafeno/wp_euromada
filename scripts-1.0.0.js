@@ -1,5 +1,21 @@
+var oFile;
+var previewUpload = null; // DOM Element
+var noImage = jParams.templateUrl + "/img/gallery-add.png";
+
 (function ($) {
   $( document ).ready(function() {
+    oFReader = new FileReader(), rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
+    
+    oFReader.onload = function (oFREvent) {
+      var image = new Image();
+      image.src = oFREvent.target.result;
+      image.onload = function() {
+        console.log( oFile.size );
+      };
+      previewUpload.attr('src', oFREvent.target.result);
+      var stateValue = previewUpload.data('state');
+      if (stateValue == 'not_uploaded') previewUpload.data('state', 'uploaded');
+    };
     /**
      * Format all element with class `.money` a currency
      */
@@ -21,7 +37,7 @@
     }, 1500);
     
     
-  }); 
+  });  // End document ready
 
   /** On load document */
   function appExist( $id ) {
@@ -30,6 +46,26 @@
     return true;
   }
 
+  /**
+   * Remove input value,
+   * Set data status to 'not_uploaded'
+   * Set src to imageNoUploaded value
+   */
+  function removeImage() {
+
+  }
+
+  /** Directive */
+  Vue.directive('upload', {
+    bind: function (el, binding, vnode) {
+      el.addEventListener('click', element => {
+        var inputFile = $('#' + binding.value);
+        previewUpload = $( el ).find('img');
+        /** Fire click event handler */
+        inputFile.trigger('click');
+      });
+    }
+  });
 
   /** Filter and Component vue */
 
@@ -52,7 +88,7 @@
   Vue.filter("moment", function(value) {
     moment.locale("fr");
     var currentDate = new Date( value );
-    return moment(currentDate).endOf('day').fromNow(); 
+    return moment(currentDate).startOf('hour').fromNow(); 
   });
 
   Vue.filter('formatName', function (value) {
@@ -88,6 +124,62 @@
   });
 
   /** End */
+  if ( appExist("app-publish") )
+    new Vue({
+      el: "#app-publish",
+      data: {
+        imageNoUploaded: noImage,
+        imageLimite: [0, 1, 2, 3],
+        pictures: []
+      },
+      methods: {
+        remove: function( event, id ) {
+          var el = event.target;
+          var parent = jQuery( el ).parents( '.ctn' );
+          var imgPreview = parent.find( 'img.image' );
+          //var status = imgPreview.data('state');
+          imgPreview.data('state', "not_uploaded");
+          imgPreview.attr('src', noImage);
+          /** reset input value */
+          jQuery("#" + id).val("");
+          /** hide trash button */
+          var removeElement = jQuery( el ).parents( '.ctn' ).find( '.er-remove-picture' )
+          if ( ! removeElement.hasClass('uk-hidden'))
+            removeElement.addClass('uk-hidden');
+        }
+      },
+      mounted: function() {
+        for (var i in this.imageLimite) {
+          this.pictures = this.pictures.concat({
+            identification: "image_" + i,
+            positionIndex: i
+          })
+        }
+      },
+      updated: function() {
+        var inputFiles = $('input[type=file].picture');
+        /** Detecte change input file */
+        inputFiles.each(function(index, element ) {
+          var input = $( element );
+          input.change( e => {
+            var currentElement = e.target;
+            /*** Active delete button */
+            var removeElement = input.parents('.ctn').find('.er-remove-picture');
+            if (removeElement.hasClass('uk-hidden'))
+              removeElement.removeClass('uk-hidden');
+            
+            var identification = input.attr('id');
+            if (document.querySelector('#' + identification).files.length === 0) { return; }
+            oFile = document.querySelector('input[type=file]#' + identification).files[0];
+            if ( ! rFilter.test(oFile.type)) { alert("You must select a valid image file!"); return; }
+            if (oFile)
+              oFReader.readAsDataURL(oFile);
+          });
+        })
+      }
+    });
+
+  
 
   var priceInterval = [
     1000000, 1500000,
@@ -114,7 +206,6 @@
 
       }
     });
-
   if ( appExist("app-publisher") )
     new Vue({
       el: '#app-publisher',
@@ -133,7 +224,6 @@
         });
       }
     });
-
   if ( appExist("app-benefit") )
     new Vue({
       el: "#app-benefit",
@@ -209,5 +299,8 @@
       }
     });
 
+
 })(jQuery)
+
+
 

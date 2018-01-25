@@ -40,6 +40,11 @@ class Services {
     return $thumbnails;
   }
 
+  public static function searchData() {
+    $data = @file_get_contents( get_template_directory() . '/inc/schema/search.json');
+    return json_encode( $data );
+  }
+
   public static function getObjectTerms() {
     global $post, $product;
     $objectTerms = [];

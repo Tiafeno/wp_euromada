@@ -14,6 +14,7 @@ class Euromada {
   public $adverts = []; // return value
   public $mainImage;
   public $contents;
+  public $gallery = [];
 
   public $forms = [];
 
@@ -48,6 +49,68 @@ class Euromada {
     return (null != $result) ? true : false;
   }
 
+  /**
+   * Upload media file
+   * @param int - int post ID
+   * @return void
+   */
+  public function action_upload_thumbnails( $post_id ) {
+    if ( ! is_user_logged_in()) return false;
+    if ($_SERVER['REQUEST_METHOD'] != 'POST') return false;
+
+    require_once( ABSPATH . 'wp-admin/includes/image.php' );
+    require_once( ABSPATH . 'wp-admin/includes/file.php' );
+    require_once( ABSPATH . 'wp-admin/includes/media.php' );
+
+    if (empty( $_FILES )) return;
+    $files = $_FILES[ "images" ];
+    foreach ($files[ 'name' ] as $key => $value) {
+      if ($files[ 'name' ][ $key ]) {
+
+        /** rename file */
+        $filename = $files['name'][$key];
+        $file_basename = substr($filename, 0, strripos($filename, '.')); // return file name
+        $file_ext = substr($filename, strripos($filename, '.')); // return file extention
+
+        $file = array(
+          'name'     => md5($file_basename) . '_' . $post_id . $file_ext,
+          'type'     => $files['type'][$key],
+          'tmp_name' => $files['tmp_name'][$key],
+          'error'    => $files['error'][$key],
+          'size'     => $files['size'][$key]
+        );
+        
+        $_FILES = array("upload_file" => $file);
+        $attachment_id = media_handle_upload("upload_file", $post_id);
+        if (is_wp_error($attachment_id)) {
+          /** Error occured */
+        } else {
+          array_push($this->gallery, $attachment_id);
+        }
+      }
+    }
+  }
+
+  public function action_insert_term_product( $args, $post_id ) {
+    while (list(, $param) = each($args)) {
+      $parent_term = term_exists( $param['value'], $param['taxonomy'] ); // array is returned if taxonomy is given
+      $term = wp_insert_term(
+        $param['value'], // the term 
+        $param['taxonomy'], // the taxonomy
+        array(
+          'description' => '',
+          'parent'      => ''  // get numeric term id
+        )
+      );
+
+      if (is_wp_error( $term )) {
+        if ($term->get_error_code() == 'term_exists') {
+          $term_id = (int)$term->get_error_data();
+        }
+      } else $term_id = &$term;
+      wp_set_post_terms( $post_id, $term_id, $param['taxonomy'] );
+    }
+  }
   /**
    * Action save meta and update
    * @param int - $user_id : User identification
@@ -101,6 +164,105 @@ class Euromada {
    */
   public function action_euromada_update_password( $user_id ) {
 
+  }
+
+  public function insert_advert() {
+    if ( ! is_user_logged_in()) return false;
+    $User = wp_get_current_user();
+    
+    /** Insert post */
+    $title = Services::getValue('title');
+    $content = Services::getValue('description');
+    $cost = Services::getValue('cost');
+
+    $postargs = [
+      'post_author' => $User->ID,
+			'post_title' => esc_html($title),
+			'post_content' => apply_filters('the_content', $content),
+			'post_status' => 'publish', /* https://codex.wordpress.org/Post_Status */
+			'post_parent' => '',
+			'post_type' => "product",
+    ];
+
+    $post_id = wp_insert_post( $postargs );
+
+    if ( ! is_numeric( $post_id )) 
+      return [
+        'success' => false,
+        'msg' => $post_id->get_error_messages()
+      ];
+    /** upload files */
+    do_action( 'euromada_upload_thumbnails', $post_id );
+    update_post_meta($post_id, '_thumbnail_id', empty($this->gallery) ? '' : $this->gallery[ 0 ]);
+    /** add meta */
+    wp_set_object_terms($post_id, 'simple', 'product_type');
+
+    /* Update post meta, these meta depend a product post_type */
+    update_post_meta( $post_id, '_visibility', 'visible');
+    update_post_meta( $post_id, '_stock_status', 'instock');
+    update_post_meta( $post_id, 'total_sales', '0');
+    update_post_meta( $post_id, '_downloadable', 'no');
+    update_post_meta( $post_id, '_virtual', 'yes');
+    update_post_meta( $post_id, '_regular_price', $cost);
+    update_post_meta( $post_id, '_sale_price', '');
+    update_post_meta( $post_id, '_purchase_note', '');
+    update_post_meta( $post_id, '_featured', 'no');
+    update_post_meta( $post_id, '_weight', '');
+    update_post_meta( $post_id, '_length', '');
+    update_post_meta( $post_id, '_width', '');
+    update_post_meta( $post_id, '_height', '');
+    update_post_meta( $post_id, '_sku', strtoupper( md5( $post_id )) );
+    update_post_meta( $post_id, '_sale_price_dates_from', '');
+    update_post_meta( $post_id, '_sale_price_dates_to', '');
+    update_post_meta( $post_id, '_price', $cost);
+    update_post_meta( $post_id, '_sold_individually', '');
+    update_post_meta( $post_id, '_manage_stock', 'no');
+    update_post_meta( $post_id, '_backorders', 'no');
+    update_post_meta( $post_id, '_stock', '');
+    update_post_meta( $post_id, '_product_image_gallery', implode(",", $this->gallery));
+
+    /** add attribut of mileage */
+    $mileage = Services::getValue('mileage');
+    $term_taxonomy_ids = wp_set_object_terms( get_the_ID(), $mileage, 'pa_mileage', true );
+     $data = Array('pa_mileage' => Array(
+       'name'        => 'pa_mileage',
+       'value'       => $mileage,
+       'is_visible'  => 1,
+       'is_taxonomy' => 0,
+       'is_variation' => 0
+     ));
+     update_post_meta( $post_id, '_product_attributes', $data); 
+    
+    $tax_args = [
+      [
+        'taxonomy' =>  'mark',
+        'value' => Services::getValue('mark')
+      ],
+      [
+        'taxonomy' => 'model',
+        'value' => Services::getValue('model')
+      ],
+      [
+        'taxonomy' => 'fuel',
+        'value' => Services::getValue('fuel')
+      ],
+      [
+        'taxonomy' => 'gearbox',
+        'value' => Services::getValue('gearbox')
+      ],
+      [
+        'taxonomy' => 'model-year',
+        'value' => Services::getValue('year')
+      ]
+    ];
+    do_action('euromada_insert_term_product', $tax_args, $post_id);
+    $url = get_the_permalink( $post_id );
+    
+    return [
+      'success' => true,
+      'url' => $url,
+      'msg' => "Votre annonce a été publié avec succès. Redirection..."
+    ];
   }
 
   public function update_user() {
@@ -193,7 +355,7 @@ class Euromada {
         "description" => ""
       ],
       [
-        "blogname" => "Pge profil",
+        "blogname" => "Page profil",
         "id" => "profil_page",
         "page_id" => get_option( "profil_page_id", false ),
         "description" => ""

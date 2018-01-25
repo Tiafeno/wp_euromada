@@ -3,23 +3,214 @@
 class Euromada_Publisher {
   public function __construct() {}
   public static function render() {
-    ?>
-    <form id="publishform" action="" method="POST" class="ui form">
-      <?= wp_nonce_field('publish', 'publish_nonce') ?>
-      <h4 class="ui dividing header">Informations</h4>
+    $logged = is_user_logged_in() ? true : false;
+    if ($logged) :
+      $categories = Services::getTerm( 'product_cat' );
+      $fuels = Services::getTerm( 'fuel' );
+      $gearboxs = Services::getTerm('gearbox');
+    endif;
 
-      <div class="two fields">
-          <div class="field"> 
-            <label>Titre</label>
-            <input placeholder="" name="firstname" type="text">
-          </div>
-          <div class="field">
-            <label>Prénom</label>
-            <input placeholder="" name="lastname" type="text">
+    ?>
+    <div>
+    <?php if ( ! $logged) : ?>
+      <?php do_shortcode( '[euromada_login]' ) ?>
+    <?php else: ?>
+    
+      <form  enctype="multipart/form-data" id="publishform" action="" method="POST" class="ui form ">
+        <?= wp_nonce_field('publish', 'publish_nonce') ?>
+        <h4 class="ui dividing header">Votre annonce</h4>
+
+        <div class="field">
+          <label>Catégorie</label>
+          <div class="ui selection dropdown">
+            <input name="category" type="hidden">
+            <div class="default text">Catégorie</div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+            <?php foreach ($categories as $categorie) { ?>
+              <div class="item" data-value="<?= $categorie->name ?>">
+                <!-- <i class="visa icon"></i> -->
+                <?= $categorie->name ?>
+              </div>
+            <?php } ?>
+            </div>
           </div>
         </div>
-    </form>
 
+        <div class="field">
+          <label>Titre de l'annonce</label>
+          <input name="title" placeholder="Titre de votre annonce" type="text">
+        </div>
+
+        <div id="app-dynamic-select-mark" class="two fields">
+          <div class="field"> 
+            <label>Marque</label>
+            <input placeholder="e.g BMW" name="mark" type="text" required>
+          </div>
+          <div class="field">
+            <label>Modèle</label>
+            <input placeholder="e.g X6" name="model" type="text" required>
+          </div>
+        </div>
+
+        <div class="two fields">
+          <div class="field"> 
+            <label>Année modèle *</label>
+            <div class="ui selection dropdown">
+              <div class="default text">Année modèle</div>
+              <i class="dropdown icon"></i>
+              <input name="year" type="hidden">
+              <div class="menu">
+
+              <?php foreach( range(1960, (int)date( "Y" )) as $year): ?> 
+                <div class="item" data-value="<?= $year ?>"><?= $year ?></div>
+              <?php endforeach; ?>
+
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Kilométrage *</label>
+            <input placeholder="" name="mileage" type="text" required>
+          </div>
+        </div>
+
+        <div class="two fields">
+          <div class="field"> 
+            <label>Carburant *</label>
+            <div class="ui selection dropdown">
+              <div class="default text">Carburant</div>
+              <i class="dropdown icon"></i>
+              <input name="fuel" type="hidden" required>
+              <div class="menu">
+
+              <?php foreach ($fuels as $fuel) { ?>
+                <div class="item" data-value="<?= $fuel->name ?>"><?= $fuel->name ?></div>
+              <?php } ?>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Boîte de vitesse *</label>
+            <div class="ui selection dropdown">
+              <div class="default text">Boîte de vitesse</div>
+              <i class="dropdown icon"></i>
+              <input name="gearbox" type="hidden" required>
+              <div class="menu">
+
+              <?php foreach ($gearboxs as $gearbox) { ?>
+                <div class="item" data-value="<?= $gearbox->name ?>"><?= $gearbox->name ?></div>
+              <?php } ?>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <input class="test" accept="image/bmp,image/gif,image/jpeg,image/png,image/x-ms-bmp" name="file[]" id="text" type="file"> -->
+
+        <div class="field">
+          <label>Texte de l'annonce *</label>
+          <textarea rows="10" maxlength="4000" name="description"></textarea>
+        </div>
+
+        <div class="two fields">
+          <div class="field">
+            <label>Prix *</label>
+            <div class="ui right labeled input">
+              <label for="amount" class="ui label">EUR</label>
+              <input placeholder="Prix" name="cost" id="amount" type="text">
+              <div class="ui basic label">.00</div>
+            </div>
+          </div>
+        </div>
+        <p><b>Photos</b> : Une annonce avec photo est 7 fois plus consultée qu'une annonce sans photo</p>
+
+        <div id="app-publish">
+          <div id="pictures-list" class="ui small images">
+
+            <div class="ctn" v-for="picture in pictures">
+              <div class="er-remove-picture uk-hidden" @click="remove($event, picture.identification)">
+                <img class="uk-icon er-icon-trash" src="<?= get_template_directory_uri() . '/img/trash.png' ?>" >
+              </div>
+              <span v-upload:identification="picture.identification" class="directive">
+                <img class="ui image" data-state="not_uploaded" v-bind:src="imageNoUploaded">
+                <div class="uk-hidden">
+                  <input class="picture" name="images[]" v-bind:id="picture.identification" type="file">
+                </div>
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+        <h4 class="ui dividing header">Localisation</h4>
+        <div class="two fields">
+          <div class="field"> 
+            <label>Ville ou code postal</label>
+            <input placeholder="" name="postal_code" type="text" required>
+          </div>
+          <div class="field">
+            <label>Adresse</label>
+            <input placeholder="" name="adress" type="text" required>
+          </div>
+        </div>
+
+        <div class="uk-margin">
+          <div class="uk-inline"><button type="submit" class="positive ui button">Valider</button></div>
+        </div>
+
+      </form>
+   <?php endif; ?>
+    </div>
+    <style type="text/css">
+      .ctn:first-child::before {
+        content: "PHOTO PRINCIPAL";
+        display: inline-block;
+        position: absolute;
+        color: #fff !important;
+        width: inherit;
+        z-index: 9999;
+        background: #4aad2b;
+        font-size: 12px;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      #pictures-list div.ctn, div.ctn > span.directive {
+        display: inline-block;
+        width: inherit;
+        position: relative;
+        cursor: pointer;
+      }
+      #pictures-list .ui.image {
+        margin: auto;
+        padding: 5px;
+      }
+      div.ctn {
+        margin-right: 20px;
+        border: 1px dashed #d1cece;
+      }
+      .uk-icon-button {
+        width: 25px !important;
+        height: 25px !important;
+      }
+      #pictures-list .er-remove-picture {
+        display: inline-block;
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        z-index: 99;
+        width: 26px;
+      }
+      .er-icon-trash {
+        margin: 0;
+        padding: 5px;
+        background: #fbff49;
+        border-radius: 20px;
+      }
+    </style>
     <?php
   }
 }
