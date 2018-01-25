@@ -11,6 +11,7 @@ final class Euromada_profil {
     $User = wp_get_current_user();
     if ($token != wp_get_session_token()) return false;
     $post = get_post($post_id);
+    if ( ! $post instanceof WP_Post) return false;
     if ($post->post_author != $User->ID) return false;
     wp_delete_post( $post_id, false); // Move to trash
   }
