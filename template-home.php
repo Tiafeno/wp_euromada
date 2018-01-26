@@ -103,11 +103,47 @@ $Adverts = $Euromada->getLastAd();
               <div class="uk-container uk-container-small uk-margin-top">
                 <p class="uk-text-center uk-margin-auto uk-width-xlarge">Vous pouvez également consulter d’autres sites web à partir des liens ci-dessous.
                   Communiquez-nous la référence que vous souhaitez commander et nous vous ferons un devis.</p>
-                <div class="uk-width-xlarge uk-margin-auto" uk-grid>
-                  <div class="uk-width-1-4@s"><img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/leboncoin.jpg" /></div>
-                  <div class="uk-width-1-4@s"><img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/paruvendu.jpg" /></div>
-                  <div class="uk-width-1-4@s"><img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/mobile.de.jpg" /></div>
-                  <div class="uk-width-1-4@s"><img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/europe-camions.jpg" /></div>
+                <div class="ui small images" >
+                  <div class="uk-inline er-other-logo">
+                    <a href="https://www.leboncoin.fr/_vehicules_/offres/">
+                      <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/leboncoin.jpg" />
+                    </a>
+                  </div>
+                  <div class="uk-inline er-other-logo">
+                    <a href="https://www.paruvendu.fr/voiture-occasion/">
+                      <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/paruvendu.jpg" />
+                    </a>
+                  </div>
+                  <div class="uk-inline er-other-logo">
+                    <a href="https://www.mobile.de/">
+                      <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/mobile.de.jpg" />
+                    </a>
+                  </div>
+                  <div class="uk-inline er-other-logo">
+                    <a href="https://www.europe-camions.com/">
+                      <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/europe-camions.jpg" />
+                    </a>
+                  </div>
+                  <div class="uk-inline er-other-logo">
+                    <a href="https://www.lacentrale.fr/">
+                      <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/lacentrale.jpg" />
+                    </a>
+                  </div>
+                  <div class="uk-inline er-other-logo">
+                    <a href="https://www.automobile.fr/">
+                      <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/automobile.jpg" />
+                    </a>
+                  </div>
+                  <div class="uk-inline er-other-logo">
+                    <a href="https://www.autoscout24.fr/">
+                      <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/auto_scout24.jpg" />
+                    </a>
+                  </div>
+                  <div class="uk-inline er-other-logo">
+                    <a href="https://www.aramisauto.com/">
+                      <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/aramisauto.jpg" />
+                    </a>
+                  </div>
 
                 </div>
               </div>

@@ -106,6 +106,9 @@ global $MESSAGE;
       font-size: 12.5px !important;
       padding-right: 0px !important;
     }
+    .er-other-logo:hover {
+      border: 1px dashed #ddd8d8;
+    }
   </style>
 
   </head>
