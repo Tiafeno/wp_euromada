@@ -85,8 +85,8 @@ final class Euromada_profil {
     <h2 class="ui header">
       <i class="settings icon"></i>
       <div class="content">
-        Account Settings
-        <div class="sub header">Manage your preferences</div>
+        Paramètres du compte
+        <div class="sub header">Gérer vos préférences et vos annonces</div>
       </div>
     </h2>
       <ul uk-tab>
