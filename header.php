@@ -102,6 +102,9 @@ global $MESSAGE;
     #offcanvas-overlay .uk-active > a {
       color: #fff !important;
     }
+    .ui.selection.dropdown .menu > .item, .ui.dropdown > .text {
+      font-size: 12.5px !important;
+    }
   </style>
 
   </head>

@@ -43,7 +43,7 @@ $euromada = new Euromada();
           </div>
         </div>
         <div class="uk-padding-large uk-padding-remove-left uk-padding-remove-right">
-          <table class="ui celled table" v-if="product.attributes != undefined">
+          <table class="ui celled table uk-margin-top" v-if="product.attributes != undefined">
             <tbody>
               <tr class="er-product-specification">
                 <td class="uk-text-uppercase">Spécification</td>

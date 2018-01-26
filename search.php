@@ -39,8 +39,19 @@ while (list(, $name) = each($names)) :
     array_push( $tax_query, [ 'taxonomy' => $name, 'field' => 'term_id', 'terms' => [(int)$value] ]);
 endwhile;
 
+$meta_query = [];
+if (false != Services::getValue('maxprice')) {
+  array_push($meta_query, [
+    'key' => "_price",
+    'value' => (float)Services::getValue('maxprice'),
+    'compare' => "<=",
+    'type' => "NUMERIC"
+  ]);
+}
+
 $args = array(  
   'post_type' => 'product', 
+  'meta_query' => $meta_query,
   's' => $wp_query->query_vars['s'],
   'paged' => $paged, 
   'posts_per_page' => -1,
