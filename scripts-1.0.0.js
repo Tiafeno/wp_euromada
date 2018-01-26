@@ -21,14 +21,14 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
      */
     var interv = window.setInterval(function(){
       var moneyElements = $( ".money" );
-      if (_.isEmpty(moneyElements)) return;
+      if (moneyElements.length === 0) return;
 
       $.each( moneyElements, function( key, value ) {
         $( value ).text( function( index ) {
           var currencyValue = parseFloat( $( this ).text().trim() );
           return new Intl.NumberFormat('de-DE', {
             style: "currency",
-            currency: 'MGA'
+            currency: 'EUR'
           }).format( currencyValue );
         });
       });
@@ -69,12 +69,12 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
 
   /** Filter and Component vue */
 
-  Vue.filter('ariary', function (value) {
+  Vue.filter('euro', function (value) {
     var v = parseFloat(value);
     if (isNaN(v)) return value;
     return new Intl.NumberFormat('de-DE', {
       style: "currency",
-      currency: 'MGA'
+      currency: 'EUR'
     }).format(v);
   });
 
