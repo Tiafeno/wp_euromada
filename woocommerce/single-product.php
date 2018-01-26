@@ -95,19 +95,20 @@ get_header();
   }
 </style>
 
-    <div id="primary-content">
-      <div class="uk-section uk-section-large uk-padding-medium">
-        <div class="uk-container uk-container-small">
-        <?php
-          while ( have_posts() ) : the_post();
-            wc_get_template_part( 'content', 'single-product' ); 
-          endwhile;
-        ?>
+      <div id="primary-content">
+        <div class="uk-section uk-section-large uk-padding-medium">
+          <div class="uk-container uk-container-small">
+          <?php
+            while ( have_posts() ) : the_post();
+              wc_get_template_part( 'content', 'single-product' ); 
+            endwhile;
+          ?>
+          </div>
         </div>
       </div>
+      <?php get_footer(); ?>
     </div>
-    <?php get_footer(); ?>
+    <?php wp_footer(); ?>
   </div>
-  <?php wp_footer(); ?>
 </body>
 </html>

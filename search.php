@@ -50,19 +50,20 @@ query_posts( $args );
 // echo $wp_query->request;
 
 ?>
-    <div id="primary-content">
-      <div class="uk-section uk-section-large uk-padding-medium">
-        <div class="uk-container uk-container-small">
-        <?php
-          if ( have_posts() ) :
-            get_template_part( 'woocommerce/content', 'archive-product' ); 
-          endif;
-        ?>
+      <div id="primary-content">
+        <div class="uk-section uk-section-large uk-padding-medium">
+          <div class="uk-container uk-container-small">
+          <?php
+            if ( have_posts() ) :
+              get_template_part( 'woocommerce/content', 'archive-product' ); 
+            endif;
+          ?>
+          </div>
         </div>
       </div>
+      <?php get_footer(); ?>
     </div>
-    <?php get_footer(); ?>
+    <?php wp_footer(); ?>
   </div>
-  <?php wp_footer(); ?>
 </body>
 </html>

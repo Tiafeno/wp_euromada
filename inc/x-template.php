@@ -3,7 +3,7 @@
     <h1 itemprop="name" class="er-h1">{{ product.title }}</h1>
     <div  itemprop="offers" itemscope itemtype="http://schema.org/Offer">
       <p class="label uk-margin-remove">Prix</p>
-      <p class="price uk-margin-remove-top er-price">{{ product.cost | ariary }}</p>
+      <p class="price uk-margin-remove-top er-price">{{ product.cost | euro }}</p>
 
       <div @click="routeLinkOrder(product.id)" class="ui button er-button-voir uk-margin-auto" style="display: table">
         Commander

@@ -14,26 +14,27 @@
 
 get_header(); ?>
 
-    <div id="primary-content">
-      <div class="uk-section uk-section-large uk-padding-medium">
-        <div class="uk-container uk-container-small">
-        <?php
-          // Start the loop.
-          while ( have_posts() ) : the_post();
-        ?>
-            <header class="entry-header">
-              <?php //the_title( '<h1 class="entry-title">', '</h1>' ); ?>
-            </header><!-- .entry-header -->
-        <?php
-            the_content();
-          // End the loop.
-          endwhile;
-        ?>
+      <div id="primary-content">
+        <div class="uk-section uk-section-large uk-padding-medium">
+          <div class="uk-container uk-container-small">
+          <?php
+            // Start the loop.
+            while ( have_posts() ) : the_post();
+          ?>
+              <header class="entry-header">
+                <?php //the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+              </header><!-- .entry-header -->
+          <?php
+              the_content();
+            // End the loop.
+            endwhile;
+          ?>
+          </div>
         </div>
       </div>
+      <?php get_footer(); ?>
     </div>
-    <?php get_footer(); ?>
+    <?php wp_footer(); ?>
   </div>
-  <?php wp_footer(); ?>
 </body>
 </html>

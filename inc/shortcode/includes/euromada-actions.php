@@ -34,9 +34,9 @@ class euromada_actions {
 
     public function action_my_profil() {
       $logoutUrl = wp_logout_url( home_url('/') );  
-      $User = wp_get_current_user();
+      $User   = wp_get_current_user();
       $adress = get_user_meta($User->ID, '_adress_', true);
-      $phone = get_user_meta($User->ID, '_phone_', true);
+      $phone  = get_user_meta($User->ID, '_phone_', true);
     ?>
       <div class="uk-container">
        <a href="<?= $logoutUrl ?>" class="button ui left floated primary button">Se deconnecter</a>
