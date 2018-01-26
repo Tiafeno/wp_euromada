@@ -104,6 +104,7 @@ global $MESSAGE;
     }
     .ui.selection.dropdown .menu > .item, .ui.dropdown > .text {
       font-size: 12.5px !important;
+      padding-right: 0px !important;
     }
   </style>
 
@@ -133,12 +134,21 @@ global $MESSAGE;
           </div>
         <div class="uk-container ukt-container-small">
           <div class="uk-margin-medium-bottom uk-margin-top" uk-grid>
-            <div class="uk-width-1-2 er-logo">
+            <div class="uk-width-1-2@m er-logo">
               <!-- logo -->
               <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="uk-logo">
                 <img src="<?php echo esc_url( get_template_directory_uri() ); ?>/img/logo.jpg" alt="<?php bloginfo( 'name' ); ?>" />
               </a>
-            </div>	
+            </div>
+
+            <div class="uk-width-1-2@m">
+              <?php 
+                if ( is_active_sidebar( 'bannier-top' ) ) : 
+                  dynamic_sidebar( 'bannier-top' ); 
+                endif; 
+              ?>
+            </div>
+
           </div>
         </div>
       </div>

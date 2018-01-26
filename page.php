@@ -22,7 +22,9 @@ get_header(); ?>
             while ( have_posts() ) : the_post();
           ?>
               <header class="entry-header">
-                <?php //the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+                <h2 class="ui header">
+                <?php the_title( '<div class="content">', '</div>' ); ?>
+                </h2>
               </header><!-- .entry-header -->
           <?php
               the_content();
