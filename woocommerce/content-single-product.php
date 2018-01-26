@@ -84,30 +84,7 @@ $euromada = new Euromada();
       </div>
     </div>
 
-    <div id="app-other-publisher" class="uk-margin-large-top">
-      <div class="uk-flex">
-        <h2 class="uk-text-uppercase uk-text-center uk-margin-auto er-h2 er-underline">Autre annonces</h2>
-      </div>
-      <div class="uk-container uk-container-small uk-margin-top">
-        <p class="uk-text-center uk-margin-auto uk-width-xlarge">Vous pouvez également consulter d’autres sites web à partir des liens ci-dessous. Communiquez-nous la référence
-          que vous souhaitez commander et nous vous ferons un devis.</p>
-        <div class="uk-width-xlarge uk-margin-auto" uk-grid>
-          <div class="uk-width-1-4@s">
-            <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/leboncoin.jpg" />
-          </div>
-          <div class="uk-width-1-4@s">
-            <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/paruvendu.jpg" />
-          </div>
-          <div class="uk-width-1-4@s">
-            <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/mobile.de.jpg" />
-          </div>
-          <div class="uk-width-1-4@s">
-            <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/europe-camions.jpg" />
-          </div>
-
-        </div>
-      </div>
-    </div>
+    <annonces></annonces>
 
   </div>
 </div>

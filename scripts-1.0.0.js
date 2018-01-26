@@ -113,6 +113,11 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
     props: ['product']
   });
 
+  Vue.component('annonces', {
+    template: '#template-other-annonces',
+    props: []
+  });
+
   Vue.component('psummary', {
     props: ['product'],
     template: '#template-summary',
@@ -274,6 +279,11 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         }
       }
     });
+  if (appExist('app-custom'))
+    new Vue({
+      el: '#app-custom',
+      data: {}
+    })
 
   var router = ( ! _.isUndefined(window.VueRouter) ) ? new VueRouter({
     mode: 'history',

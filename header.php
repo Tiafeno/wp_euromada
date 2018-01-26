@@ -109,6 +109,13 @@ global $MESSAGE;
     .er-other-logo:hover {
       border: 1px dashed #ddd8d8;
     }
+    #app-other-publisher .images {
+      width: 100% !important;
+    }
+    #app-other-publisher .images img {
+      width: 150px !important;
+      margin: auto;
+    }
   </style>
 
   </head>
