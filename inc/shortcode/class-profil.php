@@ -17,6 +17,10 @@ final class Euromada_profil {
   }
 
   public static function render($attrs, $content = "") {
+    if ( ! is_user_logged_in()) {
+      echo '<p class="uk-margin-remove er-h2">Vous n\'avez pas les autorisations pour afficher les contenues de cette page.</p>';
+      return false;
+    }
     $euromadaActions = new euromada_actions();
     $euromada = new Euromada();
     wp_enqueue_script( 'euromada-profil-script', get_template_directory_uri() . '/profil.js', array( 'vuejs', 'vuejs-route', 'jquery', 'euromada-script' ), '', true );

@@ -123,9 +123,11 @@ class Euromada {
     $adress = Services::getValue('adress');
     $type = Services::getValue('type');
     $phone = Services::getValue('phone');
+
     update_user_meta($user_id, '_adress_', trim($adress));
     update_user_meta($user_id, '_type_', trim($type));
     update_user_meta($user_id, '_phone_', $phone);
+
     update_user_meta($user_id, 'show_admin_bar_front', false);
   }
 
@@ -310,6 +312,17 @@ class Euromada {
           $User->add_cap('upload_files');
         
           do_action("euromada_save_meta_user", $user_id);
+
+          $adress = Services::getValue('adress');
+          update_user_meta( $user_id, "billing_first_name", $firstname );
+          update_user_meta( $user_id, "billing_last_name", $lastname );
+          update_user_meta( $user_id, "billing_address_1", $adress );
+          update_user_meta( $user_id, "billing_phone", Services::getValue('phone') );
+
+          update_user_meta( $user_id, "shipping_first_name", $firstname );
+          update_user_meta( $user_id, "shipping_last_name", $lastname );
+          update_user_meta( $user_id, "shipping_address_1", $adress );
+
           update_user_meta($user_id, 'show_admin_bar_front', false);
 
           return [

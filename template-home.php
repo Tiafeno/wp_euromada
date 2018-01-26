@@ -90,7 +90,7 @@ $Adverts = $Euromada->getLastAd();
                       <a class="header er-h2 uk-text-uppercase"> {{ benefit.title }}</a>
                       <div class="meta">
                         <span class="date uk-text-uppercase">à partir de </span>
-                        <p class="er-h2">{{ benefit.cost | ariary }}</p>
+                        <p class="er-h2">{{ benefit.cost | money }} MGA</p>
                       </div>
                     </div>
                   </div>

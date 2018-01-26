@@ -14,7 +14,7 @@ class euromada_actions {
           <div class="content">
             <div class="extra">
               <div class="ui left floated"><a v-bind:href="advert.url" class="header er-list-title">{{ advert.title }}</a></div>
-              <div class="ui right floated er-h2" style="color: #000"><p>{{ advert.cost | ariary }}</p></div>
+              <div class="ui right floated er-h2" style="color: #000"><p>{{ advert.cost | euro }}</p></div>
             </div>
             <div class="meta">
               <span class="cinema">{{ advert.dateadd.date | moment }}</span>
