@@ -279,11 +279,20 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         }
       }
     });
+
   if (appExist('app-custom'))
     new Vue({
       el: '#app-custom',
       data: {}
     })
+
+  if (appExist('app-promotion'))
+    new Vue({
+      el: "#app-promotion",
+      data: {
+        products: []
+      }
+    });
 
   var router = ( ! _.isUndefined(window.VueRouter) ) ? new VueRouter({
     mode: 'history',

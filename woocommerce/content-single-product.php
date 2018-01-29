@@ -1,6 +1,9 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) 
-	exit; 
+  exit; 
+
+$current_url = get_the_permalink(get_the_ID());
+$title = get_the_title();
 
 $euromada = new Euromada();
 ?>
@@ -75,7 +78,24 @@ $euromada = new Euromada();
             </div>
             <div class="content er-share-content">
               <div class="meta uk-flex">
-                <social-media></social-media>
+                <div class="uk-margin-auto uk-flex"> 
+
+                  <span style="margin: auto; position: relative; "><!-- bottom: -2px; margin-right: 10px; -->
+                    <a target="_blank" href="https://twitter.com/share?ref_src=<?= $current_url ?>" class="uk-icon-button er-icon-button twitter-share-button" 
+                    data-hashtags="euromada" data-url='<?= $current_url ?>' data-text="<?= $title ?>"><i class="twitter icon"></i></a>
+                  </span>
+                  
+                  <span class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" 
+                    data-layout="button" data-size="large" data-mobile-iframe="false">
+                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?= $current_url ?>" 
+                    class="uk-icon-button er-icon-button fb-xfbml-parse-ignore" ><i class="facebook f icon"></i></a>
+                  </span>
+
+                  <a href="https://plus.google.com/share?url=<?= $current_url ?>" onclick="javascript:window.open(this.href,
+                  '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="uk-icon-button er-icon-button" 
+                  data-action="share" ><i class="google plus icon"></i></a>
+
+                </div>
               </div>
             </div>
           </div>

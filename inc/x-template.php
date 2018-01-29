@@ -1,3 +1,4 @@
+
 <script type="text/x-template" id="template-summary">
   <div class="er-summary">
     <h1 itemprop="name" class="er-h1">{{ product.title }}</h1>
@@ -17,12 +18,14 @@
     </div>
   </div>
 </script>
+<!-- Platform social -->
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<!-- /end --> 
 
 <script type="text/x-template" id="template-social">
   <div class="uk-margin-auto"> 
-      <a href="" class="uk-icon-button er-icon-button " uk-icon="icon: twitter"></a>
-      <a href="" class="uk-icon-button er-icon-button " uk-icon="icon: facebook"></a>
-      <a href="" class="uk-icon-button er-icon-button" uk-icon="icon: google-plus"></a>
+      
   </div>
 </script>
 

@@ -40,6 +40,7 @@ global $MESSAGE;
     @import url('https://fonts.googleapis.com/css?family=Exo:300,400,700');
 
   </style>
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   <script type="text/javascript">
     (function($){
       $(document).ready(function() {

@@ -1,6 +1,10 @@
 
-<?php get_header(); 
+<?php
+get_header(); 
+
 global $post;
+$current_url = get_the_permalink(get_the_ID());
+$title = get_the_title();
 $cost = get_post_meta( $post->ID, 'cost_recommandation', true );
 ?>
 <style type="text/css">
@@ -145,9 +149,18 @@ $cost = get_post_meta( $post->ID, 'cost_recommandation', true );
                         <div class="content er-share-content">
                           <div class="meta uk-flex">
                             <div class="uk-margin-auto"> 
-                                <a href="" class="uk-icon-button er-icon-button " uk-icon="icon: twitter"></a>
-                                <a href="" class="uk-icon-button er-icon-button " uk-icon="icon: facebook"></a>
-                                <a href="" class="uk-icon-button er-icon-button" uk-icon="icon: google-plus"></a>
+                              <a target="_blank" href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="uk-icon-button er-icon-button twitter-share-button" 
+                              data-hashtags="euromada" data-text="<?= $title ?>"  uk-icon="icon: twitter"></a>
+                              
+                              <span class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" 
+                                data-layout="button" data-size="large" data-mobile-iframe="false">
+                                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?= $current_url ?>" 
+                                class="uk-icon-button er-icon-button fb-xfbml-parse-ignore" uk-icon="icon: facebook"></a>
+                              </span>
+                        
+                              <a href="https://plus.google.com/share?url=<?= $current_url ?>" onclick="javascript:window.open(this.href,
+                          '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="uk-icon-button er-icon-button" 
+                              data-action="share" uk-icon="icon: google-plus"></a>
                             </div>
                           </div>
                         </div>

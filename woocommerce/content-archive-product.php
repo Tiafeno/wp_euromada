@@ -80,28 +80,33 @@ global $wp_query;
 
     </div> <!-- /.er-annonce-list -->
     <div class="er-sidebar uk-width-1-3@m">
-      <div id="app-promotion">
+      <div id="app-promotion" v-show="products.length > 0" >
         <!-- Promotion -->
         <section>
-          <div class="ui centered card">
+          <div class="ui centered card" style="box-shadow: none !important">
             <div class="content er-sidebar-title">
-                <a class="header uk-text-uppercase er-h2">les promotions</a>
+              <a class="header uk-text-uppercase er-h2">les promotions</a>
             </div>
+          </div>
+          
+          <div class="ui centered card" v-for="(product, index) in products">
             <div class="image">
-                <img src="img/products/auto.png">
+                <img v-bind:src="product.imgLink">
             </div>
             <div class="content">
               <div class="meta">
-                  <span class="date uk-text-uppercase er-h2">NISSAN QASHQAI S 2017</span>
-                  <p class="er-sidebar-cost">20.000.000 MGA</p>
+                  <span class="date uk-text-uppercase er-h2">{{ product.title }}</span>
+                  <p class="er-sidebar-cost">{{ product.cost | euro }}</p>
                 </div>
             </div>
             <div class="extra content uk-flex">
-                <div class="ui buttons uk-margin-auto">
-                  <div class="ui primary green button">Voir tous</div>
-                </div>
+              <div class="ui buttons uk-margin-auto">
+                <div class="ui primary green button" @click="window.location.href = product.url">Voir</div>
               </div>
+            </div>
+
           </div>
+
         </section>
         <!-- end promotion -->
       </div>
