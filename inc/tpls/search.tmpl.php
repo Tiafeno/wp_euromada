@@ -6,6 +6,11 @@
     <div class="uk-container uk-container-small">
       <form class="uk-grid-small" method="GET" action="<?= site_url('/'); ?>" uk-grid>
         <div class="uk-width-1-5@m">
+          <div class="ui input uk-display-block">
+            <input placeholder="Recherche..." name="s" value="<?= Services::getValue( 's', '' ) ?>" />
+          </div>
+        </div>
+        <div class="uk-width-1-5@m">
             <select name="cat" class="ui fluid normal dropdown">
               <option value="">Catégorie</option>
               <option v-for="cat in selectInput.categories" v-bind:value="cat.term_id">
@@ -35,7 +40,7 @@
                 <option v-for="price in selectInput.maxPrice" v-bind:value="price">{{ price | euro }} maxi.</option>
               </select>
         </div>
-        <div class="uk-width-1-5@m">
+        <div class="uk-width-1-5@m uk-hidden">
             <select name="fuel" class="ui fluid normal dropdown">
                 <option value="">Carburant</option>
                 <option v-for="fuel in selectInput.fuels" v-bind:value="fuel.term_id" >
@@ -44,7 +49,6 @@
               </select>
         </div>
         <div class="uk-width-1-5@m">
-            <div class="uk-hidden"><input type="text" name="s" value="" /></div>
             <button class="uk-button uk-button-euromada er-button-search">CHERCHER</button>
         </div>
       </form>

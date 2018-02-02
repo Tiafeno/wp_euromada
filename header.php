@@ -108,7 +108,7 @@ global $MESSAGE;
       padding-right: 0px !important;
     }
     .er-other-logo:hover {
-      border: 1px dashed #ddd8d8;
+      /*border: 1px dashed #ddd8d8;*/
     }
     #app-other-publisher .images {
       width: 100% !important;
