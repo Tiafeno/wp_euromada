@@ -6,8 +6,9 @@
     <div class="uk-container uk-container-small">
       <form class="uk-grid-small" method="GET" action="<?= site_url('/'); ?>" uk-grid>
         <div class="uk-width-1-5@m">
-          <div class="ui input uk-display-block">
-            <input placeholder="Recherche..." name="s" value="<?= Services::getValue( 's', '' ) ?>" />
+          <div class="ui icon input uk-display-block">
+            <input placeholder="Que recherchez-vous?" name="s" value="<?= Services::getValue( 's', '' ) ?>" style="border-radius: 0; width: 100%" />
+            <i class="search icon"></i>
           </div>
         </div>
         <div class="uk-width-1-5@m">

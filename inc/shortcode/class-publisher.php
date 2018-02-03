@@ -6,8 +6,8 @@ class Euromada_Publisher {
     $logged = is_user_logged_in() ? true : false;
     if ($logged) :
       $categories = Services::getTerm( 'product_cat' );
-      $fuels = Services::getTerm( 'fuel' );
-      $gearboxs = Services::getTerm('gearbox');
+      $fuels      = Services::getTerm( 'fuel' );
+      $gearboxs   = Services::getTerm('gearbox');
     endif;
 
     ?>
@@ -75,7 +75,10 @@ class Euromada_Publisher {
           </div>
           <div class="field">
             <label>Kilométrage *</label>
-            <input placeholder="" name="mileage" type="text" required>
+            <div class="ui right labeled input">
+              <input placeholder="" name="mileage" type="text" required>
+              <div class="ui basic label">KM</div>
+            </div>
           </div>
         </div>
 
@@ -150,8 +153,20 @@ class Euromada_Publisher {
           </div>
         </div>
 
-        <h4 class="ui dividing header">Localisation</h4>
-        <div class="two fields">
+        <h4 class="ui dividing header">Localisation de cette annonce</h4>
+        <div class="three fields">
+          <div class="field">
+            <label>Pays</label>
+            <input name="state" placeholder="" type="text" required>
+          </div>
+
+          <div class="field">
+            <label>Département</label>
+            <input name="departement" placeholder="Département" type="text">
+          </div>
+        </div>
+
+        <div class="three fields">
           <div class="field"> 
             <label>Ville ou code postal</label>
             <input placeholder="" name="postal_code" type="text" required>
