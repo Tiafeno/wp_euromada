@@ -275,6 +275,11 @@ class Euromada {
     do_action("euromada_update_information_user", $User->ID);
   }
 
+  /**
+   * This function register an user in bdd
+   * @param void
+   * @return array - 
+   */
   public function register_user() {
     /** Denied access if user is connected */
     if (is_user_logged_in())
@@ -372,6 +377,12 @@ class Euromada {
         "id" => "profil_page",
         "page_id" => get_option( "profil_page_id", false ),
         "description" => ""
+      ],
+      [
+        "blogname" => "iFrame",
+        "id" => "iframe_page",
+        "page_id" => get_option( "iframe_page_id", false ),
+        "description" => "iFrame page application"
       ]
     ];
     return $this;

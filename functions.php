@@ -29,6 +29,7 @@ require get_template_directory() . '/inc/shortcode/class-login.php';
 require get_template_directory() . '/inc/shortcode/class-register.php';
 require get_template_directory() . '/inc/shortcode/class-profil.php';
 require get_template_directory() . '/inc/shortcode/class-publisher.php';
+require get_template_directory() . '/inc/shortcode/class-embed.php';
 /** Widget */
 require get_template_directory() . '/inc/widgets/search.widget.php';
 
@@ -70,14 +71,25 @@ add_action( "wp_loaded", function() {
   wp_verify_nonce($_POST[ 'euromada_settings_nonce' ], 'euromada_settings') &&
   is_admin() ) {
 
-    $login_page_id = Services::getValue('login_page', '');
-    update_option( 'login_page_id', $login_page_id );
+    $options = [ 
+      'register_page', 
+      'login_page', 
+      'profil_page',
+      'iframe_page'
+    ];
 
-    $register_page_id = Services::getValue('register_page', '');
-    update_option( 'register_page_id', $register_page_id );
+    while (list(, $option) = each($options)):
+      $inputValue = Services::getValue($option, '');
+      update_option( $option . '_id', $inputValue );
+    endwhile;
+    // $login_page_id = Services::getValue('login_page', '');
+    // update_option( 'login_page_id', $login_page_id );
 
-    $profil_page_id = Services::getValue('profil_page', '');
-    update_option( 'profil_page_id', $profil_page_id );
+    // $register_page_id = Services::getValue('register_page', '');
+    // update_option( 'register_page_id', $register_page_id );
+
+    // $profil_page_id = Services::getValue('profil_page', '');
+    // update_option( 'profil_page_id', $profil_page_id );
   }
 
   /** Check if register form is submit */
@@ -188,6 +200,7 @@ add_shortcode('euromada_login', [ new Euromada_Login(), 'Render' ]);
 add_shortcode('euromada_register', [ new Euromada_register(), 'Render' ]);
 add_shortcode('euromada_profil', [ new Euromada_profil(), 'Render' ]);
 add_shortcode('euromada_publisher', [ new Euromada_publisher(), 'Render' ]);
+add_shortcode('euromada_embed', [ new Euromada_embed(), 'Render' ]);
 
 function action_save_postdata( $post_id ) {
   /** for `cost` post meta */
@@ -307,7 +320,17 @@ function uk_active_nav_class( $class, $item ) {
 }
 add_filter( 'nav_menu_css_class', 'uk_active_nav_class', 10, 2 );
 
+/**
+ * Vuejs template
+ */
+function _getiFramePage( $url = '#' ) {
+  $iFramePageId = get_option( 'iframe_page_id', false );
+  if (false != $iFramePageId) {
+    $iFramePageUrl = get_the_permalink( $iFramePageId );
+    return $iFramePageUrl . '?ref_url=' . $url;
+  } else return $url;
 
+}
 add_action( "wp_head", function(){
   include_once get_template_directory() . '/inc/x-template.php';
 }, 10, 2 );
