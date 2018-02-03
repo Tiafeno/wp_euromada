@@ -242,20 +242,20 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       el: "#app-benefit",
       data: {
         benefits: [{
-          title: "Voiture légère",
-          cost: 2000000,
-          link: jParams.templateUrl + "/img/benefits/01.jpg"
-        },
-        {
-          title: "SPRINTER",
-          cost: 10000000,
-          link: jParams.templateUrl + "/img/benefits/02.jpg"
-        },
-        {
-          title: "Camion poids louds",
-          cost: 20000000,
-          link: jParams.templateUrl + "/img/benefits/03.jpg"
-        }
+            title: "Voiture légère",
+            cost: 2000000,
+            link: jParams.templateUrl + "/img/benefits/01.jpg"
+          },
+          {
+            title: "SPRINTER",
+            cost: 10000000,
+            link: jParams.templateUrl + "/img/benefits/02.jpg"
+          },
+          {
+            title: "Camion poids louds",
+            cost: 20000000,
+            link: jParams.templateUrl + "/img/benefits/03.jpg"
+          }
         ]
       }
     });

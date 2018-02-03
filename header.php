@@ -31,7 +31,7 @@ global $MESSAGE;
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/rating.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/sidebar.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/icon.css");
-    @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/model.css");
+    @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/modal.css");
     /* @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/form.css"); */
   /** UIkit */
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/uikit.css");

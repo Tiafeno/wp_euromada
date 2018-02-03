@@ -18,6 +18,14 @@
   */
 
 $MESSAGE = null;
+define('STATES', serialize([
+  "Allemagne",
+  "France",
+  "Suisse",
+  "Espagne",
+  "Belgique",
+  "Pologne"
+]));
 
 require get_template_directory() . '/inc/class-euromada.php';
 require get_template_directory() . '/inc/class-services.php';
@@ -39,9 +47,20 @@ add_action("euromada_save_meta_user", [ $instanceEuromada, 'action_euromada_save
 add_action("euromada_update_information_user", [ $instanceEuromada, 'action_euromada_update_information_user' ], 10, 1);
 add_action("euromada_upload_thumbnails", [ $instanceEuromada, 'action_upload_thumbnails' ], 10, 1);
 add_action("euromada_insert_term_product", [ $instanceEuromada, 'action_insert_term_product' ], 10, 2);
+add_action("euromada_error_message", function() {
+  global $MESSAGE;
+  if (is_null($MESSAGE)) return;
+  if ($MESSAGE instanceof Euromada_Message):
+  ?>
+    <div class="ui red large tiny message">
+      <?= $MESSAGE->get_message() ?>
+    </div>
+  <?php
+  endif;
+}, 10, 0);
 
 add_action( 'after_setup_theme', function() {
-  if ( !current_user_can( 'administrator' ) && !is_admin() ) {
+  if ( ! current_user_can( 'administrator' ) && ! is_admin() ) {
     show_admin_bar( false );
   }
 });
@@ -59,11 +78,29 @@ add_action( "wp_loaded", function() {
   if (isset($_POST[ 'publish_nonce' ]) &&
   wp_verify_nonce($_POST[ 'publish_nonce' ], 'publish') &&
   is_user_logged_in()) {
-    $insertResult = $instanceEuromada->insert_advert();
-    if ($insertResult[ 'success' ]) {
-      echo $insertResult[ 'msg' ];
-      exit( wp_redirect( $insertResult[ 'url' ], 301 ) );
-    }
+    /** 
+     * *************************************
+     * Verification du titre de l'annonce 
+     * *************************************
+     */
+    $findArray = [ 'Vente', 'Achat' ];
+    $title = Services::getValue('title', false);
+    if (false != $title)
+      while (list(, $find) = each($findArray)) {
+        if (preg_match("/\b" . $find . '\b/i', $title)) {
+          $MESSAGE = new EM_Message('Veillez verifier le titre de votre annonce', 'Broken', 'negative');
+        }
+      }
+    unset( $title );
+
+    if ( ! $MESSAGE instanceof EM_Message):
+      $insertResult = $instanceEuromada->insert_advert();
+      if ($insertResult[ 'success' ]) {
+        exit( wp_redirect( $insertResult[ 'url' ], 301 ) );
+      } else {
+        $MESSAGE = new EM_Message($insertResult[ 'msg' ], 'Broken', 'negative');
+      }
+    endif;
   }
   
   /** Check if login form is submit */
@@ -98,7 +135,7 @@ add_action( "wp_loaded", function() {
     $results = $instanceEuromada->register_user();
     $singin = (object)$results;
     $type =  ((bool)$singin->success == false) ? 'negative' : 'positive';
-    $MESSAGE = new Euromada_Message($singin->msg, 'Inscription', $type);
+    $MESSAGE = new EM_Message($singin->msg, 'Inscription', $type);
   }
 
 });

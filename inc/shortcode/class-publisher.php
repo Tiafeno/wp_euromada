@@ -8,6 +8,7 @@ class Euromada_Publisher {
       $categories = Services::getTerm( 'product_cat' );
       $fuels      = Services::getTerm( 'fuel' );
       $gearboxs   = Services::getTerm('gearbox');
+      $marks      = Services::getTerm('mark');
     endif;
 
     ?>
@@ -15,7 +16,7 @@ class Euromada_Publisher {
     <?php if ( ! $logged) : ?>
       <?php do_shortcode( '[euromada_login]' ) ?>
     <?php else: ?>
-    
+      <?php do_action('euromada_error_message'); ?>
       <form  enctype="multipart/form-data" id="publishform" action="" method="POST" class="ui form ">
         <?= wp_nonce_field('publish', 'publish_nonce') ?>
         <h4 class="ui dividing header">Votre annonce</h4>
@@ -43,13 +44,28 @@ class Euromada_Publisher {
           <div class="field">
             <label>Titre de l'annonce</label>
             <input name="title" placeholder="Titre de votre annonce" type="text">
+            <div class="ui blue tiny message">
+              Votre annonce sera refusée si le titre ne décrit pas précisément le poduit que vous
+              proposez. Ne pas mentionner "Vente" ou "Achat" dans le titre.
+            </div>
           </div>
         </div>
 
-        <div id="app-dynamic-select-mark" class="two fields">
+        <div id="app-dynamic-select-mark" class="three fields">
           <div class="field"> 
-            <label>Marque</label>
-            <input placeholder="e.g BMW" name="mark" type="text" required>
+            <label>Marque *</label>
+            <div class="ui selection dropdown">
+              <div class="default text">Marque</div>
+              <i class="dropdown icon"></i>
+              <input name="mark" type="hidden" required>
+              <div class="menu">
+
+              <?php foreach( $marks as $mark ): ?> 
+                <div class="item" data-value="<?= $mark->name ?>"><?= strtoupper($mark->name) ?></div>
+              <?php endforeach; ?>
+
+              </div>
+            </div>
           </div>
           <div class="field">
             <label>Modèle</label>
@@ -57,7 +73,7 @@ class Euromada_Publisher {
           </div>
         </div>
 
-        <div class="two fields">
+        <div class="three fields">
           <div class="field"> 
             <label>Année modèle *</label>
             <div class="ui selection dropdown">
@@ -82,7 +98,7 @@ class Euromada_Publisher {
           </div>
         </div>
 
-        <div class="two fields">
+        <div class="three fields">
           <div class="field"> 
             <label>Carburant *</label>
             <div class="ui selection dropdown">
@@ -121,6 +137,11 @@ class Euromada_Publisher {
         <div class="field">
           <label>Texte de l'annonce *</label>
           <textarea rows="10" maxlength="4000" name="description"></textarea>
+          <div class="ui blue tiny message">
+            Indiquez dans le texte de l’annonce si vous proposez un droit de rétractation à l’acheteur. 
+            En l’absence de toute mention, l’acheteur n’en bénéficiera pas et ne pourra pas demander le remboursement 
+            ou l’échange du bien ou service proposé.
+          </div>
         </div>
 
         <div class="two fields">
@@ -130,6 +151,9 @@ class Euromada_Publisher {
               <label for="amount" class="ui label">EUR</label>
               <input placeholder="Prix" name="cost" id="amount" type="text">
               <div class="ui basic label">.00</div>
+            </div>
+            <div class="ui blue tiny message">
+              Le champ prix doit contenir des nombres entiers (pas de point, de virgule ou d'espace)
             </div>
           </div>
         </div>
@@ -156,14 +180,28 @@ class Euromada_Publisher {
         <h4 class="ui dividing header">Localisation de cette annonce</h4>
         <div class="three fields">
           <div class="field">
-            <label>Pays</label>
-            <input name="state" placeholder="" type="text" required>
+            <label>Pays *</label>
+            <div class="ui fluid search selection dropdown">
+              <div class="default text">Pays</div>
+              <i class="dropdown icon"></i>
+              <input name="state" type="hidden" required>
+              <div class="menu">
+
+              <?php foreach( unserialize(STATES) as $state): ?> 
+                <div class="item" data-value="<?= $state ?>"><?= $state ?></div>
+              <?php endforeach; ?>
+
+              </div>
+            </div>
+            <div class="ui blue tiny message">
+              Indiquez le pays où se trouve l'annonce que vous proposez.
+            </div>
           </div>
 
-          <div class="field">
-            <label>Département</label>
-            <input name="departement" placeholder="Département" type="text">
-          </div>
+          <!-- <div class="field">
+            <label>Téléphone</label>
+            <input name="phone" placeholder="Numéro de télephone" type="text">
+          </div> -->
         </div>
 
         <div class="three fields">
@@ -228,6 +266,9 @@ class Euromada_Publisher {
         padding: 5px;
         background: #fbff49;
         border-radius: 20px;
+      }
+      .ui.tiny.message {
+        box-shadow: none !important;
       }
     </style>
     <?php

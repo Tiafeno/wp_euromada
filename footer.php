@@ -2,7 +2,7 @@
   <div class="uk-section-transparent uk-section-large uk-padding-medium er-footer">
     <div class="uk-container uk-container-small">
       <div uk-grid>
-        <div class="uk-width-1-3@s">
+        <div class="uk-width-1-3@m">
           <div class="er-testimonial">
             <span class="er-footer-icon" uk-icon="icon: quote-right; ratio: 2"></span>
             <h2 class="er-footer-title uk-margin-remove-top uk-text-uppercase">DES CLIENTS SATISFAITS</h2>
@@ -21,7 +21,7 @@
 
           </div>
         </div>
-        <div class="uk-width-1-3@s">
+        <div class="uk-width-1-3@m">
           <div class="er-social">
               <span class="er-footer-icon" uk-icon="icon: facebook; ratio: 2"></span>
               <h2 class="er-footer-title uk-margin-remove-top uk-text-uppercase">SUR FACEBOOK</h2>
@@ -47,7 +47,7 @@
 
           </div>
         </div>
-        <div class="uk-width-1-3@s">
+        <div class="uk-width-1-3@m">
           <div class="er-contact">
               <span class="er-footer-icon" uk-icon="icon: mail; ratio: 2"></span>
               <h2 class="er-footer-title uk-margin-remove-top uk-text-uppercase">CONTACTEZ NOUS</h2>

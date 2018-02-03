@@ -1,6 +1,6 @@
 <?php
 
-final class Euromada_Message {
+final class EM_Message {
   protected $message;
   protected $title;
   public $type;

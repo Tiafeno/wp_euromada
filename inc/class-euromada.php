@@ -56,13 +56,13 @@ class Euromada {
    */
   public function action_upload_thumbnails( $post_id ) {
     if ( ! is_user_logged_in()) return false;
-    if ($_SERVER['REQUEST_METHOD'] != 'POST') return false;
+    if ( $_SERVER['REQUEST_METHOD'] != 'POST' ) return false;
 
     require_once( ABSPATH . 'wp-admin/includes/image.php' );
     require_once( ABSPATH . 'wp-admin/includes/file.php' );
     require_once( ABSPATH . 'wp-admin/includes/media.php' );
 
-    if (empty( $_FILES )) return;
+    if ( empty( $_FILES ) ) return;
     $files = $_FILES[ "images" ];
     foreach ($files[ 'name' ] as $key => $value) {
       if ($files[ 'name' ][ $key ]) {
@@ -121,14 +121,15 @@ class Euromada {
     $User = get_user_by('id', $user_id);
     if ( ! $User instanceof WP_User ) return false;
     $adress = Services::getValue('adress');
-    $type = Services::getValue('type');
-    $phone = Services::getValue('phone');
+    $type   = Services::getValue('type');
+    $phone  = Services::getValue('phone');
 
     update_user_meta($user_id, '_adress_', trim($adress));
     update_user_meta($user_id, '_type_', trim($type));
     update_user_meta($user_id, '_phone_', $phone);
 
-    update_user_meta($user_id, 'show_admin_bar_front', false);
+    if ( ! current_user_can( 'administrator' ) && ! is_admin() ) 
+      update_user_meta($user_id, 'show_admin_bar_front', false);
   }
 
   /**
@@ -168,38 +169,62 @@ class Euromada {
 
   }
 
+  /**
+   * Ajouter une annonce dans le site
+   * @param void
+   * @return array
+   */
   public function insert_advert() {
+    /**
+     * Validation d'utilisateur et l'autorisation requit
+     */
     if ( ! is_user_logged_in()) return false;
     $User = wp_get_current_user();
     
     /** Insert post */
-    $title = Services::getValue('title');
+    $title   = Services::getValue('title');
     $content = Services::getValue('description');
-    $cost = Services::getValue('cost');
+    $cost    = Services::getValue('cost');
 
     $postargs = [
-      'post_author' => $User->ID,
-			'post_title' => esc_html($title),
+      'post_author'  => $User->ID,
+			'post_title'   => esc_html($title),
 			'post_content' => apply_filters('the_content', $content),
-			'post_status' => 'publish', /* https://codex.wordpress.org/Post_Status */
-			'post_parent' => '',
-			'post_type' => "product",
+			'post_status'  => 'publish', /* https://codex.wordpress.org/Post_Status */
+			'post_parent'  => '',
+			'post_type'    => "product",
     ];
-
     $post_id = wp_insert_post( $postargs );
 
+    unset( $User );
+
+    /** 
+     * Vérifier le status de l'insertion de l'annonce s'il n'y a pas d'erreur.
+     */
     if ( ! is_numeric( $post_id )) 
       return [
         'success' => false,
         'msg' => $post_id->get_error_messages()
       ];
-    /** upload files */
+
+    /** 
+     * *******************************************************
+     * Envoye des photos et joindre ces images dans l'annonce
+     * ****************************************************** 
+     */
     do_action( 'euromada_upload_thumbnails', $post_id );
     update_post_meta($post_id, '_thumbnail_id', empty($this->gallery) ? '' : $this->gallery[ 0 ]);
-    /** add meta */
+
+    /** 
+     * Ajouter une type du produit (simple produit)
+     */
     wp_set_object_terms($post_id, 'simple', 'product_type');
 
-    /* Update post meta, these meta depend a product post_type */
+    /**
+     * **************************************
+     *  Update post product meta dependency
+     * *************************************
+     */
     update_post_meta( $post_id, '_visibility', 'visible');
     update_post_meta( $post_id, '_stock_status', 'instock');
     update_post_meta( $post_id, 'total_sales', '0');
@@ -223,7 +248,21 @@ class Euromada {
     update_post_meta( $post_id, '_stock', '');
     update_post_meta( $post_id, '_product_image_gallery', implode(",", $this->gallery));
 
-    /** add attribut of mileage */
+    /**
+     * ***************************
+     * Localisation de l'annonce
+     * ***************************
+     * 
+     */
+    update_post_meta( $post_id, '_state', Services::getValue('state', '') );
+    update_post_meta( $post_id, '_postalcode', Services::getValue('postal_code', '') );
+    update_post_meta( $post_id, '_adress', Services::getValue('adress', '') );
+
+    /** 
+     * ****************************************************************
+     * Ajouter une attribut à la produit (pa_mileage) - Le kilometrage
+     * ***************************************************************
+     */
     $mileage = Services::getValue('mileage');
     $term_taxonomy_ids = wp_set_object_terms( get_the_ID(), $mileage, 'pa_mileage', true );
      $data = Array('pa_mileage' => Array(
@@ -235,6 +274,11 @@ class Euromada {
      ));
      update_post_meta( $post_id, '_product_attributes', $data); 
     
+     /**
+      * ********************************
+      * Ajout des terms dans le produit
+      **********************************
+      */
     $tax_args = [
       [
         'taxonomy' =>  'mark',
@@ -258,20 +302,29 @@ class Euromada {
       ]
     ];
     do_action('euromada_insert_term_product', $tax_args, $post_id);
-    $url = get_the_permalink( $post_id );
     
     return [
       'success' => true,
-      'url' => $url,
+      'url' => get_the_permalink( $post_id ),
       'msg' => "Votre annonce a été publié avec succès. Redirection..."
     ];
   }
 
+  /**
+   * Mise à jour des information du l'utilisateur
+   * @param void
+   * @return void
+   */
   public function update_user() {
     $User = wp_get_current_user();
     /** update user meta */
     do_action("euromada_save_meta_user", $User->ID);
-    /** update user */
+
+    /** 
+     * Mise à jour des champs suivants:
+     *  - firstname
+     *  - lastname
+     */
     do_action("euromada_update_information_user", $User->ID);
   }
 

@@ -68,7 +68,7 @@ class euromada_actions {
 
           <div class=" fields">
             <div class="field">
-              <label>Adrèsse de facturation</label>
+              <label>Votre adrèsse</label>
               <input placeholder="Adresse" name="adress" value="<?= $adress ?>" type="text">
             </div>
             <div class="field">

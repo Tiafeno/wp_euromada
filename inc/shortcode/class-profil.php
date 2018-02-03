@@ -5,6 +5,10 @@ require get_template_directory() . '/inc/shortcode/includes/euromada-actions.php
 final class Euromada_profil {
   public function __construct() {}
 
+  public static function deleteGallery( $post_id ) {
+    
+  } 
+
   public static function deletePost( $post_id ) {
     $token = Services::getValue('token');
     if ( ! is_user_logged_in()) return false;
@@ -108,6 +112,7 @@ final class Euromada_profil {
             <!-- Orders -->
           
               <table class="ui single line table">
+          <?php if (!empty($my_orders)): ?>
                 <thead>
                   <tr>
                     <th>Numéro</th>
@@ -117,6 +122,7 @@ final class Euromada_profil {
                     <th></th>
                   </tr>
                 </thead>
+          <?php endif; ?>
                 <tbody>
           <?php foreach ( $my_orders as $my_order ) :
                   $order      = wc_get_order( $my_order );
