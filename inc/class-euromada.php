@@ -63,7 +63,7 @@ class Euromada {
     require_once( ABSPATH . 'wp-admin/includes/media.php' );
 
     if ( empty( $_FILES ) ) return;
-    $files = $_FILES[ "images" ];
+    $files = $_FILES[ "euromada_images" ];
     foreach ($files[ 'name' ] as $key => $value) {
       if ($files[ 'name' ][ $key ]) {
 
@@ -182,9 +182,9 @@ class Euromada {
     $User = wp_get_current_user();
     
     /** Insert post */
-    $title   = Services::getValue('title');
-    $content = Services::getValue('description');
-    $cost    = Services::getValue('cost');
+    $title   = Services::getValue('euromada_title');
+    $content = Services::getValue('euromada_description');
+    $cost    = Services::getValue('euromada_cost');
 
     $postargs = [
       'post_author'  => $User->ID,
@@ -254,16 +254,16 @@ class Euromada {
      * ***************************
      * 
      */
-    update_post_meta( $post_id, '_state', Services::getValue('state', '') );
-    update_post_meta( $post_id, '_postalcode', Services::getValue('postal_code', '') );
-    update_post_meta( $post_id, '_adress', Services::getValue('adress', '') );
+    update_post_meta( $post_id, '_state', Services::getValue('euromada_state', '') );
+    update_post_meta( $post_id, '_postalcode', Services::getValue('euromada_postal_code', '') );
+    update_post_meta( $post_id, '_adress', Services::getValue('euromada_adress', '') );
 
     /** 
      * ****************************************************************
      * Ajouter une attribut à la produit (pa_mileage) - Le kilometrage
      * ***************************************************************
      */
-    $mileage = Services::getValue('mileage');
+    $mileage = Services::getValue('euromada_mileage');
     $term_taxonomy_ids = wp_set_object_terms( get_the_ID(), $mileage, 'pa_mileage', true );
      $data = Array('pa_mileage' => Array(
        'name'        => 'pa_mileage',
@@ -282,23 +282,23 @@ class Euromada {
     $tax_args = [
       [
         'taxonomy' =>  'mark',
-        'value' => Services::getValue('mark')
+        'value' => Services::getValue('euromada_mark')
       ],
       [
         'taxonomy' => 'model',
-        'value' => Services::getValue('model')
+        'value' => Services::getValue('euromada_model')
       ],
       [
         'taxonomy' => 'fuel',
-        'value' => Services::getValue('fuel')
+        'value' => Services::getValue('euromada_fuel')
       ],
       [
         'taxonomy' => 'gearbox',
-        'value' => Services::getValue('gearbox')
+        'value' => Services::getValue('euromada_gearbox')
       ],
       [
         'taxonomy' => 'model-year',
-        'value' => Services::getValue('year')
+        'value' => Services::getValue('euromada_year')
       ]
     ];
     do_action('euromada_insert_term_product', $tax_args, $post_id);

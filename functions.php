@@ -47,48 +47,42 @@ add_action("euromada_save_meta_user", [ $instanceEuromada, 'action_euromada_save
 add_action("euromada_update_information_user", [ $instanceEuromada, 'action_euromada_update_information_user' ], 10, 1);
 add_action("euromada_upload_thumbnails", [ $instanceEuromada, 'action_upload_thumbnails' ], 10, 1);
 add_action("euromada_insert_term_product", [ $instanceEuromada, 'action_insert_term_product' ], 10, 2);
-add_action("euromada_error_message", function() {
-  global $MESSAGE;
-  if (is_null($MESSAGE)) return;
-  if ($MESSAGE instanceof Euromada_Message):
-  ?>
-    <div class="ui red large tiny message">
-      <?= $MESSAGE->get_message() ?>
-    </div>
-  <?php
-  endif;
-}, 10, 0);
 
 add_action( 'after_setup_theme', function() {
-  if ( ! current_user_can( 'administrator' ) && ! is_admin() ) {
-    show_admin_bar( false );
-  }
+  if ( ! current_user_can( 'administrator' ) && ! is_admin() ) { show_admin_bar( false ); }
 });
 
  /** On load wordpress */
 add_action( "wp_loaded", function() {
   global $MESSAGE, $instanceEuromada;
   
+  /**
+   * **************************
+   *   Mise à jours du profil
+   * **************************
+   */
   if (isset($_POST[ 'edit_profil_nonce' ]) &&
-  wp_verify_nonce($_POST[ 'edit_profil_nonce' ], 'edit_profil') &&
-  is_user_logged_in()) {
+  wp_verify_nonce($_POST[ 'edit_profil_nonce' ], 'edit_profil') && is_user_logged_in()) {
     $instanceEuromada->update_user();
   }
 
-  if (isset($_POST[ 'publish_nonce' ]) &&
-  wp_verify_nonce($_POST[ 'publish_nonce' ], 'publish') &&
-  is_user_logged_in()) {
+  /**
+   * ***************************
+   *     Publier une annonce
+   * ***************************
+   */
+  if (isset($_POST[ 'publish_nonce' ]) && wp_verify_nonce($_POST[ 'publish_nonce' ], 'publish') && is_user_logged_in()) {
     /** 
      * *************************************
-     * Verification du titre de l'annonce 
+     *  Verification du titre de l'annonce 
      * *************************************
      */
     $findArray = [ 'Vente', 'Achat' ];
-    $title = Services::getValue('title', false);
+    $title = Services::getValue('euromada_title', false);
     if (false != $title)
       while (list(, $find) = each($findArray)) {
         if (preg_match("/\b" . $find . '\b/i', $title)) {
-          $MESSAGE = new EM_Message('Veillez verifier le titre de votre annonce', 'Broken', 'negative');
+          $MESSAGE = new EM_Message('Veillez verifier le titre de votre annonce', '', 'negative');
         }
       }
     unset( $title );
@@ -98,12 +92,17 @@ add_action( "wp_loaded", function() {
       if ($insertResult[ 'success' ]) {
         exit( wp_redirect( $insertResult[ 'url' ], 301 ) );
       } else {
-        $MESSAGE = new EM_Message($insertResult[ 'msg' ], 'Broken', 'negative');
+        $MESSAGE = new EM_Message($insertResult[ 'msg' ], '', 'negative');
       }
     endif;
   }
   
-  /** Check if login form is submit */
+  /**
+   * ****************************************
+   * Mise à jours des paramètres d'EUROMADA
+   * @privilège - Administrateur
+   * ****************************************
+   */
   if (isset($_POST[ 'euromada_settings_nonce' ]) &&
   wp_verify_nonce($_POST[ 'euromada_settings_nonce' ], 'euromada_settings') &&
   is_admin() ) {
@@ -119,17 +118,13 @@ add_action( "wp_loaded", function() {
       $inputValue = Services::getValue($option, '');
       update_option( $option . '_id', $inputValue );
     endwhile;
-    // $login_page_id = Services::getValue('login_page', '');
-    // update_option( 'login_page_id', $login_page_id );
-
-    // $register_page_id = Services::getValue('register_page', '');
-    // update_option( 'register_page_id', $register_page_id );
-
-    // $profil_page_id = Services::getValue('profil_page', '');
-    // update_option( 'profil_page_id', $profil_page_id );
   }
 
-  /** Check if register form is submit */
+  /**
+   * ***************************************************************
+   *   Enregistrer une nouvelle utilisateur dans la base de donnée
+   * ***************************************************************
+   */
   if (isset($_POST[ 'register_nonce' ]) &&
   wp_verify_nonce($_POST[ 'register_nonce' ], 'register') ) {
     $results = $instanceEuromada->register_user();
@@ -166,11 +161,10 @@ add_action( 'admin_init', function() {
   }
 }, 100 );
 
-function euromada_init() {
+add_action( 'init', function() {
   Euromada::taxonomy();
   Euromada::setRecommandation();
-}
-add_action( 'init', 'euromada_init' );
+});
 
 /**
  * Redirect in home page if user is login

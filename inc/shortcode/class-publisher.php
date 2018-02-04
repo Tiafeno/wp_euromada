@@ -7,8 +7,8 @@ class Euromada_Publisher {
     if ($logged) :
       $categories = Services::getTerm( 'product_cat' );
       $fuels      = Services::getTerm( 'fuel' );
-      $gearboxs   = Services::getTerm('gearbox');
-      $marks      = Services::getTerm('mark');
+      $gearboxs   = Services::getTerm( 'gearbox' );
+      $marks      = Services::getTerm( 'mark' );
     endif;
 
     ?>
@@ -16,7 +16,6 @@ class Euromada_Publisher {
     <?php if ( ! $logged) : ?>
       <?php do_shortcode( '[euromada_login]' ) ?>
     <?php else: ?>
-      <?php do_action('euromada_error_message'); ?>
       <form  enctype="multipart/form-data" id="publishform" action="" method="POST" class="ui form ">
         <?= wp_nonce_field('publish', 'publish_nonce') ?>
         <h4 class="ui dividing header">Votre annonce</h4>
@@ -25,7 +24,7 @@ class Euromada_Publisher {
           <div class="field">
             <label>Catégorie</label>
             <div class="ui selection dropdown">
-              <input name="category" type="hidden">
+              <input name="euromada_category" value="<?= Services::getValue('euromada_category','') ?>" type="hidden">
               <div class="default text">Catégorie</div>
               <i class="dropdown icon"></i>
               <div class="menu">
@@ -43,7 +42,8 @@ class Euromada_Publisher {
         <div class="two fields">
           <div class="field">
             <label>Titre de l'annonce</label>
-            <input name="title" placeholder="Titre de votre annonce" type="text">
+            <input name="euromada_title" value="<?= Services::getValue('euromada_title','') ?>" placeholder="Titre de votre annonce" 
+            type="text" autocomplete="off">
             <div class="ui blue tiny message">
               Votre annonce sera refusée si le titre ne décrit pas précisément le poduit que vous
               proposez. Ne pas mentionner "Vente" ou "Achat" dans le titre.
@@ -57,7 +57,7 @@ class Euromada_Publisher {
             <div class="ui selection dropdown">
               <div class="default text">Marque</div>
               <i class="dropdown icon"></i>
-              <input name="mark" type="hidden" required>
+              <input name="euromada_mark" value="<?= Services::getValue('euromada_mark','') ?>" type="hidden" required>
               <div class="menu">
 
               <?php foreach( $marks as $mark ): ?> 
@@ -69,7 +69,7 @@ class Euromada_Publisher {
           </div>
           <div class="field">
             <label>Modèle</label>
-            <input placeholder="e.g X6" name="model" type="text" required>
+            <input placeholder="e.g X6" value="<?= Services::getValue('euromada_model','') ?>" name="euromada_model" type="text" autocomplete="off" required>
           </div>
         </div>
 
@@ -79,7 +79,7 @@ class Euromada_Publisher {
             <div class="ui selection dropdown">
               <div class="default text">Année modèle</div>
               <i class="dropdown icon"></i>
-              <input name="year" type="hidden">
+              <input name="euromada_year" value="<?= Services::getValue('euromada_year','') ?>" type="hidden">
               <div class="menu">
 
               <?php foreach( range(1960, (int)date( "Y" )) as $year): ?> 
@@ -92,7 +92,7 @@ class Euromada_Publisher {
           <div class="field">
             <label>Kilométrage *</label>
             <div class="ui right labeled input">
-              <input placeholder="" name="mileage" type="text" required>
+              <input placeholder="" value="<?= Services::getValue('euromada_mileage','') ?>" name="euromada_mileage" type="text" autocomplete="off" required>
               <div class="ui basic label">KM</div>
             </div>
           </div>
@@ -104,7 +104,7 @@ class Euromada_Publisher {
             <div class="ui selection dropdown">
               <div class="default text">Carburant</div>
               <i class="dropdown icon"></i>
-              <input name="fuel" type="hidden" required>
+              <input name="euromada_fuel" value="<?= Services::getValue('euromada_fuel','') ?>" type="hidden" required>
               <div class="menu">
 
               <?php foreach ($fuels as $fuel) { ?>
@@ -120,7 +120,7 @@ class Euromada_Publisher {
             <div class="ui selection dropdown">
               <div class="default text">Boîte de vitesse</div>
               <i class="dropdown icon"></i>
-              <input name="gearbox" type="hidden" required>
+              <input name="euromada_gearbox" value="<?= Services::getValue('euromada_gearbox','') ?>" type="hidden" required>
               <div class="menu">
 
               <?php foreach ($gearboxs as $gearbox) { ?>
@@ -136,7 +136,7 @@ class Euromada_Publisher {
 
         <div class="field">
           <label>Texte de l'annonce *</label>
-          <textarea rows="10" maxlength="4000" name="description"></textarea>
+          <textarea rows="10" maxlength="4000" name="euromada_description"><?= Services::getValue('euromada_description','') ?></textarea>
           <div class="ui blue tiny message">
             Indiquez dans le texte de l’annonce si vous proposez un droit de rétractation à l’acheteur. 
             En l’absence de toute mention, l’acheteur n’en bénéficiera pas et ne pourra pas demander le remboursement 
@@ -149,7 +149,7 @@ class Euromada_Publisher {
             <label>Prix *</label>
             <div class="ui right labeled input">
               <label for="amount" class="ui label">EUR</label>
-              <input placeholder="Prix" name="cost" id="amount" type="text">
+              <input placeholder="Prix" value="<?= Services::getValue('euromada_cost','') ?>" name="euromada_cost" id="amount" type="text" autocomplete="off" required>
               <div class="ui basic label">.00</div>
             </div>
             <div class="ui blue tiny message">
@@ -169,7 +169,7 @@ class Euromada_Publisher {
               <span v-upload:identification="picture.identification" class="directive">
                 <img class="ui image" data-state="not_uploaded" v-bind:src="imageNoUploaded">
                 <div class="uk-hidden">
-                  <input class="picture" name="images[]" v-bind:id="picture.identification" type="file">
+                  <input class="picture" name="euromada_images[]" v-bind:id="picture.identification" type="file">
                 </div>
               </span>
             </div>
@@ -184,7 +184,7 @@ class Euromada_Publisher {
             <div class="ui fluid search selection dropdown">
               <div class="default text">Pays</div>
               <i class="dropdown icon"></i>
-              <input name="state" type="hidden" required>
+              <input name="euromada_state" value="<?= Services::getValue('euromada_state','') ?>" type="hidden" required>
               <div class="menu">
 
               <?php foreach( unserialize(STATES) as $state): ?> 
@@ -197,21 +197,16 @@ class Euromada_Publisher {
               Indiquez le pays où se trouve l'annonce que vous proposez.
             </div>
           </div>
-
-          <!-- <div class="field">
-            <label>Téléphone</label>
-            <input name="phone" placeholder="Numéro de télephone" type="text">
-          </div> -->
         </div>
 
         <div class="three fields">
           <div class="field"> 
             <label>Ville ou code postal</label>
-            <input placeholder="" name="postal_code" type="text" required>
+            <input value="<?= Services::getValue('euromada_postal_code','') ?>" name="euromada_postal_code" type="text" required>
           </div>
           <div class="field">
             <label>Adresse</label>
-            <input placeholder="" name="adress" type="text" required>
+            <input value="<?= Services::getValue('euromada_adress','') ?>" name="euromada_adress" type="text" required>
           </div>
         </div>
 
