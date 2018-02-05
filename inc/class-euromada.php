@@ -74,10 +74,10 @@ class Euromada {
 
         $file = array(
           'name'     => md5($file_basename) . '_' . $post_id . $file_ext,
-          'type'     => $files['type'][$key],
-          'tmp_name' => $files['tmp_name'][$key],
-          'error'    => $files['error'][$key],
-          'size'     => $files['size'][$key]
+          'type'     => $files[ 'type' ][ $key ],
+          'tmp_name' => $files[ 'tmp_name' ][ $key ],
+          'error'    => $files[ 'error' ][ $key ],
+          'size'     => $files[ 'size' ][ $key ]
         );
         
         $_FILES = array("upload_file" => $file);
@@ -209,7 +209,7 @@ class Euromada {
 
     /** 
      * *******************************************************
-     * Envoye des photos et joindre ces images dans l'annonce
+     * Envoyer les photos et joindre ces images dans l'annonce
      * ****************************************************** 
      */
     do_action( 'euromada_upload_thumbnails', $post_id );
@@ -415,27 +415,45 @@ class Euromada {
     $this->forms = [
       [
         "blogname" => "Page pour login",
-        "id" => "login_page",
+        "name" => "login_page",
+        "type" => "select",
         "page_id" => get_option( "login_page_id", false ),
         "description" => ""
       ],
       [
         "blogname" => "Page pour s'enregistrer",
-        "id" => "register_page",
+        "name" => "register_page",
+        "type" => "select",
         "page_id" => get_option( "register_page_id", false ),
         "description" => ""
       ],
       [
         "blogname" => "Page profil",
-        "id" => "profil_page",
+        "name" => "profil_page",
+        "type" => "select",
         "page_id" => get_option( "profil_page_id", false ),
         "description" => ""
       ],
       [
-        "blogname" => "iFrame",
-        "id" => "iframe_page",
+        "blogname" => "Page iFrame",
+        "name" => "iframe_page",
+        "type" => "select",
         "page_id" => get_option( "iframe_page_id", false ),
-        "description" => "iFrame page application"
+        "description" => ""
+      ],
+      [
+        "blogname" => "Prix maximum",
+        "name" => "max_price",
+        "type" => "input",
+        "value" => get_option( "max_price", false ),
+        "description" => ""
+      ],
+      [
+        "blogname" => "Prix minimum",
+        "name" => "min_price",
+        "type" => "input",
+        "value" => get_option( "min_price", false ),
+        "description" => ""
       ]
     ];
     return $this;

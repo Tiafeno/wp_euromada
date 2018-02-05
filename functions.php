@@ -118,6 +118,13 @@ add_action( "wp_loaded", function() {
       $inputValue = Services::getValue($option, '');
       update_option( $option . '_id', $inputValue );
     endwhile;
+    
+    $inputs = [ "max_price", "min_price" ];
+    foreach ($inputs as $input ) {
+      $inputValue = Services::getValue( $input );
+      update_option( $input, (int)$inputValue );
+    }
+
   }
 
   /**
@@ -366,6 +373,25 @@ add_action( "wp_head", function(){
   include_once get_template_directory() . '/inc/x-template.php';
 }, 10, 2 );
 
+add_action( "admin_head", function(){
+  wp_enqueue_script( 'dropdown', get_template_directory_uri() . '/js/dropdown.min.js', array() );
+  wp_enqueue_script( 'transition', get_template_directory_uri() . '/js/transition.min.js', array() );
+  wp_enqueue_script( 'form-semantic', get_template_directory_uri() . '/js/form.min.js', array() );
+?>
+  <style type="text/css">
+    @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/semantic.css");
+    @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/dropdown.css");
+    @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/transition.css");
+  </style>
+  <script type="text/javascript">
+    (function($){
+      $(document).ready(function() {
+        $('.ui.dropdown').dropdown();
+      });
+    })(jQuery)
+  </script>
+<?php
+}, 10, 2 );
 
 function render_product( $post ) {
   $cost = get_post_meta( $post->ID, 'cost_recommandation', true );

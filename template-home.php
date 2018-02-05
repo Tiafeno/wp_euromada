@@ -72,7 +72,7 @@ $Adverts = $Euromada->getLastAd();
             </div>
 
             <div id="app-benefit" class="er-annonce-benefit uk-margin-large-top">
-              <h2 class="uk-text-uppercase er-h2 uk-margin-remove-bottom">NOS PRESTATIONS</h2>
+              <h2 class="uk-text-uppercase er-h2 uk-margin-remove-bottom">FAITES VOTRE CHOIX</h2>
               <div class="uk-container uk-margin-medium-top">
                 <div class="ui special cards">
                   <div class="card" v-for="benefit in benefits">

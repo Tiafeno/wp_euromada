@@ -1,5 +1,12 @@
 <?php
 global $MESSAGE;
+$min_price = get_option( "min_price", 1 );
+$max_price = get_option( "max_price", 20000 );
+$interval = [];
+
+for ($i = $min_price; $i <= $max_price; $i += $min_price)
+  array_push($interval, $i);
+
 /**
  * The template for displaying the header
  *
@@ -42,6 +49,7 @@ global $MESSAGE;
   </style>
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   <script type="text/javascript">
+    var __priceInterval__ = [ <?= implode(',', $interval); ?> ]; 
     (function($){
       $(document).ready(function() {
         $('.ui.dropdown').dropdown();
@@ -116,6 +124,19 @@ global $MESSAGE;
     #app-other-publisher .images img {
       width: 150px !important;
       margin: auto;
+    }
+    #recommandations {
+      background: #003b81;
+      width: 100%;
+    }
+    #recommandations a {
+      color: white;
+    }
+    #recommandations p, #recommandations a {
+      font-size: 11px;
+    }
+    #recommandations p:not(.money) {
+      color: white !important;
     }
   </style>
 
