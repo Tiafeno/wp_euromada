@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="uk-width-1-5@m">
-            <select name="cat" class="ui fluid normal dropdown">
+            <select name="product_cat" class="ui fluid normal dropdown">
               <option value="">Catégorie</option>
               <option v-for="cat in selectInput.categories" v-bind:value="cat.term_id">
                 {{cat.name}}
@@ -20,7 +20,7 @@
             </select>
         </div>
         <div class="uk-width-1-5@m">
-            <select name="mark" class="ui fluid normal dropdown">
+            <select name="mark" class="ui fluid search normal dropdown">
               <option value="">Marque</option>
               <option v-for="mark in selectInput.marks" v-bind:value="mark.term_id" >
                 {{ mark.name }}
@@ -38,7 +38,7 @@
         <div class="uk-width-1-5@m">
             <select name="maxprice" class="ui fluid normal dropdown">
                 <option value="">Prix maxi</option>
-                <option v-for="price in selectInput.maxPrice" v-bind:value="price">{{ price | euro }} maxi.</option>
+                <option v-for="(price, index) in selectInput.maxPrice" v-bind:value="price">{{ price | euro }}</option>
               </select>
         </div>
         <div class="uk-width-1-5@m uk-hidden">
