@@ -3,7 +3,14 @@
 class Services {
   public static function getTerm( $taxonomy ) {
     $term = array();
-    $parent_terms = \get_terms( $taxonomy, array( 'parent' => 0, 'orderby' => 'slug', 'hide_empty' => false ) );
+    $parent_terms = \get_terms( $taxonomy, array( 
+        'parent' => 0, 
+        'orderby' => 'slug', 
+        'hide_empty' => false, 
+        'posts_per_page' => -1 
+      ) 
+    );
+
     if (!$parent_terms || \is_wp_error( $parent_terms )){
       $parent_terms = array();
     }
