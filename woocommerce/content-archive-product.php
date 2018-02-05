@@ -48,7 +48,7 @@ global $wp_query;
                 <p></p>
               </div>
               <div class="extra">
-                <div class="ui label er-label">Badget</div>
+                <div class="ui label er-label"><?= strtoupper($badge) ?></div>
                 <div class="ui right floated primary button er-button-voir" @click="window.location.href = advert.url">Voir</div>
               </div>
             </div>
@@ -80,9 +80,48 @@ global $wp_query;
 
     </div> <!-- /.er-annonce-list -->
     <div class="er-sidebar uk-width-1-3@m">
-      <div id="app-promotion" v-show="products.length > 0" >
+      <div>
+        <?php
+          $show = isset($recommandations) ? true : false;
+          if ($show):
+        ?>
+        <!-- Recommandation -->
+        <section id="recommandations" class="uk-display-inline-block">
+          <div class="ui centered card" style="box-shadow: none !important">
+            <div class="content er-sidebar-title" style="border-radius: 0px !important">
+              <span class="header uk-text-uppercase er-h2">Nos récommandation</span>
+            </div>
+          </div>
+
+
+          <?php
+            while ($recommandations->have_posts()): $recommandations->the_post();
+              $cost = get_post_meta( $recommandations->post->ID, 'cost_recommandation', true );
+              $thumbnail_url = get_the_post_thumbnail_url( $recommandations->post->ID, [100, 50] );
+          ?>
+
+          <div class="uk-margin-small" uk-grid>
+            <div class="uk-width-1-3"> 
+              <img class="uk-padding-small uk-padding-remove-right uk-padding-remove-vertical" width="77" src="<?= $thumbnail_url ?>"> 
+            </div>
+            <div class="uk-width-2-3 uk-flex">
+              <div class="uk-margin-auto-vertical">
+                <p class="uk-margin-remove uk-paddin-remove uk-text-uppercase uk-text-small">
+                  <a href="<?= the_permalink( $recommandations->post ) ?>"><?= $recommandations->post->post_title ?></a>
+                </p>
+                <p class="uk-margin-remove uk-paddin-remove uk-text-meta money"><?= $cost ?></p>
+              </div>
+            </div>
+          </div>
+
+          <?php endwhile; ?>
+
+        </section>
+          <!-- end Recommandation -->
+      <?php endif; ?>
+
         <!-- Promotion -->
-        <section>
+        <section  id="app-promotion" v-show="products.length > 0">
           <div class="ui centered card" style="box-shadow: none !important">
             <div class="content er-sidebar-title">
               <a class="header uk-text-uppercase er-h2">les promotions</a>

@@ -54,7 +54,7 @@ class Euromada_Publisher {
         <div id="app-dynamic-select-mark" class="three fields">
           <div class="field"> 
             <label>Marque *</label>
-            <div class="ui selection dropdown">
+            <div class="ui fluid search selection dropdown">
               <div class="default text">Marque</div>
               <i class="dropdown icon"></i>
               <input name="euromada_mark" value="<?= Services::getValue('euromada_mark','') ?>" type="hidden" required>

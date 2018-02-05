@@ -8,6 +8,7 @@ get_header();
           <div class="uk-container uk-container-small">
           <?php
             if ( have_posts() ) :
+              set_query_var('badge', get_post_type());
               wc_get_template_part( 'content', 'archive-product' ); 
             endif;
           ?>
