@@ -38,7 +38,9 @@
         <div class="uk-width-1-5@m">
             <select name="maxprice" class="ui fluid normal dropdown">
                 <option value="">Prix maxi</option>
-                <option v-for="(price, index) in selectInput.maxPrice" v-bind:value="price">{{ price | euro }}</option>
+                <option v-for="(price, i) in selectInput.maxPrice" v-bind:class="{ 'lastNumber': (selectInput.maxPrice.length - 1) == i }" v-bind:value="price">
+                  {{ price | euro }}
+                </option>
               </select>
         </div>
         <div class="uk-width-1-5@m uk-hidden">

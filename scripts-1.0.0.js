@@ -141,15 +141,15 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       methods: {
         remove: function( event, id ) {
           var el = event.target;
-          var parent = jQuery( el ).parents( '.ctn' );
+          var parent = $( el ).parents( '.ctn' );
           var imgPreview = parent.find( 'img.image' );
           //var status = imgPreview.data('state');
           imgPreview.data('state', "not_uploaded");
           imgPreview.attr('src', noImage);
           /** reset input value */
-          jQuery("#" + id).val("");
+          $("#" + id).val("");
           /** hide trash button */
-          var removeElement = jQuery( el ).parents( '.ctn' ).find( '.er-remove-picture' )
+          var removeElement = $( el ).parents( '.ctn' ).find( '.er-remove-picture' )
           if ( ! removeElement.hasClass('uk-hidden'))
             removeElement.addClass('uk-hidden');
         }
@@ -222,26 +222,57 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         });
       }
     });
+
   if ( appExist("app-benefit") )
     new Vue({
       el: "#app-benefit",
       data: {
-        benefits: [{
-            title: "Voiture légère",
-            cost: 2000000,
-            link: jParams.templateUrl + "/img/benefits/01.jpg"
-          },
-          {
-            title: "SPRINTER",
-            cost: 10000000,
-            link: jParams.templateUrl + "/img/benefits/02.jpg"
-          },
-          {
-            title: "Camion poids louds",
-            cost: 20000000,
-            link: jParams.templateUrl + "/img/benefits/03.jpg"
-          }
-        ]
+        benefits: [],
+        rates: {}
+      },
+      methods: {
+        fetchExchange: function( currency = 'EUR') {
+          // var base = 'MGA';
+          // var AppID = '652150c56f2640938ca36b9b079c34f1';
+          // $.get('https://openexchangerates.org/api/latest.json?app_id=' + AppID + '&base=' + base, function( data ) {
+          //   console.log(data);
+          //   this.rates = data.rates;
+          // }).fail(function() {
+
+          // }).done(function() {
+
+          // });
+          return;
+        },
+        __init__: function() {
+          var bfts = [];
+          if ( _.isUndefined(__categories__) ) console.warn("categories variable is undefined");
+          _.forEach(__categories__, function( categorie ) {
+            var content = {};
+            var desc = JSON.parse( categorie.desc );
+
+            content.name = categorie.name;
+            content.image = categorie.image;
+            content.url = categorie.url;
+            content.cost = desc.prix;
+            
+            bfts = _.concat( bfts, content );
+          });
+          this.benefits = _.concat( bfts );
+          this.fetchExchange();
+        }
+      },
+      created: function () {
+        this.__init__();
+        window.setTimeout(() => {
+          $('#app-benefit').find('.image').dimmer({
+            on: 'hover'
+          });
+        }, 1500);
+
+      },
+      mounted: function() {
+        
       }
     });
   
@@ -280,36 +311,36 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
     });
 
   var router = ( ! _.isUndefined(window.VueRouter) ) ? new VueRouter({
-    mode: 'history',
-    routes: []
-  }) : false;
-  if ( router && appExist("app-product") )
-    var vProduct = new Vue({
-      router,
-      data: {
-        activeClass: 'active',
-        product: {},
-        access: false
-      },
-      el: "#app-product",
-      beforeCreate: function () {
-        jQuery('.segment')
-          .dimmer({ closable: false })
-          .dimmer('show');
-      },
-      methods : {
-        
-      },
-      mounted: function () {
-        if ( _.isUndefined(__advert__) ) console.warn("adverts variable is undefined");
-        this.product = __advert__;
-        window.setTimeout(() => {
-          this.access = true;
-          jQuery('.segment').dimmer('hide');
-        }, 400);
+      mode: 'history',
+      routes: []
+    }) : false;
+    if ( router && appExist("app-product") )
+      var vProduct = new Vue({
+        router,
+        data: {
+          activeClass: 'active',
+          product: {},
+          access: false
+        },
+        el: "#app-product",
+        beforeCreate: function () {
+          jQuery('.segment')
+            .dimmer({ closable: false })
+            .dimmer('show');
+        },
+        methods : {
+          
+        },
+        mounted: function () {
+          if ( _.isUndefined(__advert__) ) console.warn("adverts variable is undefined");
+          this.product = __advert__;
+          window.setTimeout(() => {
+            this.access = true;
+            jQuery('.segment').dimmer('hide');
+          }, 400);
 
-      }
-    });
+        }
+      });
 
 
 })(jQuery)

@@ -7,8 +7,10 @@ get_header();
 
 $Euromada = new Euromada();
 $Adverts = $Euromada->getLastAd();
+$product_categories = Services::getProductsCat();
 ?>
 <script type="text/javascript">
+  var __categories__ = <?= json_encode( $product_categories, JSON_PRETTY_PRINT ); ?>;
   var __adverts__ = <?= json_encode( $Adverts, JSON_PRETTY_PRINT ); ?>;
 </script>
       <?php 
@@ -80,14 +82,14 @@ $Adverts = $Euromada->getLastAd();
                       <div class="ui dimmer">
                         <div class="content">
                           <div class="center">
-                            <div class="ui inverted button">Voir</div>
+                            <div class="ui inverted button" @click="window.location.href = benefit.url">Voir</div>
                           </div>
                         </div>
                       </div>
-                      <img v-bind:src="benefit.link" v-bind:alt="benefit.title">
+                      <img v-bind:src="benefit.image" v-bind:alt="benefit.name">
                     </div>
                     <div class="content">
-                      <a class="header er-h2 uk-text-uppercase"> {{ benefit.title }}</a>
+                      <a v-bind:href="benefit.url" class="header er-h2 uk-text-uppercase"> {{ benefit.name }}</a>
                       <div class="meta">
                         <span class="date uk-text-uppercase">à partir de </span>
                         <p class="er-h2">{{ benefit.cost | money }} MGA</p>

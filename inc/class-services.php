@@ -20,6 +20,36 @@ class Services {
     return $term;
   }
 
+  public static function getProductsCat() {
+    $product_cat = [];
+    $terms = get_terms( 'product_cat', [
+      'parent' => 0,
+      'hide_empty' => false,
+      'posts_per_page' => -1
+    ]);
+    foreach ( $terms as $term ) {
+      $content  = new stdClass();
+      $thumbnail_id = get_woocommerce_term_meta( $term->term_id, 'thumbnail_id', true );
+      $image = wp_get_attachment_url( $thumbnail_id );
+
+      $content->id = $term->term_id;
+      $content->name = $term->name;
+      $content->desc = $term->description;
+      $content->slug = $term->slug;
+      $content->image = $image;
+
+      $url = get_the_permalink() . "?s=&product_cat=" . $term->term_id;
+      $content->url = $url;
+
+      array_push( $product_cat, $content );
+    }
+    return $product_cat;
+  }
+
+  public static function getExchangeCurrencies() {
+    
+  }
+
   /* This function return POST or GET value by `name` variable */
   public static function getValue($name, $def = false) {
     if (!isset( $name ) || empty( $name ) || !is_string( $name ))
