@@ -45,16 +45,31 @@ endwhile;
  * Requete dans postmeta pour l'entrer "_price",
  * comparaison numerique
  */
+$compare  = "<=";
 if (false != Services::getValue('maxprice')) {
   /**
    * Limite et non limite de prix
    */
-  $maxPrice = Services::getValue('maxprice');
-
+  $maxPrice = (float)Services::getValue( 'maxprice' );
+  $optionMaxPrice = (float)get_option( 'max_price', 0 );
+  if ($optionMaxPrice != 0 && $maxPrice === $optionMaxPrice) $compare = ">=";
   array_push($meta_query, [
     'key' => "_price",
-    'value' => (float)Services::getValue('maxprice'),
-    'compare' => "<=",
+    'value' => $maxPrice,
+    'compare' => $compare, // droite
+    'type' => "NUMERIC"
+  ]);
+}
+if (false != Services::getValue('minprice')) {
+  $min_price = (float)Services::getValue('minprice');
+  /**
+   * Convertion de MGA en EUR
+   */
+  
+  array_push($meta_query, [
+    'key' => "_price",
+    'value' => $min_price,
+    'compare' => '=>', // droite
     'type' => "NUMERIC"
   ]);
 }
