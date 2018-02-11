@@ -46,10 +46,6 @@ class Services {
     return $product_cat;
   }
 
-  public static function getExchangeCurrencies() {
-    
-  }
-
   /* This function return POST or GET value by `name` variable */
   public static function getValue($name, $def = false) {
     if (!isset( $name ) || empty( $name ) || !is_string( $name ))

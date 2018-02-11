@@ -146,10 +146,9 @@ final class Euromada_profil {
                     <td>
                       <?php
                         $actions = wc_get_account_orders_actions( $order );
-                        
                         if ( ! empty( $actions ) ) {
                           foreach ( $actions as $key => $action ) {
-                            echo '<a @click="voirCommande( ' . $my_order->ID . ' )" class="button ui right floated primary button er-button-voir ' . sanitize_html_class( $key ) . '">' . esc_html( $action['name'] ) . '</a>';
+                            //echo '<a @click="voirCommande( ' . $my_order->ID . ' )" class="button ui right floated primary button er-button-voir ' . sanitize_html_class( $key ) . '">' . esc_html( $action['name'] ) . '</a>';
                           }
                         }
                       ?>

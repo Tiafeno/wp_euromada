@@ -51,48 +51,62 @@
       voitures à votre disposition. Communiquez-nous la référence que vous souhaitez commander et nous vous ferons un devis.</p>
       <div class="ui small images" >
         <div class="uk-inline er-other-logo">
-          <a href="<?= _getiFramePage('https://www.leboncoin.fr/_vehicules_/offres/'); ?>">
+          <span class="website" data-url="https://www.leboncoin.fr/_vehicules_/offres/">
             <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/leboncoin.jpg" />
-          </a>
+          </span>
         </div>
         <div class="uk-inline er-other-logo">
-          <a href="<?= _getiFramePage('https://www.paruvendu.fr/voiture-occasion/'); ?>">
+          <span class="website" data-url="https://www.paruvendu.fr/voiture-occasion/">
             <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/paruvendu.jpg" />
-          </a>
+          </span>
         </div>
         <div class="uk-inline er-other-logo">
-          <a href="<?= _getiFramePage('https://www.mobile.de/'); ?>">
+          <span class="website" data-url="https://www.mobile.de/">
             <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/mobile.de.jpg" />
-          </a>
+          </span>
         </div>
         <div class="uk-inline er-other-logo">
-          <a href="<?= _getiFramePage('https://www.europe-camions.com/'); ?>">
+          <span class="website" data-url="https://www.europe-camions.com/">
             <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/europe-camions.jpg" />
-          </a>
+          </span>
         </div>
         <div class="uk-inline er-other-logo">
-          <a href="<?= _getiFramePage('https://www.lacentrale.fr/'); ?>">
+          <span class="website" data-url="https://www.lacentrale.fr/">
             <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/lacentrale.jpg" />
           </a>
         </div>
         <div class="uk-inline er-other-logo">
-          <a href="<?= _getiFramePage('https://www.automobile.fr/'); ?>">
+          <span  class="website" data-url="https://www.automobile.fr/">
             <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/automobile.jpg" />
-          </a>
+          </span>
         </div>
         <div class="uk-inline er-other-logo">
-          <a href="<?= _getiFramePage('https://www.autoscout24.fr/'); ?>">
+          <span class="website" data-url="https://www.autoscout24.fr/">
             <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/auto_scout24.jpg" />
-          </a>
+          </span>
         </div>
         <div class="uk-inline er-other-logo">
-          <a href="<?= _getiFramePage('https://www.aramisauto.com/'); ?>">
+          <span class="website" data-url="'https://www.aramisauto.com/">
             <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/aramisauto.jpg" />
-          </a>
+          </span>
         </div>
 
       </div>
     </div>
   </div>
   
+</script>
+<script type="text/javascript">
+  (function($) {
+    $(document).ready(function() {
+      $('span.website').each(function(index, element) {
+        $( element )
+        .css('cursor', 'pointer')
+        .on('click', function() {
+          var url = $( this ).data( 'url' );
+          window.open( url, '_blank' );
+        });
+      });
+    });
+  })(jQuery)
 </script>
