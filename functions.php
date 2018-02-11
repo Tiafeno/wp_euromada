@@ -33,6 +33,7 @@ require get_template_directory() . '/inc/class-walker.php';
 require get_template_directory() . '/inc/class-order.php';
 require get_template_directory() . '/inc/class-message.php';
 /** Shortcode */
+require get_template_directory() . '/inc/shortcode/shortcode.php';
 require get_template_directory() . '/inc/shortcode/class-login.php';
 require get_template_directory() . '/inc/shortcode/class-register.php';
 require get_template_directory() . '/inc/shortcode/class-profil.php';
@@ -317,7 +318,7 @@ add_action( 'widgets_init', 'euromada_widgets_init' );
  * Enqueue scripts and styles.
  */
 function euromada_scripts() {
-  wp_enqueue_style( 'euromada-style', get_stylesheet_uri() );
+  // wp_enqueue_style( 'euromada-style', get_stylesheet_uri() );
   wp_enqueue_script( 'lodash', get_template_directory_uri() . '/js/lodash.min.js', array() );
   wp_enqueue_script( 'uikit', get_template_directory_uri() . '/js/uikit.min.js', array('jquery') );
   wp_enqueue_script( 'uikit-icons', get_template_directory_uri() . '/js/uikit-icons.min.js', array('jquery', 'uikit') );
