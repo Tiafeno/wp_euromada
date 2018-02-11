@@ -231,35 +231,23 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         rates: {}
       },
       methods: {
-        fetchExchange: function( currency = 'EUR') {
-          // var base = 'MGA';
-          // var AppID = '652150c56f2640938ca36b9b079c34f1';
-          // $.get('https://openexchangerates.org/api/latest.json?app_id=' + AppID + '&base=' + base, function( data ) {
-          //   console.log(data);
-          //   this.rates = data.rates;
-          // }).fail(function() {
-
-          // }).done(function() {
-
-          // });
-          return;
-        },
         __init__: function() {
           var bfts = [];
           if ( _.isUndefined(__categories__) ) console.warn("categories variable is undefined");
           _.forEach(__categories__, function( categorie ) {
             var content = {};
             var desc = JSON.parse( categorie.desc );
-
+            var cost_euro = parseFloat(desc.prix) / 17500;
             content.name = categorie.name;
             content.image = categorie.image;
-            content.url = categorie.url;
+
+            content.url = categorie.url + "&minprice=" + cost_euro;
             content.cost = desc.prix;
             
             bfts = _.concat( bfts, content );
           });
-          this.benefits = _.concat( bfts );
-          this.fetchExchange();
+          this.benefits = _.orderBy( bfts, ['cost'], ['asc']);
+          // console.log(this.benefits);
         }
       },
       created: function () {
