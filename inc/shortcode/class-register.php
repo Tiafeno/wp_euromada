@@ -121,18 +121,20 @@ final class Euromada_register{
           </div>
         </div>
 
-        <div class="field">
-          <label>Adrèsse E-mail</label>
-          <div class="fields">
-            <div class="twelve wide field">
-              <input type="text" name="email" placeholder="Adresse email">
+        <div class="two fields">
+          <div class="field">
+            <label>Adrèsse E-mail</label>
+            <div class="fields">
+              <div class="twelve wide field">
+                <input type="text" name="email" placeholder="Adresse email">
+              </div>
             </div>
           </div>
         </div>
-
-        <div class=" fields">
+        
+        <div class="three fields">
           <div class="field">
-            <label>Adrèsse de facturation</label>
+            <label>Votre adresse</label>
             <input placeholder="Adresse" name="adress" type="text">
           </div>
           <div class="field">
