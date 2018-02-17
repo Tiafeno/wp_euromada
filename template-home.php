@@ -6,12 +6,12 @@
 get_header();
 
 $Euromada = new Euromada();
-$Adverts = $Euromada->getLastAd();
+$adverts = $Euromada->getLastAd();
 $product_categories = Services::getProductsCat();
 ?>
 <script type="text/javascript">
   var __categories__ = <?= json_encode( $product_categories, JSON_PRETTY_PRINT ); ?>;
-  var __adverts__ = <?= json_encode( $Adverts, JSON_PRETTY_PRINT ); ?>;
+  var __adverts__ = <?= json_encode( $adverts, JSON_PRETTY_PRINT ); ?>;
 </script>
       <?php 
           if ( is_active_sidebar( 'home-slider' ) ) : 
@@ -40,8 +40,45 @@ $product_categories = Services::getProductsCat();
               <p class="uk-text-small uk-margin-remove-top">Voitures occasion</p>
 
               <ul id="er-annonce" class="uk-switcher uk-margin">
+              <?php 
+              $chuncky = array_chunk($adverts, 4); 
+              foreach ($chuncky as $key => $advert) :
+              ?>
+                <li class="<?= ($key == 0) ? 'uk-position-relative' : '' ?>">
+                  <div class="ui special cards">
 
-                <li v-for="(advert, index) in adverts" v-bind:class="index == 0 ? 'uk-position-relative': ''">
+                  <?php foreach ($advert as $adv ) :?>
+                    <div class="card">
+                      <div class="blurring dimmable image">
+                        <div class="ui dimmer">
+                          <div class="content">
+                            <div class="center">
+                              <div class="ui inverted button" @click="onClick( '<?= $adv->url ?>' )">Voir</div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="er-card-image" :style="{
+                          'background': '#ffffff url(<?= $adv->imgLink ?>) no-repeat center center',
+                          'background-size': 'contain',
+                          'width': '213px',
+                          'height': '160px'
+                        }">
+                        </div>
+                      </div>
+                      <div class="content">
+                        <a class="header er-h2"><?= $adv->title ?></a>
+                        <div class="meta">
+                          <span class="cost">{{ <?= $adv->cost ?> | euro }} </span>
+                        </div>
+                      </div>
+                    </div>
+                  <?php endforeach; ?>
+
+                  </div>
+                </li>
+                      <?php endforeach; ?>
+                <!-- <li v-for="(advert, index) in adverts" v-bind:class="index == 0 ? 'uk-position-relative': ''">
                   <div class="ui special cards">
                     <div class="card" v-for="adv in advert">
                       <div class="blurring dimmable image">
@@ -52,7 +89,14 @@ $product_categories = Services::getProductsCat();
                             </div>
                           </div>
                         </div>
-                        <img v-bind:src="adv.imgLink">
+
+                        <div class="er-card-image" :style="{
+                          'background': '#ffffff url( ' + adv.imgLink + ') no-repeat center center',
+                          'background-size': 'contain',
+                          'width': '213px',
+                          'height': '160px'
+                        }">
+                        </div>
                       </div>
                       <div class="content">
                         <a class="header er-h2">{{ adv.title }}</a>
@@ -62,7 +106,7 @@ $product_categories = Services::getProductsCat();
                       </div>
                     </div>
                   </div>
-                </li>
+                </li> -->
 
               </ul>
 
