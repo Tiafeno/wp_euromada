@@ -8,7 +8,7 @@ class euromada_actions {
       <div class="ui divided items">
         <div class="item" v-for="(advert, index) in adverts">
           <div class="image">
-            <p class="er-photo">{{ advert.countPic }}</p>
+            <!-- <p class="er-photo">{{ advert.countPic }}</p> -->
             <img v-bind:src="advert.imgLink" v-bind:alt="advert.title">
           </div>
           <div class="content">
@@ -33,14 +33,11 @@ class euromada_actions {
     }
 
     public function action_my_profil() {
-      $logoutUrl = wp_logout_url( home_url('/') );  
       $User   = wp_get_current_user();
       $adress = get_user_meta($User->ID, '_adress_', true);
       $phone  = get_user_meta($User->ID, '_phone_', true);
     ?>
-      <div class="uk-container">
-       <a href="<?= $logoutUrl ?>" class="button ui left floated primary button">Se deconnecter</a>
-      </div>
+      
       <div class="uk-width-2-3@s">
         <form id="editProfilForm" action="" method="POST" class="ui form">
           <?= wp_nonce_field('edit_profil', 'edit_profil_nonce') ?>

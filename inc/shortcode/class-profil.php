@@ -39,6 +39,7 @@ final class Euromada_profil {
 
     add_action('euromada_mes_annonces', [ $euromadaActions, 'action_mes_annonces']);
     add_action('euromada_my_profil', [ $euromadaActions, 'action_my_profil']);
+    $logoutUrl = wp_logout_url( home_url('/') ); 
 
     ?>  
     <script type="text/javascript">
@@ -89,14 +90,25 @@ final class Euromada_profil {
         </div>
       </div>
 <!--  end Dialog - -->
+      <div class="ui grid">
+        <div class="left floated six wide column">
+          <h2 class="ui header">
+            <i class="settings icon"></i>
+            <div class="content">
+              Paramètres du compte
+              <div class="sub header">Gérer vos préférences et vos annonces</div>
+            </div>
+          </h2>
+        </div>
 
-    <h2 class="ui header">
-      <i class="settings icon"></i>
-      <div class="content">
-        Paramètres du compte
-        <div class="sub header">Gérer vos préférences et vos annonces</div>
+        <div class="right floated five wide column uk-flex">
+          <div class="uk-container uk-margin-auto">
+          <a href="<?= $logoutUrl ?>" class="button ui left floated primary button">Se deconnecter</a>
+          </div>
+        </div>
       </div>
-    </h2>
+
+    
       <ul uk-tab>
           <li><a href="#">Mes annonces</a></li>
           <li><a href="#">Mes commandes</a></li>

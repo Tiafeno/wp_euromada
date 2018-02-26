@@ -137,7 +137,7 @@ class Euromada_Publisher {
         <div class="field">
           <label>Texte de l'annonce *</label>
           <textarea rows="10" maxlength="4000" name="euromada_description"><?= Services::getValue('euromada_description','') ?></textarea>
-          <div class="ui blue tiny message">
+          <div class="ui black tiny message">
             Indiquez dans le texte de l’annonce si vous proposez un droit de rétractation à l’acheteur. 
             En l’absence de toute mention, l’acheteur n’en bénéficiera pas et ne pourra pas demander le remboursement 
             ou l’échange du bien ou service proposé.
@@ -158,6 +158,12 @@ class Euromada_Publisher {
           </div>
         </div>
         <p><b>Photos</b> : Une annonce avec photo est 7 fois plus consultée qu'une annonce sans photo</p>
+        <div class="three fields">
+          <div>
+           <p class="ui orange tiny message">La taille du fichier ne doit pas dépasser 16Mo.</p>
+          </div>
+        </div>
+        
 
         <div id="app-publish">
           <div id="pictures-list" class="ui small images">
@@ -173,7 +179,6 @@ class Euromada_Publisher {
                 </div>
               </span>
             </div>
-
           </div>
         </div>
 
@@ -193,7 +198,7 @@ class Euromada_Publisher {
 
               </div>
             </div>
-            <div class="ui blue tiny message">
+            <div class="ui black tiny message">
               Indiquez le pays où se trouve l'annonce que vous proposez.
             </div>
           </div>
