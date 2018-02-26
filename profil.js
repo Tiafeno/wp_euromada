@@ -29,6 +29,10 @@
         voirCommande: function( $id ) {
           $('.basic.commande.modal').modal('show');
         },
+        redirect: function( url ) {
+          if (_.isNull(url)) return false;
+          window.location.href = url;
+        },
         deletePost: function( id ) {
           $('.basic.delete.modal').modal({
             onApprove: function() {
