@@ -302,6 +302,10 @@ class Euromada {
       [
         'taxonomy' => 'model-year',
         'value' => Services::getValue('euromada_year')
+      ],
+      [
+        'taxonomy' => 'product_cat',
+        'value' => Services::getValue('euromada_category')
       ]
     ];
     do_action('euromada_insert_term_product', $tax_args, $post_id);

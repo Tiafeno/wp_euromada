@@ -24,7 +24,7 @@ class Euromada_Publisher {
           <div class="field">
             <label>Catégorie</label>
             <div class="ui selection dropdown">
-              <input name="euromada_category" value="<?= Services::getValue('euromada_category','') ?>" type="hidden">
+              <input name="euromada_category" value="<?= Services::getValue('euromada_category','') ?>" type="hidden" required>
               <div class="default text">Catégorie</div>
               <i class="dropdown icon"></i>
               <div class="menu">
