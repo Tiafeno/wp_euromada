@@ -538,6 +538,7 @@ class Euromada {
    * @return void
    */
   protected function createObjectJS( &$advert ) {
+    
     $this->contents->id = $advert->get_id();
     $this->contents->title = $advert->get_title();
     $this->contents->cost = $advert->get_price();
@@ -547,6 +548,23 @@ class Euromada {
     $this->contents->imgLink = $this->mainImage[0][0];
     $this->contents->url = get_the_permalink( $advert->get_id() );
     $this->contents->attributes = Services::getObjectTerms();
+
+    /**
+     * Location
+     */
+    $location = Services::getLocation( $advert->get_id() );
+    array_push($this->contents->attributes, [
+      'name' => $location,
+      'taxonomy' => "VilleChaingy"
+    ]);
+    /**
+     * Get attributs mileage
+     */
+    $mileage = $advert->get_attribute( 'pa_mileage' );
+    array_push($this->contents->attributes, [ 
+      'name' => $mileage . ' KM',
+      'taxonomy' => 'mileage'
+    ]);
   }
 
   /**
@@ -639,8 +657,8 @@ class Euromada {
     $gallery = new stdClass();
     $gallery->full = $this->full_size_gallery;
     $gallery->thumbnail = $this->thumbnail_gallery;
-    $this->push();
     $this->contents->gallery = $gallery;
+
     return $this->contents;
   }
 

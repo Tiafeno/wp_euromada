@@ -78,6 +78,22 @@ class Services {
     return json_encode( $data );
   }
 
+  public static function getLocation( $post_id ) {
+    if ( ! is_numeric( $post_id )) return false;
+    $adress = get_post_meta( $post_id, '_adress', true );
+    $state = get_post_meta( $post_id, '_state', true );
+    $codepostal = get_post_meta( $post_id, '_postalcode', true );
+    $adrs =  $adress . ', ' . $state . ', ' . $codepostal;
+    return ( empty($adress) AND empty($state) AND empty($codepostal) ) ? 'Aucune adresse' : $adrs;
+
+  }
+
+  public static function get_recommandation_source_url( $post_id ) {
+    if ( ! is_numeric( $post_id )) return false;
+    $lnk = get_post_meta( $post_id, 'link_recommandation', true );
+    return empty( $lnk ) ? '#lnk' : $lnk;
+  }
+
   public static function getObjectTerms() {
     global $post, $product;
     $objectTerms = [];
@@ -86,10 +102,11 @@ class Services {
       $product_term = wp_get_object_terms( $post->ID,  sanitize_title($taxonomy) );
       if ( ! is_wp_error( $product_term ) ) {
         foreach( $product_term as $term ) {
-          $object = new stdClass();
-          $object->attribut = $taxonomy;
-
-          array_push($objectTerms, $term);
+          $attr = new stdClass();
+          // $attr->id = $term->term_id;
+          $attr->name = $term->name;
+          $attr->taxonomy = $term->taxonomy;
+          array_push($objectTerms, $attr);
         }
       }
     }

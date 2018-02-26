@@ -22,7 +22,7 @@ $euromada = new Euromada();
 
 <div id="product-<?php the_ID(); ?>" <?php post_class(); ?>>
   <div id="app-product" class="uk-container uk-container-small">
-    <div v-if="access" uk-grid>
+    <div uk-grid>
 
       <div class="uk-width-2-3@m">
         <div id="slider" class="uk-position-relative" uk-slideshow="animation: fade" style="margin-bottom: 7em;">
@@ -52,7 +52,7 @@ $euromada = new Euromada();
                 <td class="uk-text-uppercase">Spécification</td>
                 <td></td>
               </tr>
-              <tr v-for="(attribute, index) in product.attributes" v-bind:class="index % 2 ? activeClass : ''">
+              <tr v-for="(attribute, index) in product.attributes" :key="attribute.taxonomy" v-bind:class="index % 2 ? activeClass : ''">
                 <td>{{ attribute.taxonomy | formatName }}</td>
                 <td>{{ attribute.name }}</td>
               </tr>
@@ -103,9 +103,7 @@ $euromada = new Euromada();
 
       </div>
     </div>
-
     <annonces></annonces>
-
   </div>
 </div>
 

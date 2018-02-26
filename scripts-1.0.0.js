@@ -36,7 +36,6 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
 
     }, 1500);
     
-    
   });  // End document ready
 
   /** On load document */
@@ -89,19 +88,20 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
   Vue.filter("moment", function(value) {
     moment.locale("fr");
     var currentDate = new Date( value );
-    return moment(currentDate).startOf('hour').fromNow(); 
+    return moment(currentDate).format('LLLL'); 
   });
 
-  Vue.filter('formatName', function (value) {
+  Vue.filter('formatName', function ( value ) {
     var schema = [
       { slug: "mark", name: "Marque" },
       { slug: "model", name: "Modèle" },
       { slug: "model-year", name: "Année-modèle" },
       { slug: "fuel", name: "Carburant" },
       { slug: "gearbox", name: "Boite de vitesse" },
+      { slug: "mileage", name: "Kilométrage" }
     ];
     var findElement = _.find(schema, { slug: value.trim() });
-    return findElement.name;
+    return findElement == undefined ? value : findElement.name;
   })
 
   Vue.component('pagination', {
@@ -167,7 +167,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         /** Detecte change input file */
         inputFiles.each(function(index, element ) {
           var input = $( element );
-          input.change( e => {
+          input.change( function(e) {
             var currentElement = e.target;
             /*** Active delete button */
             var removeElement = input.parents('.ctn').find('.er-remove-picture');
@@ -252,7 +252,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       },
       created: function () {
         this.__init__();
-        window.setTimeout(() => {
+        window.setTimeout(function() {
           $('#app-benefit').find('.image').dimmer({
             on: 'hover'
           });
@@ -280,6 +280,9 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       methods: {
         sortBy: function () {
           this.adverts = _.sortBy(__adverts__, [this.sorting]);
+        },
+        redirect: function( url ) {
+          window.location.href = url;
         }
       }
     });
@@ -298,37 +301,31 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       }
     });
 
-  var router = ( ! _.isUndefined(window.VueRouter) ) ? new VueRouter({
-      mode: 'history',
-      routes: []
-    }) : false;
-    if ( router && appExist("app-product") )
-      var vProduct = new Vue({
-        router,
-        data: {
-          activeClass: 'active',
-          product: {},
-          access: false
-        },
-        el: "#app-product",
-        beforeCreate: function () {
-          jQuery('.segment')
-            .dimmer({ closable: false })
-            .dimmer('show');
-        },
-        methods : {
-          
-        },
-        mounted: function () {
-          if ( _.isUndefined(__advert__) ) console.warn("adverts variable is undefined");
-          this.product = __advert__;
-          window.setTimeout(() => {
-            this.access = true;
-            jQuery('.segment').dimmer('hide');
-          }, 400);
+  if (appExist("app-product") )
+    var vProduct = new Vue({
+      data: {
+        activeClass: 'active',
+        product: {}
+      },
+      el: "#app-product",
+      beforeCreate: function () {
+        jQuery('.segment')
+          .dimmer({ closable: false })
+          .dimmer('show');
+      },
+      methods : {
+        
+      },
+      mounted: function () {
+        var self = this;
+        if ( _.isUndefined(__advert__) ) console.warn("adverts variable is undefined");
+        self.product = __advert__;
+        window.setTimeout(function() {
+          jQuery('.segment').dimmer('hide');
+        }, 400);
 
-        }
-      });
+      }
+    });
 
 
 })(jQuery)

@@ -55,7 +55,7 @@ $product_categories = Services::getProductsCat();
                         <img v-bind:src="adv.imgLink">
                       </div>
                       <div class="content">
-                        <a class="header er-h2">{{ adv.title }}</a>
+                        <span class="header er-h2">{{ adv.title }}</span>
                         <div class="meta">
                           <span class="cost">{{ adv.cost | euro }} </span>
                         </div>

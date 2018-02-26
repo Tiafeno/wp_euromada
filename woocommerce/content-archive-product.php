@@ -49,7 +49,7 @@ global $wp_query;
               </div>
               <div class="extra">
                 <div class="ui label er-label"><?= strtoupper($badge) ?></div>
-                <div class="ui right floated primary button er-button-voir" @click="window.location.href = advert.url">Voir</div>
+                <div class="ui right floated primary button er-button-voir" @click="redirect(advert.url)">Voir</div>
               </div>
             </div>
           </div>

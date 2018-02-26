@@ -60,6 +60,10 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
           .parents(".menu-item-has-children")
           .children("a")
           .addClass("uk-active");
+
+        function redirect( url ) {
+          window.location.href = url;
+        }
       });
     })(jQuery)
   </script>
@@ -137,6 +141,9 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
     }
     #recommandations p:not(.money) {
       color: white !important;
+    }
+    .er-horaire .item > .content {
+      color: white;
     }
   </style>
 

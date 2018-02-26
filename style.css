@@ -51,13 +51,13 @@ ul.er-subnav li>a {
   padding-top: 10px !important;
 }
 
-ul.er-subnav li>a:hover,
+ul.er-subnav li > a:hover,
 .er-subnav .uk-active a {
   background: #001689 !important;
 }
 
-.er-subnav>li.er-publisher-car {
-  background: #41A75F;
+.er-subnav > li.er-publisher-car {
+  background: #F6C800;
 }
 
 ul.er-subnav li {
