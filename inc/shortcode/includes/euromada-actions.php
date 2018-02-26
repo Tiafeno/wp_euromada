@@ -23,7 +23,7 @@ class euromada_actions {
               <p></p>
             </div>
             <div class="extra">
-              <div class="ui right floated primary button er-button-voir" @click="window.location.href = advert.url">Voir</div>
+              <div class="ui right floated primary button er-button-voir" @click="redirect(advert.url)">Voir</div>
               <div class="ui right floated negative button" @click="deletePost(advert.id)">Supprimer</div>
             </div>
           </div>
