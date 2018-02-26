@@ -176,7 +176,7 @@ class Euromada {
    */
   public function insert_advert() {
     /**
-     * Validation d'utilisateur et l'autorisation requit
+     * Validation d'utilisateur et l'autorisation requis
      */
     if ( ! is_user_logged_in()) return false;
     $User = wp_get_current_user();
@@ -625,7 +625,7 @@ class Euromada {
         $this->contents = new stdClass();
         $advert = wc_get_product(get_the_ID());
         $this->full_size_gallery = Services::getThumbnails();
-        $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [200, 50] );
+        $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [100, 50] );
         array_push( $this->full_size_gallery, $this->mainImage );
 
         $this->createObjectJS( $advert );
