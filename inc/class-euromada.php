@@ -15,6 +15,9 @@ class Euromada {
   public $mainImage;
   public $contents;
   public $gallery = [];
+  public $no_image_parms = [
+    
+  ];
 
   public $forms = [];
 
@@ -557,6 +560,7 @@ class Euromada {
    */
   protected function getMainThumbnail( $id, $size = "full" ) {
     $image   = wp_get_attachment_image_src( $id, $size );
+    if (false == $image) return false;
     $title   = get_post_field( 'post_title', $id );
     $excerpt = get_post_field( 'post_excerpt', $id );
     return [ $image, $title, $excerpt ];
@@ -579,7 +583,8 @@ class Euromada {
       $advert = wc_get_product(get_the_ID());
       $this->full_size_gallery = Services::getThumbnails();
       $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [600, 300] );
-      array_push( $this->full_size_gallery, $this->mainImage );
+      if ($this->mainImage != false)
+       array_push( $this->full_size_gallery, $this->mainImage );
 
       $this->createObjectJS( $advert );
       $this->push();
@@ -608,7 +613,8 @@ class Euromada {
         $advert = wc_get_product(get_the_ID());
         $this->full_size_gallery = Services::getThumbnails();
         $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [100, 50] );
-        array_push( $this->full_size_gallery, $this->mainImage );
+        if ($this->mainImage != false)
+          array_push( $this->full_size_gallery, $this->mainImage );
 
         $this->createObjectJS( $advert );
         $this->push();
@@ -628,11 +634,14 @@ class Euromada {
     $this->full_size_gallery = Services::getThumbnails();
     $this->thumbnail_gallery = Services::getThumbnails( [100, 100] );
 
-    $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), "full" );
-    array_push( $this->full_size_gallery, $this->mainImage );
+    $image = $this->getMainThumbnail( (int)$advert->get_image_id(), "full" );
+    $this->mainImage = $image == false ? $this->no_image_parms : $image;
+    if ($image != false)
+      array_push( $this->full_size_gallery, $image );
 
     $thumbnail_main = $this->getMainThumbnail( (int)$advert->get_image_id(), [100, 100]);
-    array_push( $this->thumbnail_gallery, $thumbnail_main );
+    if ($thumbnail_main != false)
+      array_push( $this->thumbnail_gallery, $thumbnail_main );
 
     $this->createObjectJS( $advert );
 
@@ -669,8 +678,8 @@ class Euromada {
       while ($query->have_posts()) : $query->the_post();
         $this->contents = new stdClass();
         $advert = wc_get_product($query->post->ID);
-        $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [200, 50] );
-
+        $main_thumbnail = $this->getMainThumbnail( (int)$advert->get_image_id(), [200, 50] );
+        $this->mainImage = $main_thumbnail == false ? $this->no_image_parms : $main_thumbnail;
         $this->createObjectJS( $advert );
         $this->push();
       endwhile;

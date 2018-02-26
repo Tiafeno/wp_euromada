@@ -1,3 +1,9 @@
+/** 
+ * 
+ * Libraries:
+ * ** @lodash
+ * ** @jQuery
+*/
 var oFile;
 var previewUpload = null; // DOM Element
 var noImage = jParams.templateUrl + "/img/gallery-add.png";
@@ -252,7 +258,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       },
       created: function () {
         this.__init__();
-        window.setTimeout(() => {
+        window.setTimeout(function() {
           $('#app-benefit').find('.image').dimmer({
             on: 'hover'
           });
@@ -274,12 +280,14 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       },
       mounted: function () {
         jQuery('.ui.dropdown').dropdown();
-        this.adverts = _.concat(__adverts__);
+        this.adverts = _.concat(_.map(__adverts__, function(value) {
+          
+        }));
         this.postCount = this.adverts.length;
       },
       methods: {
         sortBy: function () {
-          this.adverts = _.sortBy(__adverts__, [this.sorting]);
+          this.adverts = _.sortBy(this.adverts, [this.sorting]);
         }
       }
     });
@@ -321,8 +329,11 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         },
         mounted: function () {
           if ( _.isUndefined(__advert__) ) console.warn("adverts variable is undefined");
+          this.product = _.map( __advert__, function(value, index){
+            
+          });
           this.product = __advert__;
-          window.setTimeout(() => {
+          window.setTimeout(function() {
             this.access = true;
             jQuery('.segment').dimmer('hide');
           }, 400);
