@@ -287,14 +287,10 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       },
       methods: {
         sortBy: function () {
-<<<<<<< HEAD
-          this.adverts = _.sortBy(this.adverts, [this.sorting]);
-=======
           this.adverts = _.sortBy(__adverts__, [this.sorting]);
         },
         redirect: function( url ) {
           window.location.href = url;
->>>>>>> a16352f415a34ab94af3d92fc66be2f657857332
         }
       }
     });
