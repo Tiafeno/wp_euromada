@@ -281,7 +281,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       mounted: function () {
         jQuery('.ui.dropdown').dropdown();
         this.adverts = _.concat(_.map(__adverts__, function(value) {
-          
+          return value;
         }));
         this.postCount = this.adverts.length;
       },
@@ -331,6 +331,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
           
         },
         mounted: function () {
+          var self = this;
           if ( _.isUndefined(__advert__) ) console.warn("adverts variable is undefined");
           this.product = _.map( __advert__, function(value, index){
             
@@ -338,6 +339,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
           this.product = __advert__;
           window.setTimeout(function() {
             this.access = true;
+            console.log(self.product);
             jQuery('.segment').dimmer('hide');
           }, 400);
 
