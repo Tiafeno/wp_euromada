@@ -242,15 +242,22 @@ add_shortcode('euromada_publisher', [ new Euromada_publisher(), 'Render' ]);
 add_shortcode('euromada_embed', [ new Euromada_embed(), 'Render' ]);
 
 function action_save_postdata( $post_id ) {
-  /** for `cost` post meta */
-  $valueCost = Services::getValue('cost_recommandation');
-  if (false != $valueCost)
-    update_post_meta( $post_id, 'cost_recommandation', $valueCost );
 
-  /** for `link` post meta  */
-  $valueLink = Services::getValue('link_recommandation');
-  if (false != $valueLink)
-    update_post_meta( $post_id, 'link_recommandation', $valueLink );
+  /**
+   * **********************************************
+   * Update recommandation post type custom input
+   * **********************************************
+   */
+  $inputValues = [
+    'cost_recommandation',
+    'link_recommandation'
+  ];
+  foreach ($inputValues as $inputValue) {
+    $value = Services::getValue( $inputValue );
+    if (false != $value)
+      update_post_meta( $post_id, $inputValue, $value );
+  }
+
 }
 
 add_action( 'save_post', 'action_save_postdata' );
@@ -323,7 +330,8 @@ function euromada_scripts() {
   wp_enqueue_script( 'uikit', get_template_directory_uri() . '/js/uikit.min.js', array('jquery') );
   wp_enqueue_script( 'uikit-icons', get_template_directory_uri() . '/js/uikit-icons.min.js', array('jquery', 'uikit') );
   wp_enqueue_script( 'moment', get_template_directory_uri() . '/js/moment.min.js', array() );
-  wp_enqueue_script( 'vuejs', 'https://cdn.jsdelivr.net/npm/vue', array() );
+  wp_enqueue_script( 'vuejs', 'https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js', array() );
+  // wp_enqueue_script( 'vuejs', 'https://cdn.jsdelivr.net/npm/vue', array() );
   wp_enqueue_script( 'vuejs-route', 'https://unpkg.com/vue-router', array() );
 
   wp_enqueue_script( 'dropdown', get_template_directory_uri() . '/js/dropdown.min.js', array() );

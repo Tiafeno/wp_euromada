@@ -118,7 +118,7 @@ $cost = get_post_meta( $post->ID, 'cost_recommandation', true );
 
                     <div>
                       <h2 class="er-h2 er-Exo">Description</h2>
-                      <p><?php if (empty($post->post_content)) echo "Aucune description"; else echo $post->post_content; ?></p>
+                      <p><?php echo empty($post->post_content) ?  "Aucune description" : $post->post_content; ?></p>
                     </div>
                   </div>
                   <div class="uk-width-1-3@m">
@@ -132,7 +132,7 @@ $cost = get_post_meta( $post->ID, 'cost_recommandation', true );
                             Commander
                             <span uk-icon="icon: chevron-right"></span>
                           </a>
-
+                          <p><a href="<?= Services::get_recommandation_source_url(get_the_ID()) ?>">Annonce source</a></p>
                           <meta itemprop="price" content="<?= $cost ?>">
                           <meta itemprop="priceCurrency" content="EUR">
                           <meta itemprop="url" content="<?= get_permalink( $post ) ?>">
@@ -170,6 +170,9 @@ $cost = get_post_meta( $post->ID, 'cost_recommandation', true );
                   </div>
                 </div>
 
+                <div id="app-custom">
+                  <annonces></annonces>
+                </div>
               </div>
             </div>
 

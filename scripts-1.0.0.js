@@ -42,7 +42,6 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
 
     }, 1500);
     
-    
   });  // End document ready
 
   /** On load document */
@@ -95,19 +94,20 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
   Vue.filter("moment", function(value) {
     moment.locale("fr");
     var currentDate = new Date( value );
-    return moment(currentDate).startOf('hour').fromNow(); 
+    return moment(currentDate).format('LLLL'); 
   });
 
-  Vue.filter('formatName', function (value) {
+  Vue.filter('formatName', function ( value ) {
     var schema = [
       { slug: "mark", name: "Marque" },
       { slug: "model", name: "Modèle" },
       { slug: "model-year", name: "Année-modèle" },
       { slug: "fuel", name: "Carburant" },
       { slug: "gearbox", name: "Boite de vitesse" },
+      { slug: "mileage", name: "Kilométrage" }
     ];
     var findElement = _.find(schema, { slug: value.trim() });
-    return findElement.name;
+    return findElement == undefined ? value : findElement.name;
   })
 
   Vue.component('pagination', {
@@ -173,7 +173,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         /** Detecte change input file */
         inputFiles.each(function(index, element ) {
           var input = $( element );
-          input.change( e => {
+          input.change( function(e) {
             var currentElement = e.target;
             /*** Active delete button */
             var removeElement = input.parents('.ctn').find('.er-remove-picture');
@@ -287,7 +287,14 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       },
       methods: {
         sortBy: function () {
+<<<<<<< HEAD
           this.adverts = _.sortBy(this.adverts, [this.sorting]);
+=======
+          this.adverts = _.sortBy(__adverts__, [this.sorting]);
+        },
+        redirect: function( url ) {
+          window.location.href = url;
+>>>>>>> a16352f415a34ab94af3d92fc66be2f657857332
         }
       }
     });
@@ -338,8 +345,8 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
             jQuery('.segment').dimmer('hide');
           }, 400);
 
-        }
-      });
+      }
+    });
 
 
 })(jQuery)
