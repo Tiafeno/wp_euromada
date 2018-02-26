@@ -16,7 +16,7 @@ class Euromada {
   public $contents;
   public $gallery = [];
   public $no_image_parms = [
-    
+    ['http://api.falicrea.com/thumbnails/cover.png', 1280, 960]
   ];
 
   public $forms = [];
@@ -574,7 +574,7 @@ class Euromada {
    * Get main product thumbnail 
    * @param int $id - This is product or post ID
    * @param string|array $size
-   * @return array
+   * @return array|false
    */
   protected function getMainThumbnail( $id, $size = "full" ) {
     $image   = wp_get_attachment_image_src( $id, $size );
@@ -600,7 +600,8 @@ class Euromada {
 
       $advert = wc_get_product(get_the_ID());
       $this->full_size_gallery = Services::getThumbnails();
-      $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [600, 300] );
+      $Image = $this->getMainThumbnail( (int)$advert->get_image_id(), [600, 300] );
+      $this->mainImage = $Image == false ? $this->no_image_parms : $Image;
       if ($this->mainImage != false)
        array_push( $this->full_size_gallery, $this->mainImage );
 
@@ -630,7 +631,8 @@ class Euromada {
         $this->contents = new stdClass();
         $advert = wc_get_product(get_the_ID());
         $this->full_size_gallery = Services::getThumbnails();
-        $this->mainImage = $this->getMainThumbnail( (int)$advert->get_image_id(), [100, 50] );
+        $Image = $this->getMainThumbnail( (int)$advert->get_image_id(), [100, 50] );
+        $this->mainImage = $Image == false ? $this->no_image_parms : $Image;
         if ($this->mainImage != false)
           array_push( $this->full_size_gallery, $this->mainImage );
 
