@@ -25,14 +25,14 @@ $euromada = new Euromada();
     <div uk-grid>
 
       <div class="uk-width-2-3@m">
-        <div id="slider" class="uk-position-relative" uk-slideshow="animation: fade" style="margin-bottom: 7em;">
-          <ul class="uk-slideshow-items">
+        <div id="slider" class="uk-position-relative" uk-slideshow="animation: fade">
+          <ul class="uk-slideshow-items" style="position: relative">
             <li v-for="image in product.gallery.full">
               <img v-bind:src="image[0][0]" v-bind:alt="product.title" uk-cover>
             </li>
           </ul>
 
-          <div class="uk-position-bottom-center uk-position-small" style="bottom: -10em;">
+          <div class="uk-position-bottom-center uk-position-small" style="position: relative !important">
             <div>
               <ul class="uk-thumbnav">
                 <li v-for="(image, index) in product.gallery.thumbnail" v-bind:uk-slideshow-item="index">

@@ -99,7 +99,7 @@ $product_categories = Services::getProductsCat();
                       <div class="ui dimmer">
                         <div class="content">
                           <div class="center">
-                            <div class="ui inverted button" @click="window.location.href = benefit.url">Voir</div>
+                            <div class="ui inverted button" @click="redirect(benefit.url)">Voir</div>
                           </div>
                         </div>
                       </div>

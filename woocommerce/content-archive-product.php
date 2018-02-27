@@ -3,11 +3,37 @@ if ( ! defined( 'ABSPATH' ) )
   exit; 
 
 global $wp_query;
+$queried = $wp_query->get_queried_object();
+if ($queried instanceof WP_Post_Type) :
+  $args = [
+    'post_type'      => $queried->name,
+    'post_status'    => 'publish',
+    'posts_per_page'  => -1
+  ];
+  $postsQueried = new WP_Query( $args );
+  $count = $postsQueried->post_count;
+  wp_reset_postdata();
+endif;
+
+$euromada = new Euromada();
+$adverts = $euromada->getAdverts();
+if ($queried instanceof WP_Term || is_null($queried))
+  $count = count($adverts);
+
+/**
+ * Change badge label
+ * Le nom de la variable est la post type
+ */
+$product = new stdClass();
+$product->badge = "VOITURES OCCASION";
+
+
+
 ?>
 
-<?php $euromada = new Euromada(); ?>
 <script type="text/javascript">
-  var __adverts__ = <?= json_encode( $euromada->getAdverts(), JSON_PRETTY_PRINT ); ?>
+  var __adverts__ = <?= json_encode( $adverts, JSON_PRETTY_PRINT ); ?>;
+  var __post_count__ = <?= (int)$count ?>;
 </script>
 
 <div>
@@ -48,7 +74,7 @@ global $wp_query;
                 <p></p>
               </div>
               <div class="extra">
-                <div class="ui label er-label"><?= strtoupper($badge) ?></div>
+                <div class="ui label er-label"><?= ${$badge}->badge ?></div>
                 <div class="ui right floated primary button er-button-voir" @click="redirect(advert.url)">Voir</div>
               </div>
             </div>

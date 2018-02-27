@@ -101,15 +101,18 @@ $args = array(
   'tax_query'  => $tax_query
 );
 
-query_posts( $args );
-// echo $wp_query->request;
-
 $argr = [
   'post_type' => [ 'recommandation' ],
   's'         => $wp_query->query_vars['s'],
   'posts_per_page' => 10
 ];
 $recommandations = new WP_Query( $argr );
+wp_reset_postdata();
+
+
+query_posts( $args );
+// echo $wp_query->request;
+
 ?>
       <div id="primary-content">
         <div class="uk-section uk-section-large uk-padding-medium">
