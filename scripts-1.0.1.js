@@ -254,6 +254,9 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
           });
           this.benefits = _.orderBy( bfts, ['cost'], ['asc']);
           // console.log(this.benefits);
+        },
+        redirect: function ( url ) {
+          window.location.href = url;
         }
       },
       created: function () {
@@ -283,7 +286,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         this.adverts = _.concat(_.map(__adverts__, function(value) {
           return value;
         }));
-        this.postCount = this.adverts.length;
+        this.postCount = __post_count__;
       },
       methods: {
         sortBy: function () {
@@ -333,9 +336,6 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         mounted: function () {
           var self = this;
           if ( _.isUndefined(__advert__) ) console.warn("adverts variable is undefined");
-          this.product = _.map( __advert__, function(value, index){
-            
-          });
           this.product = __advert__;
           window.setTimeout(function() {
             this.access = true;

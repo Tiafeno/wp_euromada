@@ -16,7 +16,7 @@
     get_option( 'woocommerce_view_order_page_id' ); 
     get_option( 'woocommerce_terms_page_id' ); 
   */
-
+define('__site_key__', "6LdkSUkUAAAAAMqVJODAt7TpAMUX9LJVVnOlz9gX");
 $MESSAGE = null;
 define('STATES', serialize([
   "Allemagne",
@@ -342,7 +342,7 @@ function euromada_scripts() {
   wp_enqueue_script( 'sidebar-semantic', get_template_directory_uri() . '/js/sidebar.min.js', array() );
   wp_enqueue_script( 'modal-semantic', get_template_directory_uri() . '/js/modal.min.js', array() );
 
-  wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/scripts-1.0.0.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '20150330', true );
+  wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/scripts-1.0.1.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '20150330', true );
   wp_localize_script( 'euromada-script', 'jParams', array(
     'ajaxUrl' => admin_url('admin-ajax.php'),
     'templateUrl' => get_template_directory_uri(),

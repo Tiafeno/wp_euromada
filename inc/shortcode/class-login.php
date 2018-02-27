@@ -59,9 +59,29 @@ final class Euromada_Login {
 
     $action = esc_url( site_url( 'wp-login.php', 'login_post' ) );
     ?>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+    </script>
     <script type="text/javascript">
+      var vCaptcha;
+      var rCaptcha = false;
+      var onloadCallback = function() {
+        vCaptcha = grecaptcha.render('reCaptcha', {
+          'sitekey' : '<?= __site_key__ ?>',
+          'callback': function( response ) {
+            rCaptcha = response;
+          }
+        });
+      };
+
       (function($){
         $(document).ready(function() {
+          $('form#<?= $args['form_id'] ?>')
+            .on('submit', function(event) {
+              if (rCaptcha == false) event.preventDefault(); // return false
+              return true;
+            });
+
           $('form#<?= $args['form_id'] ?>')
           .form({
             on: 'blur',
@@ -71,7 +91,7 @@ final class Euromada_Login {
                 rules: [
                   {
                     type   : 'empty',
-                    prompt : 'Veillez remplir ce champ'
+                    prompt : 'Veillez definir le nom d\'utilisateur'
                   }
                 ]
               },
@@ -80,11 +100,7 @@ final class Euromada_Login {
                 rules: [
                     {
                       type   : 'empty',
-                      prompt : 'Veillez remplir ce champ'
-                    },
-                    {
-                      type   : 'minLength[6]',
-                      prompt : 'Your password must be at least {ruleValue} characters'
+                      prompt : 'Veillez definir le mot de passe'
                     }
                 ]
               }
@@ -111,25 +127,29 @@ final class Euromada_Login {
       </div>
     <?php endif; ?>
 
-      <form name="<?= $args['form_id'] ?>" id="<?= $args['form_id'] ?>" action="<?= $action ?>" method="post">
+      <form class="ui form" name="<?= $args['form_id'] ?>" id="<?= $args['form_id'] ?>" action="<?= $action ?>" method="post">
           <?= $login_form_top ?>
+        <h5 class="ui header">
+          SE CONNECTER
+          <div class="sub header">Compte EUROMADA</div>
+        </h5>
         <div class="ui items">
           <div class="ui item corner labeled input">
             <input placeholder="Nom d'utilisateur" name="log" type="text">
-            <div class="ui left corner label">
+            <!-- <div class="ui left corner label">
               <i class="user icon"></i>
-            </div>
+            </div> -->
           </div>
 
           <div class="ui item corner labeled input">
             <input placeholder="Mot de passe" name="pwd" type="password">
-            <div class="ui left corner label">
+            <!-- <div class="ui left corner label">
               <i class="asterisk icon"></i>
-            </div>
+            </div> -->
           </div>
         </div>
           <?= $login_form_middle ?>
-
+          <div id="reCaptcha"></div>
           <div class="uk-margin">
             <div class="uk-inline"><button type="submit" class="positive ui button"><?= $args['label_log_in'] ?></button></div>
           </div>
@@ -140,7 +160,7 @@ final class Euromada_Login {
               <a href="<?= self::registerLink() ?>"  class="uk-button uk-button-link" >Crée un compte</a>
             </div>
           </div>
-          
+          <div class="ui error message"></div>
           <?= $login_form_bottom ?>
       </form>
       </div>
