@@ -25,7 +25,7 @@ if ($queried instanceof WP_Term || is_null($queried))
  * Le nom de la variable est la post type
  */
 $product = new stdClass();
-$product->badge = "VOITURES OCCASION";
+$product->badge = "VOITURES D'OCCASION";
 
 
 
@@ -186,7 +186,7 @@ $product->badge = "VOITURES OCCASION";
         <section>
           <div style="box-shadow: none !important; padding: 15px; background: #000000; font-weight: bold;">
             <div class="content">
-              <a class="header uk-text-uppercase er-h2" style="color: white">Autre annonces</a>
+              <span class="header uk-text-uppercase er-h2" style="color: white">Autres annonces</span>
             </div>
           </div>
           

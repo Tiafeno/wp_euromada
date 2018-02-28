@@ -45,7 +45,7 @@
 <script type="text/x-template" id="template-other-annonces">
 
   <div id="app-other-publisher" class="uk-margin-large-top">
-    <div class="uk-flex"><h2 class="uk-text-uppercase uk-text-center uk-margin-auto er-h2 er-underline">Autre annonces</h2></div>
+    <div class="uk-flex"><h2 class="uk-text-uppercase uk-text-center uk-margin-auto er-h2 er-underline">Autres annonces</h2></div>
     <div class="uk-container uk-container-small uk-margin-top">
       <p class="uk-text-center uk-margin-auto uk-width-xlarge">Vous pouvez également consulter les sites web ci-dessous, il y a des millions des
       voitures à votre disposition. Communiquez-nous la référence que vous souhaitez commander et nous vous ferons un devis.</p>
