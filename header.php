@@ -122,6 +122,9 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
     .er-other-logo:hover {
       /*border: 1px dashed #ddd8d8;*/
     }
+    .er-other-sidebar-logo {
+      width: 30%;
+    }
     #app-other-publisher .images {
       width: 100% !important;
     }

@@ -180,6 +180,66 @@ $product->badge = "VOITURES OCCASION";
 
         </section>
         <!-- end promotion -->
+
+
+        <!-- autres annonces -->
+        <section>
+          <div style="box-shadow: none !important; padding: 15px; background: #000000; font-weight: bold;">
+            <div class="content">
+              <a class="header uk-text-uppercase er-h2" style="color: white">Autre annonces</a>
+            </div>
+          </div>
+          
+          <div class="uk-container uk-container-small uk-margin-top">
+            <p class="uk-text-left uk-margin-auto uk-width-xlarge">Vous pouvez également consulter les sites web ci-dessous, il y a des millions des
+            voitures à votre disposition. Communiquez-nous la référence que vous souhaitez commander et nous vous ferons un devis.</p>
+            <div class="ui small images" >
+              <div class="uk-inline er-other-sidebar-logo">
+                <span class="website" data-url="https://www.leboncoin.fr/_vehicules_/offres/">
+                  <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/leboncoin.jpg" />
+                </span>
+              </div>
+              <div class="uk-inline er-other-sidebar-logo">
+                <span class="website" data-url="https://www.paruvendu.fr/voiture-occasion/">
+                  <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/paruvendu.jpg" />
+                </span>
+              </div>
+              <div class="uk-inline er-other-sidebar-logo">
+                <span class="website" data-url="https://www.mobile.de/">
+                  <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/mobile.de.jpg" />
+                </span>
+              </div>
+              <div class="uk-inline er-other-sidebar-logo">
+                <span class="website" data-url="https://www.europe-camions.com/">
+                  <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/europe-camions.jpg" />
+                </span>
+              </div>
+              <div class="uk-inline er-other-sidebar-logo">
+                <span class="website" data-url="https://www.lacentrale.fr/">
+                  <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/lacentrale.jpg" />
+                </a>
+              </div>
+              <div class="uk-inline er-other-sidebar-logo">
+                <span  class="website" data-url="https://www.automobile.fr/">
+                  <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/automobile.jpg" />
+                </span>
+              </div>
+              <div class="uk-inline er-other-sidebar-logo">
+                <span class="website" data-url="https://www.autoscout24.fr/">
+                  <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/auto_scout24.jpg" />
+                </span>
+              </div>
+              <div class="uk-inline er-other-sidebar-logo">
+                <span class="website" data-url="'https://www.aramisauto.com/">
+                  <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/aramisauto.jpg" />
+                </span>
+              </div>
+
+            </div>
+          </div>
+
+        </section>
+        <!-- autres annonces -->
       </div>
 
     </div>
