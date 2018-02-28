@@ -211,7 +211,8 @@ add_action( 'get_header', function() {
    * on deplace le post dans la corbeille
    */
   $post_delete_id = Services::getValue('__post_delete_id', false);
-  if (false != $post_delete_id) Euromada_profil::deletePost( (int)$post_delete_id );
+  $delete_post = null;
+  if (false != $post_delete_id) $delete_post = Euromada_profil::trash_post( (int)$post_delete_id );
 
   /** Verify header */
   if (is_user_logged_in()) {

@@ -118,7 +118,7 @@ $product->badge = "VOITURES D'OCCASION";
           if ($show):
         ?>
         <!-- Recommandation -->
-        <section id="recommandations" class="uk-display-inline-block">
+        <section id="recommandations" class="uk-display-inline-block uk-margin-bottom">
           <div class="ui centered card" style="box-shadow: none !important">
             <div class="content er-sidebar-title" style="border-radius: 0px !important">
               <span class="header uk-text-uppercase er-h2">Nos récommandation</span>
@@ -153,7 +153,7 @@ $product->badge = "VOITURES D'OCCASION";
       <?php endif; ?>
 
         <!-- Promotion -->
-        <section  id="app-promotion" v-show="products.length > 0">
+        <section  id="app-promotion" v-show="products.length > 0" class="uk-margin-bottom">
           <div class="ui centered card" style="box-shadow: none !important">
             <div class="content er-sidebar-title">
               <a class="header uk-text-uppercase er-h2">les promotions</a>
@@ -183,7 +183,7 @@ $product->badge = "VOITURES D'OCCASION";
 
 
         <!-- autres annonces -->
-        <section>
+        <section class="uk-margin-bottom">
           <div style="box-shadow: none !important; padding: 15px; background: #000000; font-weight: bold;">
             <div class="content">
               <span class="header uk-text-uppercase er-h2" style="color: white">Autres annonces</span>
