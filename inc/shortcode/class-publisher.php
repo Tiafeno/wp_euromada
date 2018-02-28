@@ -160,7 +160,7 @@ class Euromada_Publisher {
         <p><b>Photos</b> : Une annonce avec photo est 7 fois plus consultée qu'une annonce sans photo</p>
         <div class="three fields">
           <div>
-           <p class="ui orange tiny message">La taille du fichier ne doit pas dépasser 16Mo.</p>
+           <p class="ui orange tiny message">La taille du fichier ne doit pas dépasser 12Mo.</p>
           </div>
         </div>
         

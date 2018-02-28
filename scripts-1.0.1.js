@@ -173,17 +173,25 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         /** Detecte change input file */
         inputFiles.each(function(index, element ) {
           var input = $( element );
+          var byte_to_16M = 16777216; // 16Mb
+          var byte_to_12M = 12582912; // 12Mb
           input.change( function(e) {
             var currentElement = e.target;
-            /*** Active delete button */
-            var removeElement = input.parents('.ctn').find('.er-remove-picture');
-            if (removeElement.hasClass('uk-hidden'))
-              removeElement.removeClass('uk-hidden');
-            
             var identification = input.attr('id');
             if (document.querySelector('#' + identification).files.length === 0) { return; }
             oFile = document.querySelector('input[type=file]#' + identification).files[0];
+
+            // Vérifier la taille du fichier
+            if (oFile.size > byte_to_12M) { alert('Le fichier sélectionné est trop volumineux. La taille maximale est 12 Mo.'); return; }
+
+            // Vérifier le type de fichier
             if ( ! rFilter.test(oFile.type)) { alert("You must select a valid image file!"); return; }
+
+            // Active delete button 
+            var removeElement = input.parents('.ctn').find('.er-remove-picture');
+            if (removeElement.hasClass('uk-hidden'))
+              removeElement.removeClass('uk-hidden');
+              
             if (oFile)
               oFReader.readAsDataURL(oFile);
           });
