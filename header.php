@@ -145,6 +145,18 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
     .er-horaire .item > .content {
       color: white;
     }
+
+    .archive-thumbnail {
+      width: 100%;
+      height: 135px;
+    }
+    
+    @media only screen and (max-width: 767px) {
+      .archive-thumbnail {
+        width: 23em;
+        height: 16em;
+      }
+    }
   </style>
 
   </head>

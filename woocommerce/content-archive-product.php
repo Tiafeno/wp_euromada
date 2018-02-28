@@ -60,7 +60,13 @@ $product->badge = "VOITURES OCCASION";
           <div class="item" v-for="(advert, index) in adverts">
             <div class="image">
               <p class="er-photo">{{ advert.countPic }}</p>
-              <img v-bind:src="advert.imgLink" v-bind:alt="advert.title">
+
+              <div class="archive-thumbnail" :style="{
+                'background': '#eae8e8 url(' + advert.imgLink + ') no-repeat center center',
+                'background-size': 'contain'
+              }">
+              </div>
+
             </div>
             <div class="content">
               <div class="extra">
