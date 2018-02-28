@@ -1,1 +1,1 @@
-"# Euromada wordpress template" 
+# Euromada wordpress template
