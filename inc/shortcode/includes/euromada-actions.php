@@ -42,7 +42,6 @@ class euromada_actions {
         <form id="editProfilForm" action="" method="POST" class="ui form">
           <?= wp_nonce_field('edit_profil', 'edit_profil_nonce') ?>
           <h4 class="ui dividing header">Informations personnelles</h4>
-
           <div class="two fields">
             <div class="field"> <!-- error -->
               <label>Nom de famille</label>
@@ -63,7 +62,7 @@ class euromada_actions {
             </div>
           </div>
 
-          <div class=" fields">
+          <div class="fields">
             <div class="field">
               <label>Votre adrèsse</label>
               <input placeholder="Adresse" name="adress" value="<?= $adress ?>" type="text">
@@ -73,6 +72,13 @@ class euromada_actions {
               <input placeholder="Votre numéro" name="phone" value="<?= $phone ?>" type="text">
             </div>
           </div>
+
+          <div class="fields">
+            <div class="field">
+              <a href="<?= get_the_permalink(get_option( 'woocommerce_myaccount_page_id' )) ?>" class="ui button">Paramètres avancés</a>
+            </div>
+          </div>
+
           <button class="ui blue button" type="submit">Enregistrer</button>
         </form>
       </div>
