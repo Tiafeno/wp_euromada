@@ -606,8 +606,8 @@ class Euromada {
       $this->full_size_gallery = Services::getThumbnails();
       $Image = $this->getMainThumbnail( (int)$advert->get_image_id(), [600, 300] );
       $this->mainImage = $Image == false ? $this->no_image_parms : $Image;
-      if ($this->mainImage != false)
-       array_push( $this->full_size_gallery, $this->mainImage );
+      // if ($this->mainImage != false)
+      //  array_push( $this->full_size_gallery, $this->mainImage );
 
       $this->createObjectJS( $advert );
       $this->push();
@@ -658,14 +658,14 @@ class Euromada {
     $this->full_size_gallery = Services::getThumbnails();
     $this->thumbnail_gallery = Services::getThumbnails( [100, 100] );
 
-    $image = $this->getMainThumbnail( (int)$advert->get_image_id(), "full" );
-    $this->mainImage = $image == false ? $this->no_image_parms : $image;
-    if ($image != false)
-      array_push( $this->full_size_gallery, $image );
+    // $image = $this->getMainThumbnail( (int)$advert->get_image_id(), "full" );
+    // $this->mainImage = $image == false ? $this->no_image_parms : $image;
+    // if ($image != false)
+    //   array_push( $this->full_size_gallery, $image );
 
-    $thumbnail_main = $this->getMainThumbnail( (int)$advert->get_image_id(), [100, 100]);
-    if ($thumbnail_main != false)
-      array_push( $this->thumbnail_gallery, $thumbnail_main );
+    // $thumbnail_main = $this->getMainThumbnail( (int)$advert->get_image_id(), [100, 100]);
+    // if ($thumbnail_main != false)
+    //   array_push( $this->thumbnail_gallery, $thumbnail_main );
 
     $this->createObjectJS( $advert );
 
