@@ -10,6 +10,8 @@ get_header();
             if ( have_posts() ) :
               set_query_var('badge', get_post_type());
               wc_get_template_part( 'content', 'archive-product' ); 
+            else:
+              echo '<h2 class="er-h2">Aucune annonce disponible pour le moment !</h2>';
             endif;
           ?>
           </div>

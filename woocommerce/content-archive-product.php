@@ -152,35 +152,6 @@ $product->badge = "VOITURES D'OCCASION";
           <!-- end Recommandation -->
       <?php endif; ?>
 
-        <!-- Promotion -->
-        <section  id="app-promotion" v-show="products.length > 0" class="uk-margin-bottom">
-          <div class="ui centered card" style="box-shadow: none !important">
-            <div class="content er-sidebar-title">
-              <a class="header uk-text-uppercase er-h2">les promotions</a>
-            </div>
-          </div>
-          
-          <div class="ui centered card" v-for="(product, index) in products">
-            <div class="image">
-                <img v-bind:src="product.imgLink">
-            </div>
-            <div class="content">
-              <div class="meta">
-                  <span class="date uk-text-uppercase er-h2">{{ product.title }}</span>
-                  <p class="er-sidebar-cost">{{ product.cost | euro }}</p>
-                </div>
-            </div>
-            <div class="extra content uk-flex">
-              <div class="ui buttons uk-margin-auto">
-                <div class="ui primary green button" @click="window.location.href = product.url">Voir</div>
-              </div>
-            </div>
-
-          </div>
-
-        </section>
-        <!-- end promotion -->
-
 
         <!-- autres annonces -->
         <section class="uk-margin-bottom">
@@ -200,8 +171,8 @@ $product->badge = "VOITURES D'OCCASION";
                 </span>
               </div>
               <div class="uk-inline er-other-sidebar-logo">
-                <span class="website" data-url="https://www.paruvendu.fr/voiture-occasion/">
-                  <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/paruvendu.jpg" />
+                <span  class="website" data-url="https://www.automobile.fr/">
+                  <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/automobile.jpg" />
                 </span>
               </div>
               <div class="uk-inline er-other-sidebar-logo">
@@ -215,14 +186,14 @@ $product->badge = "VOITURES D'OCCASION";
                 </span>
               </div>
               <div class="uk-inline er-other-sidebar-logo">
+                <span class="website" data-url="https://www.paruvendu.fr/voiture-occasion/">
+                  <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/paruvendu.jpg" />
+                </span>
+              </div>
+              <div class="uk-inline er-other-sidebar-logo">
                 <span class="website" data-url="https://www.lacentrale.fr/">
                   <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/lacentrale.jpg" />
                 </a>
-              </div>
-              <div class="uk-inline er-other-sidebar-logo">
-                <span  class="website" data-url="https://www.automobile.fr/">
-                  <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/automobile.jpg" />
-                </span>
               </div>
               <div class="uk-inline er-other-sidebar-logo">
                 <span class="website" data-url="https://www.autoscout24.fr/">
@@ -230,7 +201,7 @@ $product->badge = "VOITURES D'OCCASION";
                 </span>
               </div>
               <div class="uk-inline er-other-sidebar-logo">
-                <span class="website" data-url="'https://www.aramisauto.com/">
+                <span class="website" data-url="https://www.aramisauto.com/">
                   <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/aramisauto.jpg" />
                 </span>
               </div>
