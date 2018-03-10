@@ -61,7 +61,12 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 	</div>
 
 	<?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
-
+	<div uk-grid>
+		<div class="uk-width-1-2">
+			<p style="font-size: 12px">* Les tarifs mentionnés sont des montants hors taxes auxquels viendront s'ajouter
+		les frais de port et de prise en charge variables selon le type du véhicule.</p>
+		</div>
+	</div>
 </form>
 
 <?php do_action( 'woocommerce_after_checkout_form', $checkout ); ?>

@@ -3,17 +3,22 @@
 require get_template_directory() . '/inc/shortcode/includes/euromada-actions.php';
 
 final class Euromada_profil {
-  public function __construct() {}
+  public function __construct() 
+  {
+    // TODO
+  }
 
   /**
    * Effacer les images comme la gallerie et l'image à la une de l'annonce
    * @param {WP_Post} $post
    * @return {void}
    */
-  public static function delete_galleries( $post ) {
+  public static function delete_galleries( $post ) 
+  {
     $product_post = wc_get_product($post->ID);
     $gallery_ids = $product_post->get_gallery_image_ids();
-    foreach ($gallery_ids as $gallery_id) {
+    foreach ($gallery_ids as $gallery_id) 
+    {
       wp_delete_attachment( (int)$gallery_id, true ); // WP_Post|false|null
     }
   } 
@@ -23,25 +28,32 @@ final class Euromada_profil {
    * @param {int} $post_id 
    * @return {WP_Post|false|null}
    */
-  public static function trash_post( $post_id ) {
+  public static function trash_post( $post_id ) 
+  {
+    if (false == $post_id) 
+    { 
+      echo 'Warning: $post_id is false';
+      return; 
+    }
     $token = Services::getValue('token');
     if ( ! is_user_logged_in()) return false;
     $User = wp_get_current_user();
     if ($token != wp_get_session_token()) return false;
+
     $post = get_post($post_id);
     if ( ! $post instanceof WP_Post) return false;
-
     // If this post is post current user
     if ($post->post_author != $User->ID) return false;
     self::delete_galleries( $post );
     // Move to trash and return WP_POST if success
-    return  wp_delete_post( $post_id, false); 
+    return  wp_delete_post( $post_id, false); // WP_Post|false|null
   }
 
   /**
    * Template de rendu pour le shortcode
    */
-  public static function render($attrs, $content = "") {
+  public static function render($attrs, $content = "") 
+  {
     if ( ! is_user_logged_in()) {
       echo '<p class="uk-margin-remove er-h2">Vous n\'avez pas les autorisations pour afficher les contenues de cette page.</p>';
       return false;

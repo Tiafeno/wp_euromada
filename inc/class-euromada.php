@@ -173,14 +173,45 @@ class Euromada {
   }
 
   /**
+   * Mettre à jours une annonce
+   * @param {int} $post_id 
+   * @return {void}
+   */
+  public function update_advert( $post_id ) {
+    if (wp_doing_ajax()) return;
+    if (is_user_logged_in()) return;
+    if ( ! $post_id) return;
+
+    // Get post
+    $pst = get_post( $post_id );
+    if (is_null($pst) || ! $pst instanceof WP_Post) {
+      echo 'Warning: L\'annonce n\'existe pas dans la base de donnée';
+      return;
+    }
+    $User = wp_get_current_user();
+    if ($pst->post_author != $User->ID) {
+      echo 'Warning: Impossible de mettre à jours cette annonce';
+      return;
+    }
+    $args = [
+      'ID' => $pst->ID,
+      'title' => '',
+      'content' => ''
+    ];
+    $update_results = wp_update_post( $args, true );
+    if ( ! is_wp_error($update_results)) {
+      // do_action('')
+    }
+
+  }
+
+  /**
    * Ajouter une annonce dans le site
    * @param void
    * @return array
    */
   public function insert_advert() {
-    /**
-     * Validation d'utilisateur et l'autorisation requis
-     */
+    // Validation d'utilisateur et l'autorisation requis
     if ( ! is_user_logged_in()) return false;
     $User = wp_get_current_user();
     

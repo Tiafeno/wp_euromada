@@ -36,6 +36,7 @@ require get_template_directory() . '/inc/class-message.php';
 require get_template_directory() . '/inc/shortcode/shortcode.php';
 require get_template_directory() . '/inc/shortcode/class-login.php';
 require get_template_directory() . '/inc/shortcode/class-register.php';
+require get_template_directory() . '/inc/shortcode/class-update.php';
 require get_template_directory() . '/inc/shortcode/class-profil.php';
 require get_template_directory() . '/inc/shortcode/class-publisher.php';
 require get_template_directory() . '/inc/shortcode/class-embed.php';
@@ -178,7 +179,7 @@ add_action( 'init', function() {
  * Redirect in home page if user is login
  */
 add_action( 'get_header', function() {
-  global $post, $posts;
+  global $post, $posts, $instanceEuromada;
   /**
    * Si la variable $_GET 'order' existe
    * On ajoute le produit qui contient l'identifiant dans le panier et redirection 
@@ -206,31 +207,28 @@ add_action( 'get_header', function() {
     }
     
   }
-  /**
-   * Si la variable $_GET __post_delete_id existe
-   * on deplace le post dans la corbeille
-   */
+
+  $profil_page_id = get_option( 'profil_page_id', false );
+  $profil_url = (false == $profil_page_id) ? home_url( "/" ) : get_permalink( (int)$profil_page_id );
   $post_delete_id = Services::getValue('__post_delete_id', false);
   $delete_post = null;
-  if (false != $post_delete_id) $delete_post = Euromada_profil::trash_post( (int)$post_delete_id );
+  if (false != $post_delete_id) $delete_post = Euromada_profil::trash_post( $post_delete_id );
+  if ($post_delete_id instanceof WP_Post) exit(wp_redirect( $profil_url, 301 ));
+
+  $post_update_id = Services::getValue('__post_update_id', false);
+  if (false != $post_update_id) $instanceEuromada->update_advert( $post_update_id );
 
   /** Verify header */
   if (is_user_logged_in()) {
     if ($post == null) return;
     $login_page_id = get_option( 'login_page_id', false );
-    $profil_page_id = get_option( 'profil_page_id', false );
     if (is_int( (int)$login_page_id ) ) :
       /**
        * On verifie si la page actuel n'est pas une page pour se connecter.
        * Si non, on reste dans cette page.
        */
       if ($post->ID != (int)$login_page_id) return true;
-
-      /** rediriger vers la page profil si l'identification existe sinon,
-       * redirection vers la page d'accueil
-       */
-      $url = (false == $profil_page_id) ? home_url( "/" ) : get_permalink( (int)$profil_page_id );
-      exit( wp_redirect( $url, 301 ) );
+      exit( wp_redirect( $profil_url, 301 ) );
     endif;
   }
 }, 10, 1);
@@ -241,6 +239,7 @@ add_shortcode('euromada_register', [ new Euromada_register(), 'Render' ]);
 add_shortcode('euromada_profil', [ new Euromada_profil(), 'Render' ]);
 add_shortcode('euromada_publisher', [ new Euromada_publisher(), 'Render' ]);
 add_shortcode('euromada_embed', [ new Euromada_embed(), 'Render' ]);
+add_shortcode('euromada_update', [ new Euromada_update(), 'Render' ]);
 
 function action_save_postdata( $post_id ) {
 

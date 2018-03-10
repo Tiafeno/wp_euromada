@@ -76,6 +76,22 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
     a.uk-active {
       background: #001689 !important;
     }
+    #app-other-publisher .ui.small.images .image, 
+    #app-other-publisher .ui.small.images img, 
+    #app-other-publisher .ui.small.images svg, 
+    #app-other-publisher .ui.small.image,
+
+    .er-sidebar .ui.small.images .image, 
+    .er-sidebar .ui.small.images img, 
+    .er-sidebar .ui.small.images svg, 
+    .er-sidebar .ui.small.image
+    {
+      width: 75px;
+    }
+    span.website {
+      display: inherit;
+    }
+
     .ui.form textarea, 
     .ui.form input:not([type]), 
     .ui.form input[type="date"], 
@@ -123,7 +139,7 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
       /*border: 1px dashed #ddd8d8;*/
     }
     .er-other-sidebar-logo {
-      width: 30%;
+      /* width: 30%; */
     }
     #app-other-publisher .images {
       width: 100% !important;
@@ -152,6 +168,19 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
     .archive-thumbnail {
       width: 100%;
       height: 135px;
+    }
+    .woocommerce #respond input#submit.alt, 
+    .woocommerce a.button.alt, 
+    .woocommerce button.button.alt, 
+    .woocommerce input.button.alt {
+      background-color: #001689;
+    }
+
+    .woocommerce #respond input#submit.alt:hover, 
+    .woocommerce a.button.alt:hover, 
+    .woocommerce button.button.alt:hover, 
+    .woocommerce input.button.alt:hover {
+      background-color: #f6c800;
     }
     
     @media only screen and (max-width: 767px) {
