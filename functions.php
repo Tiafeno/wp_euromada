@@ -16,8 +16,9 @@
     get_option( 'woocommerce_view_order_page_id' ); 
     get_option( 'woocommerce_terms_page_id' ); 
   */
-define('__site_key__', "6LdkSUkUAAAAAMqVJODAt7TpAMUX9LJVVnOlz9gX");
+define('__site_key__', "6LdkSUkUAAAAAMqVJODAt7TpAMUX9LJVVnOlz9gX"); /** Google api key */
 $MESSAGE = null;
+/** Les Etats qui sont autorisé a publier des annonces */
 define('STATES', serialize([
   "Allemagne",
   "France",
@@ -27,12 +28,14 @@ define('STATES', serialize([
   "Pologne"
 ]));
 
+/** Class dependence */
 require get_template_directory() . '/inc/class-euromada.php';
 require get_template_directory() . '/inc/class-services.php';
 require get_template_directory() . '/inc/class-walker.php';
 require get_template_directory() . '/inc/class-order.php';
 require get_template_directory() . '/inc/class-message.php';
-/** Shortcode */
+
+/** Class shortcode */
 require get_template_directory() . '/inc/shortcode/shortcode.php';
 require get_template_directory() . '/inc/shortcode/class-login.php';
 require get_template_directory() . '/inc/shortcode/class-register.php';
@@ -40,16 +43,19 @@ require get_template_directory() . '/inc/shortcode/class-update.php';
 require get_template_directory() . '/inc/shortcode/class-profil.php';
 require get_template_directory() . '/inc/shortcode/class-publisher.php';
 require get_template_directory() . '/inc/shortcode/class-embed.php';
+
 /** Widget */
 require get_template_directory() . '/inc/widgets/search.widget.php';
 
 $instanceEuromada = new Euromada();
 
+/** Action wordpress personnalisé */
 add_action("euromada_save_meta_user", [ $instanceEuromada, 'action_euromada_save_meta_user' ], 10, 1);
 add_action("euromada_update_information_user", [ $instanceEuromada, 'action_euromada_update_information_user' ], 10, 1);
 add_action("euromada_upload_thumbnails", [ $instanceEuromada, 'action_upload_thumbnails' ], 10, 1);
 add_action("euromada_insert_term_product", [ $instanceEuromada, 'action_insert_term_product' ], 10, 2);
 
+/** Seule les administrateur peuvent voir le menu administrateur */
 add_action( 'after_setup_theme', function() {
   if ( ! current_user_can( 'administrator' ) && ! is_admin() ) { show_admin_bar( false ); }
 });
@@ -149,7 +155,7 @@ add_action( 'wp_login_failed', function() {
   $referer = $_SERVER[ 'HTTP_REFERER' ];
   // if there's a valid referrer, and it's not the default log-in screen
   if ( !empty($referer) && !strstr($referer, 'wp-login') && !strstr($referer, 'wp-admin') ) {
-    exit(wp_redirect( $referer . '?login=failed', 301 ));  // let's append some information (login=failed) to the URL for the theme to use
+    exit(wp_redirect( $referer . '?login=failed', 302 ));  // let's append some information (login=failed) to the URL for the theme to use
   }
 });
 
@@ -210,15 +216,24 @@ add_action( 'get_header', function() {
 
   $profil_page_id = get_option( 'profil_page_id', false );
   $profil_url = (false == $profil_page_id) ? home_url( "/" ) : get_permalink( (int)$profil_page_id );
+
+  /**
+   * Envoyer l'annonce dans la corbeille 
+   */
   $post_delete_id = Services::getValue('__post_delete_id', false);
   $delete_post = null;
   if (false != $post_delete_id) $delete_post = Euromada_profil::trash_post( $post_delete_id );
-  if ($post_delete_id instanceof WP_Post) exit(wp_redirect( $profil_url, 301 ));
+  if ($delete_post instanceof WP_Post) exit(wp_redirect( $profil_url, 301 ));
 
+  /**
+   * Mettre à jours l'annonce
+   */
   $post_update_id = Services::getValue('__post_update_id', false);
   if (false != $post_update_id) $instanceEuromada->update_advert( $post_update_id );
 
-  /** Verify header */
+  /** 
+   * Vérifier l'en-tete de la page
+   */
   if (is_user_logged_in()) {
     if ($post == null) return;
     $login_page_id = get_option( 'login_page_id', false );

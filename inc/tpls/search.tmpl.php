@@ -13,7 +13,7 @@
         </div>
         <div class="uk-width-1-5@m">
             <select name="product_cat" class="ui fluid normal dropdown">
-              <option value=" ">Toutes les catégorie</option>
+              <option value=" ">Toutes les catégories</option>
               <option v-for="cat in selectInput.categories" v-bind:value="cat.term_id">
                 {{cat.name}}
               </option>
@@ -29,7 +29,7 @@
         </div>
         <div class="uk-width-1-6@m uk-hidden">
             <select name="model" class="ui fluid normal dropdown">
-                <option value=" ">Tous les modèle</option>
+                <option value=" ">Tous les modèles</option>
                 <option v-for="model in selectInput.models" v-bind:value="model.term_id" >
                   {{ model.name }}
                 </option>
@@ -45,7 +45,7 @@
         </div>
         <div class="uk-width-1-5@m uk-hidden">
             <select name="fuel" class="ui fluid normal dropdown">
-                <option value=" ">Carburant</option>
+                <option value=" ">Carburants</option>
                 <option v-for="fuel in selectInput.fuels" v-bind:value="fuel.term_id" >
                   {{ fuel.name }}
                 </option>
