@@ -13,7 +13,7 @@
         </div>
         <div class="uk-width-1-5@m">
             <select name="product_cat" class="ui fluid normal dropdown">
-              <option value="">Catégorie</option>
+              <option value=" ">Toutes les catégorie</option>
               <option v-for="cat in selectInput.categories" v-bind:value="cat.term_id">
                 {{cat.name}}
               </option>
@@ -21,7 +21,7 @@
         </div>
         <div class="uk-width-1-5@m">
             <select name="mark" class="ui fluid search normal dropdown">
-              <option value="">Marque</option>
+              <option value=" ">Toutes les marques</option>
               <option v-for="mark in selectInput.marks" v-bind:value="mark.term_id" >
                 {{ mark.name }}
               </option>
@@ -29,7 +29,7 @@
         </div>
         <div class="uk-width-1-6@m uk-hidden">
             <select name="model" class="ui fluid normal dropdown">
-                <option value="">Modèle</option>
+                <option value=" ">Tous les modèle</option>
                 <option v-for="model in selectInput.models" v-bind:value="model.term_id" >
                   {{ model.name }}
                 </option>
@@ -37,7 +37,7 @@
         </div>
         <div class="uk-width-1-5@m">
             <select name="maxprice" class="ui fluid normal dropdown">
-                <option value="">Prix maxi</option>
+                <option value=" ">Prix max</option>
                 <option v-for="(price, i) in selectInput.maxPrice" v-bind:class="{ 'lastNumber': (selectInput.maxPrice.length - 1) == i }" v-bind:value="price">
                   {{ price | euro }}
                 </option>
@@ -45,7 +45,7 @@
         </div>
         <div class="uk-width-1-5@m uk-hidden">
             <select name="fuel" class="ui fluid normal dropdown">
-                <option value="">Carburant</option>
+                <option value=" ">Carburant</option>
                 <option v-for="fuel in selectInput.fuels" v-bind:value="fuel.term_id" >
                   {{ fuel.name }}
                 </option>
