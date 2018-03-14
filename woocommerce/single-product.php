@@ -1,4 +1,22 @@
 <?php
+
+add_action('wp_head', function() {
+  global $post;
+  $thumbnail_id = get_post_meta( $post->ID, '_thumbnail_id', true );
+  $image = wp_get_attachment_url( (int)$thumbnail_id );
+  $current_url = get_the_permalink(get_the_ID());
+?>
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="<?= get_the_title() ?>" />
+  <meta property="og:description" content="<?= sanitize_textarea_field( $post->post_content ) ?>" />
+  <meta property="og:url" content="<?= $current_url ?>" />
+  <meta property="og:site_name" content="EUROMADA" />
+  <meta property="og:image" content="<?= $image ?>" />
+
+<?php
+}, 10, 2);
+
 get_header();
 
 ?>

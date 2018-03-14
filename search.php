@@ -100,7 +100,7 @@ query_posts( $args );
               if ($recommandations->have_posts()) :
                 set_query_var('recommandations', $recommandations);
               endif;
-              get_template_part( 'woocommerce/content', 'archive-product' ); 
+              wc_get_template_part( 'content', 'archive-product' );
             else:
               echo '<h2>Aucune annonce trouvée !</h2>';
               echo 'Si vous effectuez une recherche par mots-clés, vérifiez bien qu\'il n\'y ait pas de faute de frappe.';

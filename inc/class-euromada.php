@@ -20,6 +20,7 @@ class Euromada {
   ];
 
   public $forms = [];
+  public $tax_args = [];
 
   function __construct() {
     $this->contents = new stdClass();
@@ -94,26 +95,6 @@ class Euromada {
     }
   }
 
-  public function action_insert_term_product( $args, $post_id ) {
-    while (list(, $param) = each($args)) {
-      $parent_term = term_exists( $param['value'], $param['taxonomy'] ); // array is returned if taxonomy is given
-      $term = wp_insert_term(
-        $param['value'], // the term 
-        $param['taxonomy'], // the taxonomy
-        array(
-          'description' => '',
-          'parent'      => ''  // get numeric term id
-        )
-      );
-
-      if (is_wp_error( $term )) {
-        if ($term->get_error_code() == 'term_exists') {
-          $term_id = (int)$term->get_error_data();
-        }
-      } else $term_id = &$term;
-      wp_set_post_terms( $post_id, $term_id, $param['taxonomy'] );
-    }
-  }
   /**
    * Action save meta and update
    * @param int - $user_id : User identification
@@ -163,13 +144,65 @@ class Euromada {
     return  (is_wp_error( $result )) ? false : true;
   }
 
-  /**
-   * Action update user password
-   * @param int - $user_id : User identification
-   * @return bool
-   */
-  public function action_euromada_update_password( $user_id ) {
+  public function action_insert_term_product( $args, $post_id ) {
+    while (list(, $param) = each($args)) {
+      if ($param[ 'value' ] == false) continue;
+      $parent_term = term_exists( $param['value'], $param['taxonomy'] ); // array is returned if taxonomy is given
+      $term = wp_insert_term(
+        $param['value'], // the term 
+        $param['taxonomy'], // the taxonomy
+        array(
+          'description' => '',
+          'parent'      => ''  // get numeric term id
+        )
+      );
 
+      if (is_wp_error( $term )) {
+        if ($term->get_error_code() == 'term_exists') {
+          $term_id = (int)$term->get_error_data();
+        }
+      } else $term_id = &$term;
+      wp_set_post_terms( $post_id, $term_id, $param['taxonomy'] );
+    }
+  }
+
+  public function action_init_object_product() {
+    $this->tax_args = [
+      [
+        'taxonomy' =>  'mark',
+        'value' => Services::getValue('euromada_mark')
+      ],
+      [
+        'taxonomy' => 'model',
+        'value' => Services::getValue('euromada_model')
+      ],
+      [
+        'taxonomy' => 'fuel',
+        'value' => Services::getValue('euromada_fuel')
+      ],
+      [
+        'taxonomy' => 'gearbox',
+        'value' => Services::getValue('euromada_gearbox')
+      ],
+      [
+        'taxonomy' => 'model-year',
+        'value' => Services::getValue('euromada_year')
+      ],
+      [
+        'taxonomy' => 'product_cat',
+        'value' => Services::getValue('euromada_category')
+      ]
+    ];
+  }
+
+  private function delete_all_post_relationships( $post_id ) {
+    foreach ($this->tax_args as $args)
+      wp_delete_object_term_relationships( $post_id, $args[ 'taxonomy' ] );
+    return $this;
+  }
+
+  public function update_product_terms( $post_id ) {
+    do_action('euromada_insert_term_product', $this->tax_args, $post_id);
   }
 
   /**
@@ -178,10 +211,10 @@ class Euromada {
    * @return {void}
    */
   public function update_advert( $post_id ) {
-    if (wp_doing_ajax()) return;
-    if (is_user_logged_in()) return;
-    if ( ! $post_id) return;
+    if (wp_doing_ajax() || ! is_user_logged_in() || ! $post_id) 
+      return;
 
+    $this->action_init_object_product();
     // Get post
     $pst = get_post( $post_id );
     if (is_null($pst) || ! $pst instanceof WP_Post) {
@@ -193,14 +226,42 @@ class Euromada {
       echo 'Warning: Impossible de mettre à jours cette annonce';
       return;
     }
+    $title = Services::getValue('euromada_title', $pst->post_title);
+    $content = Services::getValue('euromada_description', $pst->post_content);
     $args = [
       'ID' => $pst->ID,
-      'title' => '',
-      'content' => ''
+      'post_title' => $title,
+      'post_content' => $content
     ];
-    $update_results = wp_update_post( $args, true );
+    $update_results = wp_update_post( $args, false );
     if ( ! is_wp_error($update_results)) {
-      // do_action('')
+      /** Update post product meta and localisation */
+      $price = Services::getValue('euromada_cost', 0);
+      update_post_meta( $pst->ID, '_regular_price', $price);
+      update_post_meta( $pst->ID, '_price', $price);
+
+      update_post_meta( $pst->ID, '_state', Services::getValue('euromada_state', '') );
+      update_post_meta( $pst->ID, '_postalcode', Services::getValue('euromada_postal_code', '') );
+      update_post_meta( $pst->ID, '_adress', Services::getValue('euromada_adress', '') );
+
+      /** Update product attributes */
+      $mileage = Services::getValue('euromada_mileage', '');
+      $data = Array('pa_mileage' => Array(
+        'name'        => 'pa_mileage',
+        'value'       => $mileage,
+        'is_visible'  => 1,
+        'is_taxonomy' => 0,
+        'is_variation' => 0
+      ));
+      update_post_meta( $pst->ID, '_product_attributes', $data); 
+
+      /** Update taxonomy */
+      $this
+        ->delete_all_post_relationships($pst->ID)
+        ->update_product_terms( $pst->ID );
+      echo 'Update without error';
+    } else {
+      echo $update_results->get_error_messages();
     }
 
   }
@@ -214,7 +275,8 @@ class Euromada {
     // Validation d'utilisateur et l'autorisation requis
     if ( ! is_user_logged_in()) return false;
     $User = wp_get_current_user();
-    
+
+    $this->action_init_object_product();
     /** Insert post */
     $title   = Services::getValue('euromada_title');
     $content = Services::getValue('euromada_description');
@@ -313,33 +375,7 @@ class Euromada {
       * Ajout des terms dans le produit
       **********************************
       */
-    $tax_args = [
-      [
-        'taxonomy' =>  'mark',
-        'value' => Services::getValue('euromada_mark')
-      ],
-      [
-        'taxonomy' => 'model',
-        'value' => Services::getValue('euromada_model')
-      ],
-      [
-        'taxonomy' => 'fuel',
-        'value' => Services::getValue('euromada_fuel')
-      ],
-      [
-        'taxonomy' => 'gearbox',
-        'value' => Services::getValue('euromada_gearbox')
-      ],
-      [
-        'taxonomy' => 'model-year',
-        'value' => Services::getValue('euromada_year')
-      ],
-      [
-        'taxonomy' => 'product_cat',
-        'value' => Services::getValue('euromada_category')
-      ]
-    ];
-    do_action('euromada_insert_term_product', $tax_args, $post_id);
+    $this->update_product_terms( $post_id );
     
     return [
       'success' => true,
@@ -471,6 +507,13 @@ class Euromada {
         "type" => "select",
         "page_id" => get_option( "profil_page_id", false ),
         "description" => ""
+      ],
+      [
+        "blogname" => "Page d'edition",
+        "name" => "edit_page",
+        "type" => "select",
+        "page_id" => get_option( "edit_page_id", false ),
+        "description" => "Page pour modifier une annonce"
       ],
       [
         "blogname" => "Page iFrame",

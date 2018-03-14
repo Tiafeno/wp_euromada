@@ -60,7 +60,7 @@ final class Euromada_profil {
     }
     $euromadaActions = new euromada_actions();
     $euromada = new Euromada();
-    wp_enqueue_script( 'euromada-profil-script', get_template_directory_uri() . '/profil.js', array( 'vuejs', 'vuejs-route', 'jquery', 'euromada-script' ), '', true );
+    wp_enqueue_script( 'euromada-profil-script', get_template_directory_uri() . '/profil.js', array( 'vuejs', 'vuejs-route', 'jquery', 'euromada-script' ), '15032018', true );
     
     $my_orders = get_posts( apply_filters( 'woocommerce_my_account_my_orders_query', array(
       'numberposts' => 12,
@@ -73,11 +73,12 @@ final class Euromada_profil {
     add_action('euromada_mes_annonces', [ $euromadaActions, 'action_mes_annonces']);
     add_action('euromada_my_profil', [ $euromadaActions, 'action_my_profil']);
     $logoutUrl = wp_logout_url( home_url('/') ); 
-
+    $modification_post_id = get_option( "edit_page_id", false );
     ?>  
     <script type="text/javascript">
     var __user_token__ = "<?= wp_get_session_token() ?>";
     var __adverts__ = <?= json_encode( $euromada->myAdverts(), JSON_PRETTY_PRINT ); ?>;
+    var modificationUrl = "<?= get_permalink( (int)$modification_post_id );  ?>";
 
     (function($) {
       $(document).ready(function() {

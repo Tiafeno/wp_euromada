@@ -24,7 +24,8 @@ class euromada_actions {
             </div>
             <div class="extra">
               <div class="ui right floated primary button er-button-voir" @click="redirect(advert.url)">Voir</div>
-              <div class="ui right floated negative button" @click="deletePost(advert.id)">Supprimer</div>
+              <div class="ui right floated button" @click="editPost(advert.id)">Modifier</div>
+              <div class="ui right floated circular negative icon button" @click="deletePost(advert.id)"><i class="icon trash"></i></div>
             </div>
           </div>
         </div>

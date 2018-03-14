@@ -7,7 +7,7 @@
   };
 
   if (profilTestExist) {
-    new Vue({
+    var vm = new Vue({
       el: "#app-profil",
       data: {
         currentId: null,
@@ -33,12 +33,39 @@
           if (_.isNull(url)) return false;
           window.location.href = url;
         },
+        editPost: function( id ) {
+          window.location.href = window.modificationUrl + "?post_id=" + id;
+        },
         deletePost: function( id ) {
+          var self = this;
           $('.basic.delete.modal').modal({
             onApprove: function() {
-              var currentUrl = window.location.href;
-              window.location.href = currentUrl + "?__post_delete_id=" + id + "&token=" + __user_token__;
-              return true;
+              var requestPromise = null;
+              requestPromise = new Promise(function(resolve, reject) {
+                $.ajax({
+                  url: jParams.ajaxUrl,
+                  type: 'GET',
+                  dataType: 'json',
+                  data: {
+                    action           : 'ajx_action_delete_advert',
+                    __post_delete_id : id,
+                    token            : __user_token__
+                  }
+                }).done(function( data ) {
+                  if (data.success) {
+                    resolve(data.response.ID);
+                  }
+                }).fail(function(jqXHR, textStatus) {
+                  reject(false);
+                })
+              });
+              requestPromise.then(function(successMessage) {
+                if (successMessage) {
+                  self.adverts = _.reject(self.adverts, { id: parseInt(successMessage) });
+                  console.log(self.adverts);
+                }
+              });
+              
             }
           }).modal('show');
         },

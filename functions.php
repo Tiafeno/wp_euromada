@@ -48,12 +48,15 @@ require get_template_directory() . '/inc/shortcode/class-embed.php';
 require get_template_directory() . '/inc/widgets/search.widget.php';
 
 $instanceEuromada = new Euromada();
+$updateInstance = new Euromada_update();
 
 /** Action wordpress personnalisé */
 add_action("euromada_save_meta_user", [ $instanceEuromada, 'action_euromada_save_meta_user' ], 10, 1);
 add_action("euromada_update_information_user", [ $instanceEuromada, 'action_euromada_update_information_user' ], 10, 1);
 add_action("euromada_upload_thumbnails", [ $instanceEuromada, 'action_upload_thumbnails' ], 10, 1);
 add_action("euromada_insert_term_product", [ $instanceEuromada, 'action_insert_term_product' ], 10, 2);
+
+add_action("euromada_init_object_product", [ $instanceEuromada, 'action_init_object_product' ], 10, 0);
 
 /** Seule les administrateur peuvent voir le menu administrateur */
 add_action( 'after_setup_theme', function() {
@@ -119,6 +122,7 @@ add_action( "wp_loaded", function() {
       'register_page', 
       'login_page', 
       'profil_page',
+      'edit_page',
       'iframe_page'
     ];
 
@@ -161,7 +165,8 @@ add_action( 'wp_login_failed', function() {
 
 add_action( 'admin_menu', function() {
   add_meta_box( 'products', 'Produits', "render_product", "recommandation", 'normal', 'low' );
-  add_menu_page('euromada', 'Euromada', 'manage_options', 'euromada', array(new Euromada, 'euromada_admin_template'), 'dashicons-admin-settings');
+  add_menu_page('euromada', 'Euromada', 'manage_options', 'euromada', 
+    array(new Euromada, 'euromada_admin_template'), 'dashicons-admin-settings');
 });
 
 add_action( 'admin_init', function() {
@@ -176,7 +181,27 @@ add_action( 'admin_init', function() {
   }
 }, 100 );
 
+function ajx_action_delete_advert() {
+  $profil_page_id = get_option( 'profil_page_id', false );
+  $profil_url = (false == $profil_page_id) ? home_url( "/" ) : get_permalink( (int)$profil_page_id );
+
+  // Envoyer l'annonce dans la corbeille 
+  $post_delete_id = Services::getValue('__post_delete_id', false);
+  $delete_post = null;
+  if (false != $post_delete_id) :
+    $delete_post = Euromada_profil::trash_post( $post_delete_id );
+    if ( false != $delete_post || is_null($delete_post) ) :
+      wp_send_json( [ 'success' => true, 'response' => $delete_post ] );
+    else:
+      wp_send_json( [ 'success' => $delete_post, 'response' => 'Une erreur c\'est produit' ] );
+    endif;
+  endif;
+}
+
 add_action( 'init', function() {
+  add_action('wp_ajax_ajx_action_delete_advert', 'ajx_action_delete_advert');
+  add_action('wp_ajax_nopriv_ajx_action_delete_advert', 'ajx_action_delete_advert');
+
   Euromada::taxonomy();
   Euromada::setRecommandation();
 });
@@ -210,7 +235,7 @@ add_action( 'get_header', function() {
       $Order->addCart( $product_id );
       $cart_page_url = get_the_permalink( get_option( 'woocommerce_cart_page_id' ) );
       wp_redirect( $cart_page_url, 301 );
-    }
+    } 
     
   }
 
@@ -218,18 +243,14 @@ add_action( 'get_header', function() {
   $profil_url = (false == $profil_page_id) ? home_url( "/" ) : get_permalink( (int)$profil_page_id );
 
   /**
-   * Envoyer l'annonce dans la corbeille 
-   */
-  $post_delete_id = Services::getValue('__post_delete_id', false);
-  $delete_post = null;
-  if (false != $post_delete_id) $delete_post = Euromada_profil::trash_post( $post_delete_id );
-  if ($delete_post instanceof WP_Post) exit(wp_redirect( $profil_url, 301 ));
-
-  /**
    * Mettre à jours l'annonce
    */
-  $post_update_id = Services::getValue('__post_update_id', false);
-  if (false != $post_update_id) $instanceEuromada->update_advert( $post_update_id );
+  if (isset($_POST[ 'update_nonce' ]) && wp_verify_nonce($_POST[ 'update_nonce' ], 'update') ) 
+  {
+    $post_update_id = Services::getValue('post_id', false);
+    if (false != $post_update_id) $instanceEuromada->update_advert( $post_update_id );
+  }
+
 
   /** 
    * Vérifier l'en-tete de la page
@@ -341,7 +362,8 @@ add_action( 'widgets_init', 'euromada_widgets_init' );
  */
 function euromada_scripts() {
   // wp_enqueue_style( 'euromada-style', get_stylesheet_uri() );
-  wp_enqueue_script( 'lodash', get_template_directory_uri() . '/js/lodash.min.js', array() );
+  wp_enqueue_script( 'bluebird', get_template_directory_uri() . '/js/bluebird.min.js', array('jquery') );
+  wp_enqueue_script( 'lodash', get_template_directory_uri() . '/js/lodash.min.js', array('jquery') );
   wp_enqueue_script( 'uikit', get_template_directory_uri() . '/js/uikit.min.js', array('jquery') );
   wp_enqueue_script( 'uikit-icons', get_template_directory_uri() . '/js/uikit-icons.min.js', array('jquery', 'uikit') );
   wp_enqueue_script( 'moment', get_template_directory_uri() . '/js/moment.min.js', array() );
