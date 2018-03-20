@@ -19,6 +19,33 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js">
 <head>
+<!-- *
+
+                                                                                                                                  
+                                                                                                                                  
+FFFFFFFFFFFFFFFFFFFFFF                lllllll   iiii                                                                              
+F::::::::::::::::::::F                l:::::l  i::::i                                                                             
+F::::::::::::::::::::F                l:::::l   iiii                                                                              
+FF::::::FFFFFFFFF::::F                l:::::l                                                                                     
+  F:::::F       FFFFFFaaaaaaaaaaaaa    l::::l iiiiiii     ccccccccccccccccrrrrr   rrrrrrrrr       eeeeeeeeeeee    aaaaaaaaaaaaa   
+  F:::::F             a::::::::::::a   l::::l i:::::i   cc:::::::::::::::cr::::rrr:::::::::r    ee::::::::::::ee  a::::::::::::a  
+  F::::::FFFFFFFFFF   aaaaaaaaa:::::a  l::::l  i::::i  c:::::::::::::::::cr:::::::::::::::::r  e::::::eeeee:::::eeaaaaaaaaa:::::a 
+  F:::::::::::::::F            a::::a  l::::l  i::::i c:::::::cccccc:::::crr::::::rrrrr::::::re::::::e     e:::::e         a::::a 
+  F:::::::::::::::F     aaaaaaa:::::a  l::::l  i::::i c::::::c     ccccccc r:::::r     r:::::re:::::::eeeee::::::e  aaaaaaa:::::a 
+  F::::::FFFFFFFFFF   aa::::::::::::a  l::::l  i::::i c:::::c              r:::::r     rrrrrrre:::::::::::::::::e aa::::::::::::a 
+  F:::::F            a::::aaaa::::::a  l::::l  i::::i c:::::c              r:::::r            e::::::eeeeeeeeeee a::::aaaa::::::a 
+  F:::::F           a::::a    a:::::a  l::::l  i::::i c::::::c     ccccccc r:::::r            e:::::::e         a::::a    a:::::a 
+FF:::::::FF         a::::a    a:::::a l::::::li::::::ic:::::::cccccc:::::c r:::::r            e::::::::e        a::::a    a:::::a 
+F::::::::FF         a:::::aaaa::::::a l::::::li::::::i c:::::::::::::::::c r:::::r             e::::::::eeeeeeeea:::::aaaa::::::a 
+F::::::::FF          a::::::::::aa:::al::::::li::::::i  cc:::::::::::::::c r:::::r              ee:::::::::::::e a::::::::::aa:::a
+FFFFFFFFFFF           aaaaaaaaaa  aaaalllllllliiiiiiii    cccccccccccccccc rrrrrrr                eeeeeeeeeeeeee  aaaaaaaaaa  aaaa
+                                                                                                                                  
+                                                                                                                                  
+                                                                                                                                  
+
+*** Visite www.falicrea.com pour plus d'information et voir nos réalisations
+*** Contact: contact@falicrea.com
+  -->
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
