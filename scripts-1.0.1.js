@@ -320,13 +320,8 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       }
     });
 
-  var router = ( ! _.isUndefined(window.VueRouter) ) ? new VueRouter({
-      mode: 'history',
-      routes: []
-    }) : false;
-    if ( router && appExist("app-product") )
+    if ( appExist("app-product") )
       var vProduct = new Vue({
-        router,
         data: {
           activeClass: 'active',
           product: {},
@@ -341,6 +336,9 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         methods : {
           
         },
+        updated: function() {
+          
+        },
         mounted: function () {
           var self = this;
           if ( _.isUndefined(__advert__) ) console.warn("adverts variable is undefined");
@@ -349,6 +347,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
             this.access = true;
             console.log(self.product);
             jQuery('.segment').dimmer('hide');
+            jQuery('.venobox').venobox();
           }, 400);
 
       }

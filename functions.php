@@ -365,6 +365,7 @@ function euromada_scripts() {
   wp_enqueue_script( 'bluebird', get_template_directory_uri() . '/js/bluebird.min.js', array('jquery') );
   wp_enqueue_script( 'lodash', get_template_directory_uri() . '/js/lodash.min.js', array('jquery') );
   wp_enqueue_script( 'uikit', get_template_directory_uri() . '/js/uikit.min.js', array('jquery') );
+  wp_enqueue_script( 'venobox', get_template_directory_uri() . '/js/venobox/venobox.min.js', array('jquery') );
   wp_enqueue_script( 'uikit-icons', get_template_directory_uri() . '/js/uikit-icons.min.js', array('jquery', 'uikit') );
   wp_enqueue_script( 'moment', get_template_directory_uri() . '/js/moment.min.js', array() );
   wp_enqueue_script( 'vuejs', 'https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js', array() );
@@ -379,7 +380,7 @@ function euromada_scripts() {
   wp_enqueue_script( 'sidebar-semantic', get_template_directory_uri() . '/js/sidebar.min.js', array() );
   wp_enqueue_script( 'modal-semantic', get_template_directory_uri() . '/js/modal.min.js', array() );
 
-  wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/scripts-1.0.1.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '20150330', true );
+  wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/scripts-1.0.1.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '21032018-02', true );
   wp_localize_script( 'euromada-script', 'jParams', array(
     'ajaxUrl' => admin_url('admin-ajax.php'),
     'templateUrl' => get_template_directory_uri(),

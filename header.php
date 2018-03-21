@@ -57,7 +57,6 @@ FFFFFFFFFFF           aaaaaaaaaa  aaaalllllllliiiiiiii    cccccccccccccccc rrrrr
 
   <style type="text/css">
    
-  /** UI semantic */
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/semantic.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/dropdown.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/transition.css");
@@ -66,11 +65,11 @@ FFFFFFFFFFF           aaaaaaaaaa  aaaalllllllliiiiiiii    cccccccccccccccc rrrrr
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/sidebar.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/icon.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/modal.css");
-    /* @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/form.css"); */
-  /** UIkit */
+    @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/js/venobox/venobox.css"); 
+    
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/uikit.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/style.css");
-  /** Google fonts */
+    
     @import url('https://fonts.googleapis.com/css?family=Exo:300,400,700');
 
   </style>
