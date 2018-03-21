@@ -347,7 +347,9 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
             this.access = true;
             console.log(self.product);
             jQuery('.segment').dimmer('hide');
-            jQuery('.venobox').venobox();
+            jQuery('.venobox').venobox({
+              framewidth: '1000px'
+            });
           }, 400);
 
       }
