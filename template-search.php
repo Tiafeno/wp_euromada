@@ -43,6 +43,8 @@ if (false != Services::getValue('maxprice')) {
  * du produit.
  */
 $query = Services::getValue( "query", '' );
+
+// Taxonomy query
 if ( ! empty($query) ) {
   $array_query = explode( ' ', $query );
   array_push( $tax_query, [
@@ -52,6 +54,12 @@ if ( ! empty($query) ) {
     'operator' => 'EXISTS'
   ]);
 }
+/** Order */
+$od = [
+  'meta_key'   => '_price',
+  'orderby'    => 'meta_value_num',
+  'order'      => "ASC",
+];
 
 /**
  * Assemblage
@@ -64,6 +72,8 @@ $args = array(
   'posts_per_page' => -1,
   'tax_query'  => $tax_query
 );
+
+$args = array_merge($args, $od);
 
 $argr = [
   'post_type' => [ 'recommandation' ],

@@ -38,7 +38,7 @@ class Services {
       $content->slug = $term->slug;
       $content->image = $image;
 
-      $url = get_the_permalink() . "?s=&product_cat=" . $term->term_id;
+      $url = __SEARCH_URL__ . "?s=&product_cat=" . $term->term_id;
       $content->url = $url;
 
       array_push( $product_cat, $content );

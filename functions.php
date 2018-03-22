@@ -17,6 +17,11 @@
     get_option( 'woocommerce_terms_page_id' ); 
   */
 define('__site_key__', "6LdkSUkUAAAAAMqVJODAt7TpAMUX9LJVVnOlz9gX"); /** Google api key */
+
+$search_page_id = get_option( "search_page_id", false );
+$search_url = (false === $search_page_id) ? site_url('/') : get_permalink( (int)$search_page_id );
+define('__SEARCH_URL__', $search_url);
+
 $MESSAGE = null;
 /** Les Etats qui sont autorisé a publier des annonces */
 define('STATES', serialize([
