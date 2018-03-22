@@ -4,17 +4,8 @@ if ( ! defined( 'ABSPATH' ) )
 
 $current_url = get_the_permalink(get_the_ID());
 $title = get_the_title();
-
 $euromada = new Euromada();
-?>
-
-<?php
-  /**
-   * woocommerce_before_single_product hook.
-   *
-   * @hooked wc_print_notices - 10
-   */
-  do_action( 'woocommerce_before_single_product' );
+wc_print_notices();
 ?>
 <script type="text/javascript">
   var __advert__ = <?= json_encode( $euromada->getAdvert() ); ?>
@@ -27,7 +18,6 @@ $euromada = new Euromada();
     height: 100%;
   }
 </style>
-
 <div id="product-<?php the_ID(); ?>" <?php post_class(); ?>>
   <div id="app-product" class="uk-container uk-container-small">
     <div uk-grid>

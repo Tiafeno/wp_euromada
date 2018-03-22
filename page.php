@@ -20,12 +20,12 @@ get_header(); ?>
           <?php
             // Start the loop.
             while ( have_posts() ) : the_post();
-          ?>
+            ?>
               <header class="entry-header">
                 <h2 class="ui header">
                 <?php the_title( '<div class="content">', '</div>' ); ?>
                 </h2>
-              </header><!-- .entry-header -->
+              </header><!-- .entry-header/ Page display-->
           <?php
               the_content();
             // End the loop.

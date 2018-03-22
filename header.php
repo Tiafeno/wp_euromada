@@ -192,7 +192,7 @@ FFFFFFFFFFF           aaaaaaaaaa  aaaalllllllliiiiiiii    cccccccccccccccc rrrrr
       margin: auto;
     }
     #recommandations {
-      background: #003b81;
+      background: #f6bf11;
       width: 100%;
     }
     #recommandations a {

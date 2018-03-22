@@ -250,12 +250,13 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
           if ( _.isUndefined(__categories__) ) console.warn("categories variable is undefined");
           _.forEach(__categories__, function( categorie ) {
             var content = {};
-            var desc = JSON.parse( categorie.desc );
+            if (_.isEmpty(categorie.desc)) return;
+            var desc =  JSON.parse(categorie.desc) ;
             var cost_euro = parseFloat(desc.prix) / 17500;
             content.name = categorie.name;
             content.image = categorie.image;
 
-            content.url = categorie.url + "&minprice=" + cost_euro;
+            content.url = categorie.url;
             content.cost = desc.prix;
             
             bfts = _.concat( bfts, content );

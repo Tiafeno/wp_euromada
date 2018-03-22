@@ -50,6 +50,8 @@ require get_template_directory() . '/inc/widgets/search.widget.php';
 $instanceEuromada = new Euromada();
 $updateInstance = new Euromada_update();
 
+remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+
 /** Action wordpress personnalisé */
 add_action("euromada_save_meta_user", [ $instanceEuromada, 'action_euromada_save_meta_user' ], 10, 1);
 add_action("euromada_update_information_user", [ $instanceEuromada, 'action_euromada_update_information_user' ], 10, 1);
@@ -120,10 +122,11 @@ add_action( "wp_loaded", function() {
 
     $options = [ 
       'register_page', 
-      'login_page', 
+      'login_page',
+      'offres_page', 
       'profil_page',
       'edit_page',
-      'iframe_page'
+      'search_page'
     ];
 
     while (list(, $option) = each($options)):
@@ -380,7 +383,7 @@ function euromada_scripts() {
   wp_enqueue_script( 'sidebar-semantic', get_template_directory_uri() . '/js/sidebar.min.js', array() );
   wp_enqueue_script( 'modal-semantic', get_template_directory_uri() . '/js/modal.min.js', array() );
 
-  wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/scripts-1.0.1.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '21032018-04', true );
+  wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/scripts-1.0.1.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '22032018', true );
   wp_localize_script( 'euromada-script', 'jParams', array(
     'ajaxUrl' => admin_url('admin-ajax.php'),
     'templateUrl' => get_template_directory_uri(),
@@ -419,6 +422,25 @@ function _getiFramePage( $url = '#' ) {
 add_action( "wp_head", function(){
   include_once get_template_directory() . '/inc/x-template.php';
 }, 10, 2 );
+
+/** SEO */
+add_action('wp_head', function() {
+  global $post;
+  if ($post == null) return;
+  $thumbnail_id = get_post_meta( $post->ID, '_thumbnail_id', true );
+  $image = wp_get_attachment_url( (int)$thumbnail_id );
+  $current_url = get_the_permalink(get_the_ID());
+?>
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="<?= get_the_title() ?>" />
+  <meta property="og:description" content="<?= sanitize_textarea_field( $post->post_content ) ?>" />
+  <meta property="og:url" content="<?= $current_url ?>" />
+  <meta property="og:site_name" content="EUROMADA" />
+  <meta property="og:image" content="<?= $image ?>" />
+
+<?php
+}, 10, 2);
 
 add_action( "admin_head", function(){
   wp_enqueue_script( 'dropdown', get_template_directory_uri() . '/js/dropdown.min.js', array() );
