@@ -4,28 +4,57 @@
  * Organisation: Entreprise FALI (Falicrea)
  * Author mail: tiafenofnel@gmail.com
  */
-
-
-final class Euromada_Order {
-  public function __construct() {
+final class Euromada_Order
+{
+  public function __construct()
+  {
     return $this;
   }
-  
+
   /**
    * This function add product in cart
-   * 
+   *
    * @param int - Product ID
    * @return void
    */
-  public function addCart( $post_id ) {
+  public function addCart($post_id)
+  {
     global $woocommerce;
-    if ( ! is_int($post_id)) return;
-    $post = get_post( $post_id );
+    if (!is_int($post_id)) return;
+    $post = get_post($post_id);
     if ($post->post_type == "product") :
-      $cart_item_key = $woocommerce->cart->add_to_cart( $post_id, 1 );
+      $cart_item_key = $woocommerce->cart->add_to_cart($post_id, 1);
     endif;
   }
 
+  /**
+   * Determine if a product exists based on title and taxonomy
+   * @param string $post_title
+   * @param string $post_type
+   * @return int
+   */
+  private static function product_exists($post_title, $post_type = "product")
+  {
+    global $wpdb;
+
+    $query = "SELECT ID FROM $wpdb->posts WHERE 1=1";
+    $args = array();
+
+    if (!empty ($post_title)) {
+      $query .= " AND post_title LIKE '%s' ";
+      $args[] = $post_title;
+    }
+
+    if (!empty ($post_type)) {
+      $query .= " AND post_type = '%s' ";
+      $args[] = $post_type;
+    }
+
+    if (!empty ($args))
+      return $wpdb->get_var($wpdb->prepare($query, $args));
+
+    return 0;
+  }
 
   /**
    * Create an product post
@@ -33,15 +62,20 @@ final class Euromada_Order {
    * @param int - $post_id This is a recommandation ID post type
    * @return int - Product ID
    */
-  public static function createProduct( $post_id ) {
+  public static function createProduct($post_id)
+  {
     if ( ! is_user_logged_in()) return false;
     if ( ! is_int( $post_id) ) return new WP_Error('broken', "Variable isn't integer");
+    $user = get_current_user();
     $pst = get_post( $post_id );
     $attachment_id = get_post_thumbnail_id( $pst );
     /** return wp error if post type isn't `recommandation` */
     if ($pst->post_type != "recommandation") return new WP_Error("broke", "Can't create a product from this type of item");
     $cost = get_post_meta( $post_id, 'cost_recommandation', true );
-    
+
+    /** verify post if exist */
+    $post_exist = self::product_exists($pst->post_title);
+    if ($post_exist != 0) return $post_exist;
     $post = [
       'post_author' => $user->ID,
       'post_type' => 'product',

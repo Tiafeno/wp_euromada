@@ -459,7 +459,7 @@ class Euromada {
 
           return [
             'success' => true,
-            'msg' => "Inscription success!"
+            'msg' => "Votre inscription a réussi."
           ];
 
         } else {

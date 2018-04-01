@@ -3,7 +3,7 @@
   <!-- search section -->
   <div class="uk-section-transparent uk-section-large uk-margin-remove uk-padding-remove">
     <div class="uk-container uk-container-small">
-      <form class="uk-grid-small" method="GET" action="<?= __SEARCH_URL__ ?>" uk-grid>
+      <form class="uk-grid-small" method="GET" action="<?= __SEARCH_URL__ ?>" uk-grid style="margin-right: -40px">
         <div class="uk-width-1-5@m">
           <div class="ui input uk-display-block">
             <input placeholder="Que recherchez-vous?" name="query" value="<?= Services::getValue( 'query', '' ) ?>" style="border-radius: 0; width: 100%" />
