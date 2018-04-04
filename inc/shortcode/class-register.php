@@ -5,7 +5,7 @@ final class Euromada_register
   public function __construct() {}
   public static function render($attrs, $content = "") {
     global $MESSAGE;
-    $msgExist = is_null($MESSAGE) ? true : (is_object($MESSAGE) ? true : false);
+    $msgExist = is_null($MESSAGE) ? false : (is_object($MESSAGE) ? true : false);
     if ($msgExist) return true;
     /** Denied access if user is connected */
     $verification = is_user_logged_in() ? false : true;
