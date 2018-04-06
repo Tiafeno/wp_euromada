@@ -70,6 +70,15 @@ add_action( 'after_setup_theme', function() {
   if ( ! current_user_can( 'administrator' ) && ! is_admin() ) { show_admin_bar( false ); }
 });
 
+/**
+ * Changer les roles des indentifiants qui s'inscrit
+ * dans la formulaire de commande de woocommerce.
+ */
+add_action("woocommerce_created_customer", function ($user_id) {
+  $currentUser = new WP_User($user_id);
+  $currentUser->set_role("advertiser");
+}, 10, 3);
+
  /** On load wordpress */
 add_action( "wp_loaded", function() {
   global $MESSAGE, $instanceEuromada;

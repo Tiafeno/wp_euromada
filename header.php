@@ -225,6 +225,10 @@ FFFFFFFFFFF           aaaaaaaaaa  aaaalllllllliiiiiiii    cccccccccccccccc rrrrr
     .woocommerce input.button.alt:hover {
       background-color: #f6c800;
     }
+
+    .ui.form textarea, .ui.form input[type="checkbox"] {
+      vertical-align: middle;
+    }
     
     @media only screen and (max-width: 767px) {
       .archive-thumbnail {

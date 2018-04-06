@@ -7,8 +7,8 @@ $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 $args = [
   'post_type'      => "product",
   'post_status'    => 'publish',
-  'paged'      => $paged, 
-  'posts_per_page' => 4,
+  'paged'      => $paged,
+  'posts_per_page' => 8,
 ];
 $response = $euromada->getAdverts( $args );
 $adverts = $response->adverts;
