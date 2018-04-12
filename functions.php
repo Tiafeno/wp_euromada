@@ -17,6 +17,11 @@
     get_option( 'woocommerce_terms_page_id' ); 
   */
 define('__site_key__', "6LdkSUkUAAAAAMqVJODAt7TpAMUX9LJVVnOlz9gX"); /** Google api key */
+
+$search_page_id = get_option( "search_page_id", false );
+$search_url = (false === $search_page_id) ? site_url('/') : get_permalink( (int)$search_page_id );
+define('__SEARCH_URL__', $search_url);
+
 $MESSAGE = null;
 /** Les Etats qui sont autorisé a publier des annonces */
 define('STATES', serialize([
@@ -50,6 +55,8 @@ require get_template_directory() . '/inc/widgets/search.widget.php';
 $instanceEuromada = new Euromada();
 $updateInstance = new Euromada_update();
 
+remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+
 /** Action wordpress personnalisé */
 add_action("euromada_save_meta_user", [ $instanceEuromada, 'action_euromada_save_meta_user' ], 10, 1);
 add_action("euromada_update_information_user", [ $instanceEuromada, 'action_euromada_update_information_user' ], 10, 1);
@@ -62,6 +69,15 @@ add_action("euromada_init_object_product", [ $instanceEuromada, 'action_init_obj
 add_action( 'after_setup_theme', function() {
   if ( ! current_user_can( 'administrator' ) && ! is_admin() ) { show_admin_bar( false ); }
 });
+
+/**
+ * Changer les roles des indentifiants qui s'inscrit
+ * dans la formulaire de commande de woocommerce.
+ */
+add_action("woocommerce_created_customer", function ($user_id) {
+  $currentUser = new WP_User($user_id);
+  $currentUser->set_role("advertiser");
+}, 10, 3);
 
  /** On load wordpress */
 add_action( "wp_loaded", function() {
@@ -120,10 +136,11 @@ add_action( "wp_loaded", function() {
 
     $options = [ 
       'register_page', 
-      'login_page', 
+      'login_page',
+      'offres_page', 
       'profil_page',
       'edit_page',
-      'iframe_page'
+      'search_page'
     ];
 
     while (list(, $option) = each($options)):
@@ -365,6 +382,7 @@ function euromada_scripts() {
   wp_enqueue_script( 'bluebird', get_template_directory_uri() . '/js/bluebird.min.js', array('jquery') );
   wp_enqueue_script( 'lodash', get_template_directory_uri() . '/js/lodash.min.js', array('jquery') );
   wp_enqueue_script( 'uikit', get_template_directory_uri() . '/js/uikit.min.js', array('jquery') );
+  wp_enqueue_script( 'venobox', get_template_directory_uri() . '/js/venobox/venobox.min.js', array('jquery') );
   wp_enqueue_script( 'uikit-icons', get_template_directory_uri() . '/js/uikit-icons.min.js', array('jquery', 'uikit') );
   wp_enqueue_script( 'moment', get_template_directory_uri() . '/js/moment.min.js', array() );
   wp_enqueue_script( 'vuejs', 'https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js', array() );
@@ -379,7 +397,7 @@ function euromada_scripts() {
   wp_enqueue_script( 'sidebar-semantic', get_template_directory_uri() . '/js/sidebar.min.js', array() );
   wp_enqueue_script( 'modal-semantic', get_template_directory_uri() . '/js/modal.min.js', array() );
 
-  wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/scripts-1.0.1.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '20150330', true );
+  wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/scripts-1.0.1.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '22032018', true );
   wp_localize_script( 'euromada-script', 'jParams', array(
     'ajaxUrl' => admin_url('admin-ajax.php'),
     'templateUrl' => get_template_directory_uri(),
@@ -418,6 +436,25 @@ function _getiFramePage( $url = '#' ) {
 add_action( "wp_head", function(){
   include_once get_template_directory() . '/inc/x-template.php';
 }, 10, 2 );
+
+/** SEO */
+add_action('wp_head', function() {
+  global $post;
+  if ($post == null) return;
+  $thumbnail_id = get_post_meta( $post->ID, '_thumbnail_id', true );
+  $image = wp_get_attachment_url( (int)$thumbnail_id );
+  $current_url = get_the_permalink(get_the_ID());
+?>
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="<?= get_the_title() ?>" />
+  <meta property="og:description" content="<?= sanitize_textarea_field( $post->post_content ) ?>" />
+  <meta property="og:url" content="<?= $current_url ?>" />
+  <meta property="og:site_name" content="EUROMADA" />
+  <meta property="og:image" content="<?= $image ?>" />
+
+<?php
+}, 10, 2);
 
 add_action( "admin_head", function(){
   wp_enqueue_script( 'dropdown', get_template_directory_uri() . '/js/dropdown.min.js', array() );

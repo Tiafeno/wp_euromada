@@ -479,7 +479,7 @@ class Euromada {
 
           return [
             'success' => true,
-            'msg' => "Inscription success!"
+            'msg' => "Votre inscription a réussi."
           ];
 
         } else {
@@ -515,6 +515,13 @@ class Euromada {
         "description" => ""
       ],
       [
+        "blogname" => "Page offres",
+        "name" => "offres_page",
+        "type" => "select",
+        "page_id" => get_option( "offres_page_id", false ),
+        "description" => ""
+      ],
+      [
         "blogname" => "Page pour s'enregistrer",
         "name" => "register_page",
         "type" => "select",
@@ -536,10 +543,10 @@ class Euromada {
         "description" => "Page pour modifier une annonce"
       ],
       [
-        "blogname" => "Page iFrame",
-        "name" => "iframe_page",
+        "blogname" => "Page search",
+        "name" => "search_page",
         "type" => "select",
-        "page_id" => get_option( "iframe_page_id", false ),
+        "page_id" => get_option( "search_page_id", false ),
         "description" => ""
       ],
       [
@@ -688,16 +695,21 @@ class Euromada {
    * @param void
    * @return array - Array of object product details
    */
-  public function getAdverts() {
-    while (have_posts()) : the_post();
+  public function getAdverts( $args ) {
+    $response = new stdClass();
+    $postsQueried = new WP_Query( $args );
+    $count = $postsQueried->post_count;
+    
+    while ($postsQueried->have_posts()) : $postsQueried->the_post();
+
       $this->contents = new stdClass();
       
       /** Get only published post */
       $post_status = get_post_status();
       if ($post_status == "private") continue;
 
-      $advert = wc_get_product(get_the_ID());
-      $this->full_size_gallery = Services::getThumbnails();
+      $advert = wc_get_product($postsQueried->post->ID);
+      $this->full_size_gallery = Services::getThumbnails("full", [], $postsQueried->post->ID);
       $Image = $this->getMainThumbnail( (int)$advert->get_image_id(), [600, 300] );
       $this->mainImage = $Image == false ? $this->no_image_parms : $Image;
       // if ($this->mainImage != false)
@@ -706,9 +718,11 @@ class Euromada {
       $this->createObjectJS( $advert );
       $this->push();
     endwhile;
-
+    $response->postQueried = &$postsQueried;
+    $response->adverts = $this->adverts;
+    wp_reset_postdata();
     /** return all push products details  */
-    return $this->adverts;
+    return $response;
     
   }
 

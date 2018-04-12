@@ -1,8 +1,8 @@
 <?php
 /**
- * The template for displaying search results pages.
- *
+ * Template Name: Search Page
  */
+
 get_header();
 
 global $wp_query;
@@ -37,27 +37,16 @@ if (false != Services::getValue('maxprice')) {
     'type' => "NUMERIC"
   ]);
 }
-// if (false != Services::getValue('minprice')) {
-//   $min_price = (float)Services::getValue('minprice');
-//   /**
-//    * Convertion de MGA en EUR
-//    */
-  
-//   array_push($meta_query, [
-//     'key' => "_price",
-//     'value' => $min_price,
-//     'compare' => '=>', // droite
-//     'type' => "NUMERIC"
-//   ]);
-// }
 
 /**
  * Rechercher les mots clé de la recherche dans la taxonomy model
  * du produit.
  */
-if ( ! empty($wp_query->query_vars['s']) ) {
-  $s = $wp_query->query_vars['s'];
-  $array_query = explode( ' ', $s );
+$query = Services::getValue( "query", '' );
+
+// Taxonomy query
+if ( ! empty($query) ) {
+  $array_query = explode( ' ', $query );
   array_push( $tax_query, [
     'taxonomy' => 'model',
     'field' => 'name',
@@ -65,6 +54,12 @@ if ( ! empty($wp_query->query_vars['s']) ) {
     'operator' => 'EXISTS'
   ]);
 }
+/** Order */
+$od = [
+  'meta_key'   => '_price',
+  'orderby'    => 'meta_value_num',
+  'order'      => "ASC",
+];
 
 /**
  * Assemblage
@@ -72,22 +67,29 @@ if ( ! empty($wp_query->query_vars['s']) ) {
 $args = array(  
   'post_type'  => [ 'product' ],
   'meta_query' => $meta_query,
-  's'          => $wp_query->query_vars['s'],
+  's'          => $query,
   'paged'      => $paged, 
-  'posts_per_page' => 20,
+  'posts_per_page' => -1,
   'tax_query'  => $tax_query
 );
 
+$args = array_merge($args, $od);
+
 $argr = [
   'post_type' => [ 'recommandation' ],
-  's'         => $wp_query->query_vars['s'],
+  's'         => $query,
   'posts_per_page' => 10
 ];
 $recommandations = new WP_Query( $argr );
 wp_reset_postdata();
 
 
-query_posts( $args );
+// query_posts( $args );
+$euromada = new Euromada();
+
+$response = $euromada->getAdverts( $args );
+$adverts = $response->adverts;
+$count = count($adverts);
 // echo $wp_query->request;
 
 ?>
@@ -95,12 +97,9 @@ query_posts( $args );
         <div class="uk-section uk-section-large uk-padding-medium">
           <div class="uk-container uk-container-small">
           <?php 
-            if ( have_posts() ) :
-              set_query_var('badge', get_post_type());
-              if ($recommandations->have_posts()) :
-                set_query_var('recommandations', $recommandations);
-              endif;
-              wc_get_template_part( 'content', 'archive-product' );
+            if ( $count > 0 ) :
+              echo "<h4>Résultats de recherche pour « <i>". $query ."</i> ».</h4>";
+              include_once get_template_directory() . '/inc/inc-offres.php';
             else:
               echo '<h2>Aucune annonce trouvée !</h2>';
               echo 'Si vous effectuez une recherche par mots-clés, vérifiez bien qu\'il n\'y ait pas de faute de frappe.';

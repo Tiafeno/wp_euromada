@@ -23,25 +23,6 @@
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <!-- /end --> 
 
-<script type="text/x-template" id="template-social">
-  <div class="uk-margin-auto"> 
-      
-  </div>
-</script>
-
-<script type="text/x-template" id="template-pagination">
-  <ul class="uk-pagination uk-flex-center" uk-margin>
-    <li><a href="#"><span uk-pagination-previous></span></a></li>
-    <li><a href="#">1</a></li>
-    <li class="uk-disabled"><span>...</span></li>
-    <li><a href="#">5</a></li>
-    <li><a href="#">6</a></li>
-    <li class="uk-active"><span>7</span></li>
-    <li><a href="#">8</a></li>
-    <li><a href="#"><span uk-pagination-next></span></a></li>
-  </ul>
-</script>
-
 <script type="text/x-template" id="template-other-annonces">
 
   <div id="app-other-publisher" class="uk-margin-large-top">
@@ -95,6 +76,7 @@
   </div>
   
 </script>
+
 <script type="text/javascript">
   (function($) {
     $(document).ready(function() {

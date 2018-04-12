@@ -1,35 +1,3 @@
-<?php
-if ( ! defined( 'ABSPATH' ) ) 
-  exit; 
-
-global $wp_query;
-$queried = $wp_query->get_queried_object();
-if ($queried instanceof WP_Post_Type) :
-  $args = [
-    'post_type'      => $queried->name,
-    'post_status'    => 'publish',
-    'posts_per_page'  => -1
-  ];
-  $postsQueried = new WP_Query( $args );
-  $count = $postsQueried->post_count;
-  wp_reset_postdata();
-endif;
-
-$euromada = new Euromada();
-$adverts = $euromada->getAdverts();
-if ($queried instanceof WP_Term || is_null($queried))
-  $count = count($adverts);
-
-/**
- * Change badge label
- * Le nom de la variable est la post type
- */
-$product = new stdClass();
-$product->badge = "VOITURES D'OCCASION";
-
-
-
-?>
 
 <script type="text/javascript">
   var __adverts__ = <?= json_encode( $adverts, JSON_PRETTY_PRINT ); ?>;
@@ -80,7 +48,7 @@ $product->badge = "VOITURES D'OCCASION";
                 <p></p>
               </div>
               <div class="extra">
-                <div class="ui label er-label"><?= ${$badge}->badge ?></div>
+                <div class="ui label er-label"></div>
                 <div class="ui right floated primary button er-button-voir" @click="redirect(advert.url)">Voir</div>
               </div>
             </div>
@@ -97,7 +65,7 @@ $product->badge = "VOITURES D'OCCASION";
             'prev_text'    => '<span uk-pagination-previous></span>',
             'next_text'    => '<span uk-pagination-next></span>',
             'current' => max( 1, get_query_var( 'paged' ) ),
-            'total'   => $wp_query->max_num_pages,
+            'total'   => $response->postQueried->max_num_pages,
             'type'    => 'array'
           ));
 
@@ -114,7 +82,7 @@ $product->badge = "VOITURES D'OCCASION";
     <div class="er-sidebar uk-width-1-3@m">
       <div>
         <?php
-          $show = isset($recommandations) ? true : false;
+          $show = isset($recommandations) ? ($recommandations->have_posts() ? true : false) : false;
           if ($show):
         ?>
         <!-- Recommandation -->

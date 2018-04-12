@@ -19,10 +19,54 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js">
 <head>
+<!-- *
+
+                                                                                                                                  
+                                                                                                                                  
+FFFFFFFFFFFFFFFFFFFFFF                lllllll   iiii                                                                              
+F::::::::::::::::::::F                l:::::l  i::::i                                                                             
+F::::::::::::::::::::F                l:::::l   iiii                                                                              
+FF::::::FFFFFFFFF::::F                l:::::l                                                                                     
+  F:::::F       FFFFFFaaaaaaaaaaaaa    l::::l iiiiiii     ccccccccccccccccrrrrr   rrrrrrrrr       eeeeeeeeeeee    aaaaaaaaaaaaa   
+  F:::::F             a::::::::::::a   l::::l i:::::i   cc:::::::::::::::cr::::rrr:::::::::r    ee::::::::::::ee  a::::::::::::a  
+  F::::::FFFFFFFFFF   aaaaaaaaa:::::a  l::::l  i::::i  c:::::::::::::::::cr:::::::::::::::::r  e::::::eeeee:::::eeaaaaaaaaa:::::a 
+  F:::::::::::::::F            a::::a  l::::l  i::::i c:::::::cccccc:::::crr::::::rrrrr::::::re::::::e     e:::::e         a::::a 
+  F:::::::::::::::F     aaaaaaa:::::a  l::::l  i::::i c::::::c     ccccccc r:::::r     r:::::re:::::::eeeee::::::e  aaaaaaa:::::a 
+  F::::::FFFFFFFFFF   aa::::::::::::a  l::::l  i::::i c:::::c              r:::::r     rrrrrrre:::::::::::::::::e aa::::::::::::a 
+  F:::::F            a::::aaaa::::::a  l::::l  i::::i c:::::c              r:::::r            e::::::eeeeeeeeeee a::::aaaa::::::a 
+  F:::::F           a::::a    a:::::a  l::::l  i::::i c::::::c     ccccccc r:::::r            e:::::::e         a::::a    a:::::a 
+FF:::::::FF         a::::a    a:::::a l::::::li::::::ic:::::::cccccc:::::c r:::::r            e::::::::e        a::::a    a:::::a 
+F::::::::FF         a:::::aaaa::::::a l::::::li::::::i c:::::::::::::::::c r:::::r             e::::::::eeeeeeeea:::::aaaa::::::a 
+F::::::::FF          a::::::::::aa:::al::::::li::::::i  cc:::::::::::::::c r:::::r              ee:::::::::::::e a::::::::::aa:::a
+FFFFFFFFFFF           aaaaaaaaaa  aaaalllllllliiiiiiii    cccccccccccccccc rrrrrrr                eeeeeeeeeeeeee  aaaaaaaaaa  aaaa
+                                                                                                                                  
+                                                                                                                                  
+                                                                                                                                  
+
+*** Visite www.falicrea.com pour plus d'information et voir nos réalisations
+*** Contact: contact@falicrea.com
+  -->
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
+  <link rel="apple-touch-icon" sizes="57x57" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/favicon-16x16.png">
+  <link rel="manifest" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
 	<!--[if lt IE 9]>
 	<script src="<?php echo esc_url( get_template_directory_uri() ); ?>/js/html5.js"></script>
 	<![endif]-->
@@ -30,7 +74,6 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
 
   <style type="text/css">
    
-  /** UI semantic */
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/semantic.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/dropdown.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/transition.css");
@@ -39,11 +82,11 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/sidebar.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/icon.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/modal.css");
-    /* @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/form.css"); */
-  /** UIkit */
+    @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/js/venobox/venobox.css"); 
+    
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/css/uikit.css");
     @import url("<?php echo esc_url( get_template_directory_uri() ); ?>/style.css");
-  /** Google fonts */
+    
     @import url('https://fonts.googleapis.com/css?family=Exo:300,400,700');
 
   </style>
@@ -149,7 +192,7 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
       margin: auto;
     }
     #recommandations {
-      background: #003b81;
+      background: #f6bf11;
       width: 100%;
     }
     #recommandations a {
@@ -181,6 +224,10 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
     .woocommerce button.button.alt:hover, 
     .woocommerce input.button.alt:hover {
       background-color: #f6c800;
+    }
+
+    .ui.form textarea, .ui.form input[type="checkbox"] {
+      vertical-align: middle;
     }
     
     @media only screen and (max-width: 767px) {

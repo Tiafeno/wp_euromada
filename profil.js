@@ -62,7 +62,8 @@
               requestPromise.then(function(successMessage) {
                 if (successMessage) {
                   self.adverts = _.reject(self.adverts, { id: parseInt(successMessage) });
-                  console.log(self.adverts);
+                } else {
+                  alert("Une erreur inconnue c'est produit. Veuillez reéssayer ulterieurement");
                 }
               });
               

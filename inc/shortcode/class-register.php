@@ -1,20 +1,14 @@
 <?php
 
-final class Euromada_register{
+final class Euromada_register
+{
   public function __construct() {}
   public static function render($attrs, $content = "") {
     global $MESSAGE;
-    $verification = is_null($MESSAGE) ? true : (is_object($MESSAGE) ? true : false );
-    $url = home_url( '/' );
-    /** Denied access if user is connected and redirect login url */
-    if (is_user_logged_in()) {
-      $login_page_id = get_option( 'login_page_id', false );
-      if (is_int( (int)$login_page_id ) ) :
-        $url = get_the_permalink( (int)$login_page_id, false );
-      endif;
-      $verification = false;
-    }
-
+    $msgExist = is_null($MESSAGE) ? false : (is_object($MESSAGE) ? true : false);
+    if ($msgExist) return true;
+    /** Denied access if user is connected */
+    $verification = is_user_logged_in() ? false : true;
     ?>
     <script type="text/javascript">
       (function($){

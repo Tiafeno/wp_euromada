@@ -250,12 +250,13 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
           if ( _.isUndefined(__categories__) ) console.warn("categories variable is undefined");
           _.forEach(__categories__, function( categorie ) {
             var content = {};
-            var desc = JSON.parse( categorie.desc );
+            if (_.isEmpty(categorie.desc)) return;
+            var desc =  JSON.parse(categorie.desc) ;
             var cost_euro = parseFloat(desc.prix) / 17500;
             content.name = categorie.name;
             content.image = categorie.image;
 
-            content.url = categorie.url + "&minprice=" + cost_euro;
+            content.url = categorie.url;
             content.cost = desc.prix;
             
             bfts = _.concat( bfts, content );
@@ -320,36 +321,35 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       }
     });
 
-  var router = ( ! _.isUndefined(window.VueRouter) ) ? new VueRouter({
-      mode: 'history',
-      routes: []
-    }) : false;
-    if ( router && appExist("app-product") )
-      var vProduct = new Vue({
-        router,
-        data: {
-          activeClass: 'active',
-          product: {},
-          access: false
-        },
-        el: "#app-product",
-        beforeCreate: function () {
-          jQuery('.segment')
-            .dimmer({ closable: false })
-            .dimmer('show');
-        },
-        methods : {
-          
-        },
-        mounted: function () {
-          var self = this;
-          if ( _.isUndefined(__advert__) ) console.warn("adverts variable is undefined");
-          this.product = __advert__;
-          window.setTimeout(function() {
-            this.access = true;
-            console.log(self.product);
-            jQuery('.segment').dimmer('hide');
-          }, 400);
+  if (appExist("app-product"))
+    var vProduct = new Vue({
+      data: {
+        activeClass: 'active',
+        product: {},
+        access: false
+      },
+      el: "#app-product",
+      beforeCreate: function () {
+        jQuery('.segment')
+          .dimmer({closable: false})
+          .dimmer('show');
+      },
+      methods: {},
+      updated: function () {
+
+      },
+      mounted: function () {
+        var self = this;
+        if (_.isUndefined(__advert__)) console.warn("adverts variable is undefined");
+        this.product = __advert__;
+        window.setTimeout(function () {
+          this.access = true;
+          console.log(self.product);
+          jQuery('.segment').dimmer('hide');
+          jQuery('.venobox').venobox({
+            framewidth: '1000px'
+          });
+        }, 400);
 
       }
     });
