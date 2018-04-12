@@ -25,12 +25,12 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
     /**
      * Format all element with class `.money` a currency
      */
-    var interv = window.setInterval(function(){
+    var interv = window.setInterval(function () {
       var moneyElements = $( ".money" );
       if (moneyElements.length === 0) return;
 
-      $.each( moneyElements, function( key, value ) {
-        $( value ).text( function( index ) {
+      $.each( moneyElements, function ( key, value ) {
+        $( value ).text( function ( index ) {
           var currencyValue = parseFloat( $( this ).text().trim() );
           return new Intl.NumberFormat('de-DE', {
             style: "currency",
@@ -63,7 +63,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
   /** Directive */
   Vue.directive('upload', {
     bind: function (el, binding, vnode) {
-      el.addEventListener('click', element => {
+      el.addEventListener('click', function (element) {
         var inputFile = $('#' + binding.value);
         previewUpload = $( el ).find('img');
         /** Fire click event handler */
@@ -91,7 +91,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
     }).format(v);
   });
 
-  Vue.filter("moment", function(value) {
+  Vue.filter("moment", function (value) {
     moment.locale("fr");
     var currentDate = new Date( value );
     return moment(currentDate).format('LLLL'); 
@@ -128,7 +128,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
     props: ['product'],
     template: '#template-summary',
     methods: {
-      routeLinkOrder: function( product_id ) {
+      routeLinkOrder: function ( product_id ) {
         var currentUrl = window.location.href;
         window.location.href = currentUrl + "?order=" + parseInt( product_id );
       }
@@ -145,7 +145,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         pictures: []
       },
       methods: {
-        remove: function( event, id ) {
+        remove: function ( event, id ) {
           var el = event.target;
           var parent = $( el ).parents( '.ctn' );
           var imgPreview = parent.find( 'img.image' );
@@ -160,7 +160,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
             removeElement.addClass('uk-hidden');
         }
       },
-      mounted: function() {
+      mounted: function () {
         for (var i in this.imageLimite) {
           this.pictures = this.pictures.concat({
             identification: "image_" + i,
@@ -171,11 +171,11 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       updated: function() {
         var inputFiles = $('input[type=file].picture');
         /** Detecte change input file */
-        inputFiles.each(function(index, element ) {
+        inputFiles.each(function ( index, element ) {
           var input = $( element );
           var byte_to_16M = 16777216; // 16Mb
           var byte_to_12M = 12582912; // 12Mb
-          input.change( function(e) {
+          input.change( function (e) {
             var currentElement = e.target;
             var identification = input.attr('id');
             if (document.querySelector('#' + identification).files.length === 0) { return; }

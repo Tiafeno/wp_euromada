@@ -26,6 +26,11 @@ class Euromada {
     $this->contents = new stdClass();
   }
 
+  /**
+   * Cree une type d'utilisateur
+   * @param {void}
+   * @return {bool}
+   */
   public static function createRole() {
     $result = add_role(
       'advertiser',
@@ -144,6 +149,11 @@ class Euromada {
     return  (is_wp_error( $result )) ? false : true;
   }
 
+  /**
+   * Ajouter les terms dans l'annonce
+   * @param {array} $args, {int} $post_id
+   * @return {void}
+   */
   public function action_insert_term_product( $args, $post_id ) {
     while (list(, $param) = each($args)) {
       if ($param[ 'value' ] == false) continue;
@@ -195,12 +205,22 @@ class Euromada {
     ];
   }
 
+  /**
+   * Effacer tout les relations des terms avec l'annonce
+   * @param {int} $post_id
+   * @return {this} Euromada class instance
+   */
   private function delete_all_post_relationships( $post_id ) {
     foreach ($this->tax_args as $args)
       wp_delete_object_term_relationships( $post_id, $args[ 'taxonomy' ] );
     return $this;
   }
 
+  /**
+   * Mise a jour des terms
+   * @param {int} $post_id
+   * @return {void}
+   */
   public function update_product_terms( $post_id ) {
     do_action('euromada_insert_term_product', $this->tax_args, $post_id);
   }
