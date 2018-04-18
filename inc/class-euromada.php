@@ -689,6 +689,10 @@ class Euromada {
     return [ $image, $title, $excerpt ];
   }
 
+	public static function set_advert_order( $by ) {
+
+	}
+
   /**
    * Get all lists of products (use by content-archive-product)
    * Change pagination Option -> Reading in wordpress.

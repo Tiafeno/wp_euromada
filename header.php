@@ -18,7 +18,7 @@ for ($i = $min_price; $i <= $max_price; $i += $min_price)
  */
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js">
-<head>
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# product: http://ogp.me/ns/product#">
 <!-- *
 
                                                                                                                                   
@@ -47,7 +47,7 @@ FFFFFFFFFFF           aaaaaaaaaa  aaaalllllllliiiiiiii    cccccccccccccccc rrrrr
 *** Contact: contact@falicrea.com
   -->
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
-	<meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=525, initial-scale=0.9">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
   <link rel="apple-touch-icon" sizes="57x57" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon/apple-icon-57x57.png">
@@ -70,6 +70,7 @@ FFFFFFFFFFF           aaaaaaaaaa  aaaalllllllliiiiiiii    cccccccccccccccc rrrrr
 	<!--[if lt IE 9]>
 	<script src="<?php echo esc_url( get_template_directory_uri() ); ?>/js/html5.js"></script>
 	<![endif]-->
+	<?php wp_enqueue_script( "jquery" ); ?>
 	<?php wp_head(); ?>
 
   <style type="text/css">
@@ -90,9 +91,14 @@ FFFFFFFFFFF           aaaaaaaaaa  aaaalllllllliiiiiiii    cccccccccccccccc rrrrr
     @import url('https://fonts.googleapis.com/css?family=Exo:300,400,700');
 
   </style>
+
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   <script type="text/javascript">
-    var __priceInterval__ = [ <?= implode(',', $interval); ?> ]; 
+    function redirect(url) {
+      window.location.href = url;
+    }
+
+    var __priceInterval__ = [ <?= implode( ',', $interval ); ?> ];
     (function($){
       $(document).ready(function() {
         $('.ui.dropdown').dropdown();
@@ -103,10 +109,6 @@ FFFFFFFFFFF           aaaaaaaaaa  aaaalllllllliiiiiiii    cccccccccccccccc rrrrr
           .parents(".menu-item-has-children")
           .children("a")
           .addClass("uk-active");
-
-        function redirect( url ) {
-          window.location.href = url;
-        }
       });
     })(jQuery)
   </script>
@@ -206,6 +208,12 @@ FFFFFFFFFFF           aaaaaaaaaa  aaaalllllllliiiiiiii    cccccccccccccccc rrrrr
     }
     .er-horaire .item > .content {
       color: white;
+    }
+
+    #app-product .uk-thumbnav > * {
+        padding-top: 5px;
+        display: block;
+        margin: auto;
     }
 
     .archive-thumbnail {
