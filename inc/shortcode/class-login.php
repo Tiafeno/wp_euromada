@@ -65,10 +65,13 @@ final class Euromada_Login {
     <script type="text/javascript">
       var vCaptcha;
       var rCaptcha = false;
+      /**
+       * async function on recaptchaJs load
+       */
       var onloadCallback = function() {
         vCaptcha = grecaptcha.render('reCaptcha', {
           'sitekey' : '<?= __site_key__ ?>',
-          'callback': function( response ) {
+          'callback': function(response ) {
             rCaptcha = response;
           }
         });

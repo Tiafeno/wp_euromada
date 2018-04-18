@@ -59,7 +59,7 @@
         <div class="uk-inline er-other-sidebar-logo">
           <span class="website" data-url="https://www.lacentrale.fr/">
             <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/lacentrale.jpg" />
-          </a>
+          </span>
         </div>
         <div class="uk-inline er-other-sidebar-logo">
           <span class="website" data-url="https://www.autoscout24.fr/">

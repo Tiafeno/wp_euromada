@@ -1,4 +1,9 @@
 <?php
+/**
+ * Author: Tiafeno Finel
+ * Organisation: Entreprise FALI (Falicrea)
+ * Author mail: tiafenofnel@gmail.com
+ */
 
 class Services {
   public static function getTerm( $taxonomy ) {
@@ -95,7 +100,7 @@ class Services {
   }
 
   public static function getObjectTerms() {
-    global $post, $product;
+	  global $post;
     $objectTerms = [];
     $taxonomies = Euromada::$taxonomies;
     while(list(, $taxonomy) = each($taxonomies)) {

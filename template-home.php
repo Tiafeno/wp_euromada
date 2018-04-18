@@ -35,7 +35,7 @@ $product_categories = Services::getProductsCat();
         <div class="uk-section uk-section-large uk-padding-medium">
           <div class="uk-container uk-container-small">
 
-            <div id="app-publisher" class="er-annonce-publish">
+              <div class="er-annonce-publish">
               <h2 class="uk-text-uppercase er-h2 uk-margin-remove-bottom">Les dernières annonces publiées</h2>
               <p class="uk-text-small uk-margin-remove-top">Voitures occasion</p>
 
@@ -53,23 +53,23 @@ $product_categories = Services::getProductsCat();
                         <div class="ui dimmer">
                           <div class="content">
                             <div class="center">
-                              <div class="ui inverted button" @click="onClick( '<?= $adv->url ?>' )">Voir</div>
+                                <div class="ui inverted button" onClick="redirect( '<?= $adv->url ?>' )">Voir</div>
                             </div>
                           </div>
                         </div>
 
-                        <div class="er-card-image" :style="{
-                          'background': '#ffffff url(<?= $adv->imgLink ?>) no-repeat center center',
-                          'background-size': 'contain',
-                          'width': '213px',
-                          'height': '160px'
-                        }">
+                          <div class="er-card-image" style="
+                                  background: #ffffff url('<?= $adv->imgLink ?>') no-repeat center center;
+                                  background-size: contain;
+                                  width: 213px;
+                                  height: 160px;
+                                  ">
                         </div>
                       </div>
                       <div class="content">
                         <a class="header er-h2"><?= $adv->title ?></a>
                         <div class="meta">
-                          <span class="cost">{{ <?= $adv->cost ?> | euro }} </span>
+                            <span class="cost money"><?= $adv->cost ?></span>
                         </div>
                       </div>
                     </div>

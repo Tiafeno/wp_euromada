@@ -20,6 +20,9 @@ define('__site_key__', "6LdkSUkUAAAAAMqVJODAt7TpAMUX9LJVVnOlz9gX"); /** Google a
 
 $search_page_id = get_option( "search_page_id", false );
 $search_url = (false === $search_page_id) ? site_url('/') : get_permalink( (int)$search_page_id );
+/**
+ *
+ */
 define('__SEARCH_URL__', $search_url);
 
 $MESSAGE = null;
@@ -186,6 +189,9 @@ add_action( 'admin_menu', function() {
     array(new Euromada, 'euromada_admin_template'), 'dashicons-admin-settings');
 });
 
+/**
+ * Init admin page
+ */
 add_action( 'admin_init', function() {
   $advertiser = get_role( "advertiser" );
   if ($advertiser === null) {
@@ -198,6 +204,13 @@ add_action( 'admin_init', function() {
   }
 }, 100 );
 
+/**
+ * Action delete advert with ajax
+ *
+ * @param {void}
+ *
+ * @return {json}
+ */
 function ajx_action_delete_advert() {
   $profil_page_id = get_option( 'profil_page_id', false );
   $profil_url = (false == $profil_page_id) ? home_url( "/" ) : get_permalink( (int)$profil_page_id );
@@ -386,8 +399,10 @@ function euromada_scripts() {
   wp_enqueue_script( 'uikit-icons', get_template_directory_uri() . '/js/uikit-icons.min.js', array('jquery', 'uikit') );
   wp_enqueue_script( 'moment', get_template_directory_uri() . '/js/moment.min.js', array() );
   wp_enqueue_script( 'vuejs', 'https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js', array() );
-  // wp_enqueue_script( 'vuejs', 'https://cdn.jsdelivr.net/npm/vue', array() );
-  wp_enqueue_script( 'vuejs-route', 'https://unpkg.com/vue-router', array() );
+	// wp_enqueue_script( 'vuejs-route', 'https://unpkg.com/vue-router', array() );
+
+	/** Debugger */
+	// wp_enqueue_script( 'vuejs-inspector', 'https://cdn.jsdelivr.net/npm/vue-inspector@0.4.3/dist/js/vue-inspector.min.js', ['vuejs']);
 
   wp_enqueue_script( 'dropdown', get_template_directory_uri() . '/js/dropdown.min.js', array() );
   wp_enqueue_script( 'dimmer', get_template_directory_uri() . '/js/dimmer.min.js', array() );
@@ -397,7 +412,10 @@ function euromada_scripts() {
   wp_enqueue_script( 'sidebar-semantic', get_template_directory_uri() . '/js/sidebar.min.js', array() );
   wp_enqueue_script( 'modal-semantic', get_template_directory_uri() . '/js/modal.min.js', array() );
 
-  wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/scripts-1.0.1.js', array( 'vuejs', 'vuejs-route', 'jquery' ), '22032018', true );
+	wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/scripts-1.0.1.js', array(
+		'vuejs',
+		'jquery'
+	), '13042018-04', true );
   wp_localize_script( 'euromada-script', 'jParams', array(
     'ajaxUrl' => admin_url('admin-ajax.php'),
     'templateUrl' => get_template_directory_uri(),
@@ -442,18 +460,36 @@ add_action('wp_head', function() {
   global $post;
   if ($post == null) return;
   $thumbnail_id = get_post_meta( $post->ID, '_thumbnail_id', true );
-  $image = wp_get_attachment_url( (int)$thumbnail_id );
-  $current_url = get_the_permalink(get_the_ID());
+  $image        = wp_get_attachment_url( (int)$thumbnail_id );
+  $current_url  = get_the_permalink(get_the_ID() );
+	$type         = ( $post->post_type == "product" ) ? "product" : "article";
 ?>
-  <meta property="og:locale" content="fr_FR" />
-  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="fr_FR"/>
+    <meta property="og:type" content="<?= $type ?>" />
   <meta property="og:title" content="<?= get_the_title() ?>" />
   <meta property="og:description" content="<?= sanitize_textarea_field( $post->post_content ) ?>" />
   <meta property="og:url" content="<?= $current_url ?>" />
   <meta property="og:site_name" content="EUROMADA" />
   <meta property="og:image" content="<?= $image ?>" />
-
-<?php
+	<?php
+	if ( $type == "product" ) :
+		$product = wc_get_product( $post->ID );
+		$terms      = get_the_terms( $product->get_id(), 'product_cat' );
+		foreach ( $terms as $term ):
+			$product_cat_name = $term->name;
+			break;
+		endforeach;
+		$catName = isset( $product_cat_name ) ? $product_cat_name : "";
+		?>
+      <meta property="product:category" content="<?= $catName ?>"/>
+      <meta property="product:price:amount" content="<?= $product->get_price() ?>"/>
+      <meta property="product:price:currency" content="EUR"/>
+      <meta property="product:shipping_cost:amount" content="<?= $product->get_price() ?>"/>
+      <meta property="product:shipping_cost:currency" content="EUR"/>
+      <meta property="product:sale_price:amount" content="<?= $product->get_price() ?>"/>
+      <meta property="product:sale_price:currency" content="EUR"/>
+	<?php
+	endif;
 }, 10, 2);
 
 add_action( "admin_head", function(){

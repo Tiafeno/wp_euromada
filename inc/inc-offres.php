@@ -1,18 +1,21 @@
-
+<?php
+date_default_timezone_set( 'UTC' );
+setlocale( LC_TIME, 'fra_fra' );
+?>
 <script type="text/javascript">
   var __adverts__ = <?= json_encode( $adverts, JSON_PRETTY_PRINT ); ?>;
-  var __post_count__ = <?= (int)$count ?>;
 </script>
 
 <div>
   <div class="uk-margin-large-top" uk-grid>
     <div class="er-annonce-list uk-width-2-3@m">
-      <div  id="app-lists">
+        <div>
         <h2 class="uk-text-uppercase er-h2 uk-margin-remove-bottom">Voitures occasion</h2>
-        <p class="uk-text-small uk-margin-remove-top">{{ postCount | money }} {{ postCount == 1 ? 'annonce': 'annonces'}}</p>
+            <p class="uk-text-small uk-display-inline uk-margin-remove-top numTocurrency"><?= $count ?></p>
+            <span><?= ( $count > 1 ) ? "annonces" : " annonce" ?></span>
 
         <!-- order select -->
-        <div uk-grid>
+            <div class="uk-margin-small-top" uk-grid>
           <div class="uk-width-1-3@s">
             <select name="orderBy" v-model="sorting" v-on:change="sortBy" class="ui fluid normal dropdown">
               <option value="">Trier par</option>
@@ -24,36 +27,45 @@
         <!-- end -->
 
         <div class="ui divided items">
+	        <?php foreach ( $adverts as $advert ) : ?>
+              <div class="item">
+                  <div class="image">
+                      <p class="er-photo"><?= $advert->countPic ?></p>
 
-          <div class="item" v-for="(advert, index) in adverts">
-            <div class="image">
-              <p class="er-photo">{{ advert.countPic }}</p>
+                      <div class="archive-thumbnail" style="
+                              background: #eae8e8 url('<?= $advert->imgLink ?>') no-repeat center center;
+                              background-size: contain ">
+                      </div>
 
-              <div class="archive-thumbnail" :style="{
-                'background': '#eae8e8 url(' + advert.imgLink + ') no-repeat center center',
-                'background-size': 'contain'
-              }">
+                  </div>
+                  <div class="content">
+                      <div class="extra">
+                          <div class="ui left floated">
+                              <a href="'<?= $advert->url ?>'" class="header er-list-title">
+												        <?= $advert->title ?>
+                              </a>
+                          </div>
+                          <div class="ui right floated er-h2" style="color: #000">
+                              <p class="money">
+												        <?= $advert->cost ?>
+                              </p>
+                          </div>
+                      </div>
+                      <div class="meta">
+                          <span class="cinema"><?= $advert->dateadd->date( "F j, Y, g:i a" ) ?></span>
+                      </div>
+                      <div class="description">
+                          <p></p>
+                      </div>
+                      <div class="extra">
+                          <div class="ui label er-label">Voitures d'occasion</div>
+                          <div class="ui right floated primary button er-button-voir"
+                               onClick="window.location.href = '<?= $advert->url ?>'">Voir
+                          </div>
+                      </div>
+                  </div>
               </div>
-
-            </div>
-            <div class="content">
-              <div class="extra">
-                <div class="ui left floated"><a v-bind:href="advert.url" class="header er-list-title">{{ advert.title }}</a></div>
-                <div class="ui right floated er-h2" style="color: #000"><p>{{ advert.cost | euro }}</p></div>
-              </div>
-              <div class="meta">
-                <span class="cinema">{{ advert.dateadd.date | moment }}</span>
-              </div>
-              <div class="description">
-                <p></p>
-              </div>
-              <div class="extra">
-                <div class="ui label er-label"></div>
-                <div class="ui right floated primary button er-button-voir" @click="redirect(advert.url)">Voir</div>
-              </div>
-            </div>
-          </div>
-          
+	        <?php endforeach; ?>
         </div>
       </div>
 
@@ -161,7 +173,7 @@
               <div class="uk-inline er-other-sidebar-logo">
                 <span class="website" data-url="https://www.lacentrale.fr/">
                   <img class="uk-logo" src="<?= get_template_directory_uri() ?>/img/logo/lacentrale.jpg" />
-                </a>
+                </span>
               </div>
               <div class="uk-inline er-other-sidebar-logo">
                 <span class="website" data-url="https://www.autoscout24.fr/">

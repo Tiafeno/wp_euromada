@@ -9,6 +9,13 @@ var previewUpload = null; // DOM Element
 var noImage = jParams.templateUrl + "/img/gallery-add.png";
 
 (function ($) {
+
+  function formatNumber($value) {
+    var v = parseFloat($value);
+    if (isNaN(v)) return $value;
+    return new Intl.NumberFormat('de-DE', {}).format(v);
+  }
+
   $( document ).ready(function() {
     oFReader = new FileReader(), rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
     
@@ -27,8 +34,16 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
      */
     var interv = window.setInterval(function () {
       var moneyElements = $( ".money" );
-      if (moneyElements.length === 0) return;
+      var numTocurrency = $(".numTocurrency");
 
+      $.each(numTocurrency, function (key, value) {
+        $(value).text(function (index) {
+          var numberValue = parseFloat($(this).text().trim());
+          return formatNumber(numberValue);
+        })
+      });
+
+      if (moneyElements.length === 0) return;
       $.each( moneyElements, function ( key, value ) {
         $( value ).text( function ( index ) {
           var currencyValue = parseFloat( $( this ).text().trim() );
@@ -51,13 +66,8 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
     return true;
   }
 
-  /**
-   * Remove input value,
-   * Set data status to 'not_uploaded'
-   * Set src to imageNoUploaded value
-   */
-  function removeImage() {
-
+  function redirectTo(url) {
+    window.location.href = url;
   }
 
   /** Directive */
@@ -85,10 +95,7 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
   });
 
   Vue.filter('money', function (value) {
-    var v = parseFloat(value);
-    if (isNaN(v)) return value;
-    return new Intl.NumberFormat('de-DE', {
-    }).format(v);
+    return formatNumber(value);
   });
 
   Vue.filter("moment", function (value) {
@@ -252,7 +259,6 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
             var content = {};
             if (_.isEmpty(categorie.desc)) return;
             var desc =  JSON.parse(categorie.desc) ;
-            var cost_euro = parseFloat(desc.prix) / 17500;
             content.name = categorie.name;
             content.image = categorie.image;
 
@@ -287,7 +293,6 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       el: "#app-lists",
       data: {
         sorting: "",
-        postCount: 0,
         adverts: []
       },
       mounted: function () {
@@ -295,14 +300,10 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
         this.adverts = _.concat(_.map(__adverts__, function(value) {
           return value;
         }));
-        this.postCount = __post_count__;
       },
       methods: {
         sortBy: function () {
           this.adverts = _.sortBy(__adverts__, [this.sorting]);
-        },
-        redirect: function( url ) {
-          window.location.href = url;
         }
       }
     });
