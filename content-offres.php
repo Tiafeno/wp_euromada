@@ -3,13 +3,40 @@ if ( ! defined( 'ABSPATH' ) )
   exit; 
 
 $euromada = new Euromada();
-$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
-$args = [
-  'post_type'      => "product",
-  'post_status'    => 'publish',
-  'paged'      => $paged,
-  'posts_per_page' => 8,
+$paged    = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+$orders   = Services::getSession( 'orders' );
+
+$od = [
+	'meta_key' => '_price',
+	'orderby'  => 'meta_value_num',
+	'order'    => "ASC",
 ];
+if ( $orders ) :
+	switch ( $orders['orderby'] ):
+		case "price":
+			$od['order'] = $orders['order'];
+			break;
+		case "title":
+			$od = [
+				'orderby' => $orders['orderby'],
+				'order'   => $orders['order']
+			];
+			break;
+		case "mark":
+
+			break;
+	endswitch;
+endif;
+
+$args = [
+	'post_type'      => "product",
+	'post_status'    => 'publish',
+	'paged'          => $paged,
+	'posts_per_page' => 8
+];
+
+$args = array_merge( $args, $od );
+
 $response = $euromada->getAdverts( $args );
 $adverts = $response->adverts;
 

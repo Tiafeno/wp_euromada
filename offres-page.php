@@ -1,7 +1,6 @@
 <?php
 /**
  * Template Name: Offres page
- * 
  */
 get_header();
 ?>

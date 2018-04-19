@@ -7,10 +7,11 @@ get_header();
 
 global $wp_query;
 
-$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
-$tax_query = [ 'relation' => 'AND' ];
-$names = ["mark", "fuel", 'product_cat'];
+$paged      = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+$tax_query  = [ 'relation' => 'AND' ];
+$names      = ["mark", "fuel", 'product_cat'];
 $meta_query = [];
+$orders     = Services::getSession( 'orders' );
 
 while (list(, $name) = each($names)) :
   $value = Services::getValue( $name );
@@ -53,6 +54,16 @@ if ( ! empty($query) ) {
     'terms' =>  $array_query,
     'operator' => 'EXISTS'
   ]);
+
+	$verifyMark = Services::getValue( 'mark', false );
+	if ( $verifyMark != false ) {
+		array_push( $tax_query, [
+			'taxonomy' => 'mark',
+			'field'    => 'name',
+			'terms'    => $array_query,
+			'operator' => 'IN'
+		] );
+	}
 }
 /** Order */
 $od = [
@@ -60,6 +71,23 @@ $od = [
   'orderby'    => 'meta_value_num',
   'order'      => "ASC",
 ];
+
+if ( $orders ) :
+	switch ( $orders['orderby'] ):
+		case "price":
+			$od['order'] = $orders['order'];
+			break;
+		case "title":
+			$od = [
+				'orderby' => $orders['orderby'],
+				'order'   => $orders['order']
+			];
+			break;
+		case "mark":
+
+			break;
+	endswitch;
+endif;
 
 /**
  * Assemblage

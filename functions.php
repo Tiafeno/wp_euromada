@@ -5,6 +5,8 @@
  * Author mail: tiafenofnel@gmail.com
  */
 
+date_default_timezone_set( 'UTC' );
+@setlocale( LC_TIME, "fra_fra" );
  /************
   * get_option( 'woocommerce_shop_page_id' ); 
     get_option( 'woocommerce_cart_page_id' ); 
@@ -83,9 +85,13 @@ add_action("woocommerce_created_customer", function ($user_id) {
 }, 10, 3);
 
  /** On load wordpress */
-add_action( "wp_loaded", function() {
+add_action( "wp_loaded", function () {
   global $MESSAGE, $instanceEuromada;
-  
+
+	$orders = Services::getSession( 'orders', false );
+	if ( ! $orders ) {
+		$_SESSION['orders'] = Array();
+	}
   /**
    * **************************
    *   Mise à jours du profil
@@ -208,7 +214,6 @@ add_action( 'admin_init', function() {
  * Action delete advert with ajax
  *
  * @param {void}
- *
  * @return {json}
  */
 function ajx_action_delete_advert() {
@@ -228,19 +233,51 @@ function ajx_action_delete_advert() {
   endif;
 }
 
-add_action( 'init', function() {
-  add_action('wp_ajax_ajx_action_delete_advert', 'ajx_action_delete_advert');
-  add_action('wp_ajax_nopriv_ajx_action_delete_advert', 'ajx_action_delete_advert');
+function ajx_action_order_review() {
+	/**
+	 * @func wp_doing_ajax
+	 * (bool) True if it's a WordPress Ajax request, false otherwise.
+	 */
 
-  Euromada::taxonomy();
-  Euromada::setRecommandation();
-});
+	if ( ! wp_doing_ajax() ) {
+		return;
+	}
+	$session_orders = Services::getSession( 'orders', false );
+	$post_order     = Services::getValue( 'order' );
+	if ( false == $post_order ) {
+		wp_send_json( [ "success" => false, "msg" => "Post order is empty" ] );
+	}
+	$orders = explode( '_', $post_order );
+
+	$_SESSION['orders']            = [];
+	$_SESSION['orders']['orderby'] = $orders[0];
+	$_SESSION['orders']['order']   = strtoupper( $orders[1] );
+	wp_send_json( [
+		"success" => true,
+		"msg"     => Services::getSession( 'orders' )
+	] );
+}
+
+add_action( 'init', function () {
+
+	if ( ! session_id() )
+		session_start();
+
+	add_action('wp_ajax_ajx_action_delete_advert', 'ajx_action_delete_advert');
+	add_action('wp_ajax_nopriv_ajx_action_delete_advert', 'ajx_action_delete_advert' );
+
+	add_action( 'wp_ajax_ajx_action_order_review', 'ajx_action_order_review' );
+	add_action( 'wp_ajax_nopriv_ajx_action_order_review', 'ajx_action_order_review');
+
+	Euromada::taxonomy();
+	Euromada::setRecommandation();
+}, 1);
 
 /**
  * Redirect in home page if user is login
  */
-add_action( 'get_header', function() {
-  global $post, $posts, $instanceEuromada;
+add_action( 'get_header', function () {
+	global $post, $instanceEuromada;
   /**
    * Si la variable $_GET 'order' existe
    * On ajoute le produit qui contient l'identifiant dans le panier et redirection 
@@ -415,7 +452,7 @@ function euromada_scripts() {
 	wp_enqueue_script( 'euromada-script', get_template_directory_uri() . '/scripts-1.0.1.js', array(
 		'vuejs',
 		'jquery'
-	), '13042018-04', true );
+	), '13042018-05', true );
   wp_localize_script( 'euromada-script', 'jParams', array(
     'ajaxUrl' => admin_url('admin-ajax.php'),
     'templateUrl' => get_template_directory_uri(),

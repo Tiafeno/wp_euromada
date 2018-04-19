@@ -29,6 +29,30 @@ var noImage = jParams.templateUrl + "/img/gallery-add.png";
       var stateValue = previewUpload.data('state');
       if (stateValue == 'not_uploaded') previewUpload.data('state', 'uploaded');
     };
+
+    $('select[name="orderBy"]')
+      .change(function () {
+        $.ajax({
+          url: jParams.ajaxUrl,
+          contentType: "application/x-www-form-urlencoded",
+          method: "POST",
+          dataType: "json",
+          data: {
+            action: "ajx_action_order_review",
+            order: $(this).val().trim()
+          }
+        })
+          .done(function (response) {
+            if (response.success) {
+              window.location.reload();
+            } else {
+              console.log(response.msg);
+            }
+          })
+          .fail(function (jqXHR, status) {
+            console.warn("Probléme de connexion!, " + status);
+          })
+      });
     /**
      * Format all element with class `.money` a currency
      */

@@ -60,6 +60,16 @@ class Services {
     return !is_string( $returnValue ) ? $returnValue : stripslashes( $returnValue );
   }
 
+	public static function getSession( $key, $default = false ) {
+		if ( ! isset( $_SESSION[ $key ] ) || empty( $_SESSION[ $key ] ) ) {
+			return false;
+		}
+		$val = ( isset( $_SESSION[ $key ] ) ? $_SESSION[ $key ] : $default );
+
+		return $val;
+	}
+
+
   public static function getThumbnails( $size = "full", $ids = [], $post_id = null ) {
     global $product;
     $thumbnails = [];
