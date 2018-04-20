@@ -6,17 +6,25 @@
  */
 
 class Services {
+
+	/**
+	 * @desc Recupèrer des terms d'une taxonomy wordpress
+	 *
+	 * @param $taxonomy
+	 *
+	 * @return array
+	 */
   public static function getTerm( $taxonomy ) {
     $term = array();
-    $parent_terms = \get_terms( $taxonomy, array( 
+	  $parent_terms = get_terms( $taxonomy, array(
         'parent' => 0, 
         'orderby' => 'slug', 
         'hide_empty' => false, 
         'posts_per_page' => -1 
-      ) 
-    );
+      )
+	  );
 
-    if (!$parent_terms || \is_wp_error( $parent_terms )){
+	  if ( ! $parent_terms || is_wp_error( $parent_terms )){
       $parent_terms = array();
     }
     foreach ( $parent_terms as $pterm ) {
@@ -25,6 +33,11 @@ class Services {
     return $term;
   }
 
+	/**
+	 * @func getProductsCat
+	 * @desc Recupère les categories de type de post "product" - Woocommerce
+	 * @return array
+	 */
   public static function getProductsCat() {
     $product_cat = [];
     $terms = get_terms( 'product_cat', [
@@ -51,7 +64,14 @@ class Services {
     return $product_cat;
   }
 
-  /* This function return POST or GET value by `name` variable */
+	/**
+	 * @func getValue
+	 * @desc Recupère une variable d'une requete HTTP d'une methode POST ou GET
+	 * @param mixed $name
+	 * @param bool $def
+	 *
+	 * @return bool|string
+	 */
   public static function getValue($name, $def = false) {
     if (!isset( $name ) || empty( $name ) || !is_string( $name ))
       return $def;
@@ -60,16 +80,30 @@ class Services {
     return !is_string( $returnValue ) ? $returnValue : stripslashes( $returnValue );
   }
 
+	/**
+	 * @func getSession
+	 * @desc Recupère une variable session PHP
+	 * @param mixed $key
+	 * @param bool $default
+	 *
+	 * @return bool
+	 */
 	public static function getSession( $key, $default = false ) {
-		if ( ! isset( $_SESSION[ $key ] ) || empty( $_SESSION[ $key ] ) ) {
+		if ( ! isset( $_SESSION[ $key ] ) || empty( $_SESSION[ $key ] ) )
 			return false;
-		}
 		$val = ( isset( $_SESSION[ $key ] ) ? $_SESSION[ $key ] : $default );
-
 		return $val;
 	}
 
-
+	/**
+	 * @desc Recupère les vignettes d'une post ou d'une produits avec ces
+	 *       description, legende et taille.
+	 * @param string $size
+	 * @param array $ids
+	 * @param null|int $post_id
+	 *
+	 * @return array
+	 */
   public static function getThumbnails( $size = "full", $ids = [], $post_id = null ) {
     global $product;
     $thumbnails = [];
@@ -93,6 +127,12 @@ class Services {
     return json_encode( $data );
   }
 
+	/**
+	 * @desc Recupère les informations d'adresse de l'annonce ou ce post
+	 * @param int $post_id
+	 *
+	 * @return bool|string
+	 */
   public static function getLocation( $post_id ) {
     if ( ! is_numeric( $post_id )) return false;
     $adress = get_post_meta( $post_id, '_adress', true );
@@ -103,12 +143,22 @@ class Services {
 
   }
 
+	/**
+	 * @desc Recupère l'url externe de l'annonce original
+	 * @param int $post_id
+	 *
+	 * @return false|string
+	 */
   public static function get_recommandation_source_url( $post_id ) {
     if ( ! is_numeric( $post_id )) return false;
     $lnk = get_post_meta( $post_id, 'link_recommandation', true );
     return empty( $lnk ) ? '#lnk' : $lnk;
   }
 
+	/**
+	 * @desc Recupère les taxonomies du post de type product (Woocommerce)
+	 * @return array
+	 */
   public static function getObjectTerms() {
 	  global $post;
     $objectTerms = [];
