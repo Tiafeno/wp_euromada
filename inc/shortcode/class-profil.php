@@ -60,7 +60,11 @@ final class Euromada_profil {
     }
     $euromadaActions = new euromada_actions();
     $euromada = new Euromada();
-    wp_enqueue_script( 'euromada-profil-script', get_template_directory_uri() . '/profil.js', array( 'vuejs', 'vuejs-route', 'jquery', 'euromada-script' ), '15032018', true );
+	  wp_enqueue_script( 'euromada-profil-script', get_template_directory_uri() . '/profil.js', array(
+		  'vuejs',
+		  'jquery',
+		  'euromada-script'
+	  ), '15032018', true );
     
     $my_orders = get_posts( apply_filters( 'woocommerce_my_account_my_orders_query', array(
       'numberposts' => 12,
