@@ -13,21 +13,19 @@ $od = [
 ];
 if ( $orders ) :
 	switch ( $orders['orderby'] ):
+
 		case "price":
 			$od['order'] = $orders['order'];
 			break;
-		case "title":
+
+		case "title";
+		case "date";
 			$od = [
 				'orderby' => $orders['orderby'],
 				'order'   => $orders['order']
 			];
 			break;
-		case "date":
-			$od = [
-				'orderby' => $orders['orderby'],
-				'order'   => $orders['order']
-			];
-			break;
+
 	endswitch;
 endif;
 
