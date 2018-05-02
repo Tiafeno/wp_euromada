@@ -22,8 +22,11 @@ if ( $orders ) :
 				'order'   => $orders['order']
 			];
 			break;
-		case "mark":
-
+		case "date":
+			$od = [
+				'orderby' => $orders['orderby'],
+				'order'   => $orders['order']
+			];
 			break;
 	endswitch;
 endif;

@@ -16,8 +16,12 @@
             <select name="orderBy" class="ui fluid normal dropdown">
               <option value="">Trier par</option>
 
+              <option value="date_ASC">Date croissant</option>
+              <option value="date_DESC">Date décroissant</option>
+
               <option value="title_DESC">Titre décroissant</option>
               <option value="title_ASC">Titre croissant</option>
+
               <option value="price_DESC">Prix décroissant</option>
               <option value="price_ASC">Prix croissant</option>
               <!--<option value="mark_DESC">Marque décroissant</option>
