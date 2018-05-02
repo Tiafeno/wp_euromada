@@ -7,9 +7,8 @@ $paged    = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 $orders   = Services::getSession( 'orders' );
 
 $od = [
-	'meta_key' => '_price',
-	'orderby'  => 'meta_value_num',
-	'order'    => "ASC",
+	'orderby' => 'date',
+	'order'   => "DESC",
 ];
 if ( $orders ) :
 	switch ( $orders['orderby'] ):
