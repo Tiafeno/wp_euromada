@@ -8,6 +8,23 @@
 
 class Euromada {
   public static $taxonomies = [ "Mark", "Model", "Model Year", "Fuel", "GearBox" ];
+	/** @var array $dependency
+	 * for inbox
+	 */
+	public static $dependency = [
+		[
+			"slug"          => "__fc_messages",
+			"name"          => "Messages",
+			"singular_name" => "message",
+			"menu_icon"     => "dashicons-email"
+		],
+		/*[
+			"slug" => "__fc_inbox",
+			"name" => "Boite de réception",
+			"singular_name" => "boite de réception",
+			"menu_icon" => "dashicons-format-chat"
+		]*/
+	];
 
   public $full_size_gallery = [];
   public $thumbnail_gallery = [];
@@ -158,6 +175,9 @@ class Euromada {
     while (list(, $param) = each($args)) {
       if ($param[ 'value' ] == false) continue;
       $parent_term = term_exists( $param['value'], $param['taxonomy'] ); // array is returned if taxonomy is given
+	    if ( $parent_term !== 0 || $parent_term !== null ) {
+		    continue;
+	    }
       $term = wp_insert_term(
         $param['value'], // the term 
         $param['taxonomy'], // the taxonomy
@@ -168,7 +188,7 @@ class Euromada {
       );
 
       if (is_wp_error( $term )) {
-        if ($term->get_error_code() == 'term_exists') {
+	      if ( $term->get_error_code() === 'term_exists' ) {
           $term_id = (int)$term->get_error_data();
         }
       } else $term_id = &$term;
@@ -380,6 +400,12 @@ class Euromada {
      * ***************************************************************
      */
     $mileage = Services::getValue('euromada_mileage');
+	  /**
+	   * @func wp_set_object_terms
+	   * (array) An array of the terms ( as term_taxonomy_ids ! ) affected if successful
+	   * (array) An empty array if the $terms argument was NULL or empty - successmessage for the removing of the term
+	   * (WP_Error) The WordPress Error object on invalid taxonomy ('invalid_taxonomy').
+	   */
     $term_taxonomy_ids = wp_set_object_terms( get_the_ID(), $mileage, 'pa_mileage', true );
      $data = Array('pa_mileage' => Array(
        'name'        => 'pa_mileage',
@@ -604,6 +630,29 @@ class Euromada {
       }
     endif;
   }
+
+	public static function setInbox() {
+		foreach ( self::$dependency as $key => $depend ) {
+			register_post_type( $depend["slug"], array(
+				'label'         => _x( $depend["name"], "General name for {$depend[ 'singular_name' ]} post type" ),
+				'labels'        => array(
+					'name'          => _x( $depend["name"], "Plural name for {$depend[ 'singular_name' ]} post type" ),
+					'singular_name' => _x( $depend["name"], "Singular name for {$depend[ 'singular_name' ]} post type" ),
+					'add_new'       => __( 'Ajouter' ),
+					'add_new_item'  => __( "Ajouter une {$depend[ 'singular_name' ]}" ),
+					'edit_item'     => __( 'Modifier' ),
+					'view_item'     => __( 'Voir' ),
+					'search_items'  => __( "Rechercher une {$depend[ 'singular_name' ]} " )
+				),
+				'public'        => true,
+				'hierarchical'  => false,
+				'menu_position' => 101 + (int) $key,
+				'menu_icon'     => $depend["menu_icon"],
+				'supports'      => [ 'title', 'editor' ]
+			) );
+		}
+
+	}
 
   /** 
    * Create custom post type `recommandation`  - call in function.php file

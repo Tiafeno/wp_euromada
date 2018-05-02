@@ -44,6 +44,7 @@ require get_template_directory() . '/inc/class-services.php';
 require get_template_directory() . '/inc/class-walker.php';
 require get_template_directory() . '/inc/class-order.php';
 require get_template_directory() . '/inc/class-message.php';
+require get_template_directory() . '/inc/class-inbox.php';
 
 /** Class shortcode */
 require get_template_directory() . '/inc/shortcode/shortcode.php';
@@ -52,7 +53,6 @@ require get_template_directory() . '/inc/shortcode/class-register.php';
 require get_template_directory() . '/inc/shortcode/class-update.php';
 require get_template_directory() . '/inc/shortcode/class-profil.php';
 require get_template_directory() . '/inc/shortcode/class-publisher.php';
-require get_template_directory() . '/inc/shortcode/class-embed.php';
 
 /** Widget */
 require get_template_directory() . '/inc/widgets/search.widget.php';
@@ -233,6 +233,11 @@ function ajx_action_delete_advert() {
   endif;
 }
 
+/**
+ * @func ajx_action_order_review
+ * @desc Afficher les annonces par une ordre definie
+ * @return json
+ */
 function ajx_action_order_review() {
 	/**
 	 * @func wp_doing_ajax
@@ -242,7 +247,6 @@ function ajx_action_order_review() {
 	if ( ! wp_doing_ajax() ) {
 		return;
 	}
-	$session_orders = Services::getSession( 'orders', false );
 	$post_order     = Services::getValue( 'order' );
 	if ( false == $post_order ) {
 		wp_send_json( [ "success" => false, "msg" => "Post order is empty" ] );
@@ -271,7 +275,12 @@ add_action( 'init', function () {
 
 	Euromada::taxonomy();
 	Euromada::setRecommandation();
-}, 1);
+
+	/**
+	 * Inbox section
+	 */
+	Euromada::setInbox();
+} );
 
 /**
  * Redirect in home page if user is login
@@ -341,7 +350,6 @@ add_shortcode('euromada_login', [ new Euromada_Login(), 'Render' ]);
 add_shortcode('euromada_register', [ new Euromada_register(), 'Render' ]);
 add_shortcode('euromada_profil', [ new Euromada_profil(), 'Render' ]);
 add_shortcode('euromada_publisher', [ new Euromada_publisher(), 'Render' ]);
-add_shortcode('euromada_embed', [ new Euromada_embed(), 'Render' ]);
 add_shortcode('euromada_update', [ new Euromada_update(), 'Render' ]);
 
 function action_save_postdata( $post_id ) {
@@ -480,14 +488,7 @@ add_filter( 'nav_menu_css_class', 'uk_active_nav_class', 10, 2 );
 /**
  * Vuejs template
  */
-function _getiFramePage( $url = '#' ) {
-  $iFramePageId = get_option( 'iframe_page_id', false );
-  if (false != $iFramePageId) {
-    $iFramePageUrl = get_the_permalink( $iFramePageId );
-    return $iFramePageUrl . '?ref_url=' . $url;
-  } else return $url;
 
-}
 add_action( "wp_head", function(){
   include_once get_template_directory() . '/inc/x-template.php';
 }, 10, 2 );

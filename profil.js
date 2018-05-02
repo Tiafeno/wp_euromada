@@ -2,8 +2,7 @@
   /** On load document */
   var profilTestExist = function () {
     var exist = document.getElementById( "app-profil" );
-    if (_.isNull(exist)) return false;
-    return true;
+    return _.isNull(exist) ? false : true;
   };
 
   if (profilTestExist) {
