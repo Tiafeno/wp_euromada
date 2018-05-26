@@ -16,26 +16,28 @@ class inbox {
 		$this->inbox_id = &$id;
 	}
 
-	public function getInboxId() {
+	/**
+	* Get parent id
+	*/
+	public function getID() {
 		return $this->inbox_id;
 	}
 
 	public function send_message() {
 		$send_to = $this->get_current_sender();
-
+		if (is_null($send_to)) throw new \Exception("Variable send_to is NULL", 1);
 		/** Récuperation des informations HTTP */
 		$content = Services::getValue( "msg_content" );
 		/** Enregistre le message */
 		$args       = [
 			'post_author'  => $this->getmyId(),
-			'post_title'   => esc_html( $title ),
-			'post_content' => apply_filters( 'the_content', $content ),
+			'post_content' => $content,
 			'post_status'  => 'publish', /* https://codex.wordpress.org/Post_Status */
 			'post_parent'  => '',
 			'post_type'    => "__fc_messages",
 		];
 		$message_id = wp_insert_post( $args );
-
+		$post = wp_update_post(['ID' => $message_id, 'post_title' => "Re: inbox ({$message_id})"]);
 	}
 
 	/**
@@ -68,6 +70,9 @@ class inbox {
 		return $exist;
 	}
 
+	/**
+	* récuperer l'id de l'autre utilisateur dans le discussion
+	*/
 	private function get_current_sender() {
 		$_contributor = get_post_meta( $this->inbox_id, '__contributor', true ); // @return json
 		$contributors = json_decode( $_contributor );
@@ -82,14 +87,11 @@ class inbox {
 				break;
 			}
 		endforeach;
-
 		return $to;
-
 	}
 
 	private function getmyId() {
 		$Usr = wp_get_current_user();
-
 		return $Usr->ID;
 	}
 
@@ -226,7 +228,7 @@ final class __inbox_init__ {
 	public function __construct() {
 		$id    = Services::getValue( 'id_inbox' );
 		$inbox = new inbox( (int) $id );
-		echo $inbox->getInboxId();
+		echo $inbox->getID();
 	}
 }
 
